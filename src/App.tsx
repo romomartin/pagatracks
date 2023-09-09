@@ -1,9 +1,7 @@
+import { MapCanvas } from "./map/MapCanvas";
+
 function App() {
-  return (
-    <div>
-      <header>Pagatracks</header>
-    </div>
-  );
+  return <MapCanvas></MapCanvas>;
 }
 
 export default App;
