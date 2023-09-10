@@ -6,3 +6,6 @@ down:
 
 clean:
 	docker-compose down --rmi local --volumes --remove-orphans
+
+test: 
+	docker-compose run --rm pagatracks npm run test 
