@@ -12,6 +12,11 @@ export const MapCanvas = () => {
         left: 0,
       }}
       mapStyle="mapbox://styles/mapbox/outdoors-v12"
+      initialViewState={{
+        longitude: -2.94305,
+        latitude: 43.21861,
+        zoom: 13,
+      }}
     ></Map>
   );
 };
