@@ -1,8 +1,17 @@
 import fs, { readFileSync } from "fs";
-import { trackFromGeoJSON } from "./trackFromGeojson";
 import { Track } from "./track";
+import { Feature } from "geojson";
 
 const DATA_URL = "./src/dummy_data";
+
+export const trackFromGeoJSON = (geoJSON: Feature) => {
+  const track: Track = {
+    properties: { name: geoJSON.properties?.name || "no name" },
+    geometry: geoJSON.geometry,
+  };
+
+  return track;
+};
 
 export const getTracks = (): Track[] => {
   const tracks: Track[] = [];
