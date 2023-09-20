@@ -1,4 +1,5 @@
 import { Map } from "react-map-gl";
+import { TracksLayer } from "../layers/TracksLayer";
 
 export const MapCanvas = () => {
   return (
@@ -17,6 +18,8 @@ export const MapCanvas = () => {
         latitude: 43.21861,
         zoom: 13,
       }}
-    ></Map>
+    >
+      <TracksLayer></TracksLayer>
+    </Map>
   );
 };

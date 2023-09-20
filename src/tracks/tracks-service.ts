@@ -1,8 +1,13 @@
-import fs, { readFileSync } from "fs";
 import { Track } from "./track";
-import { Feature } from "geojson";
+import { Feature, FeatureCollection } from "geojson";
+import mergedRawTracks from "../data/mergedRawTracks.json";
 
-const DATA_URL = "./src/dummy_data";
+export const getTracks = (): Track[] => {
+  const tracks: Track[] = mergedRawTracks.map((rawTrack) =>
+    trackFromGeoJSON(rawTrack as Feature)
+  );
+  return tracks;
+};
 
 export const trackFromGeoJSON = (geoJSON: Feature) => {
   const track: Track = {
@@ -13,16 +18,16 @@ export const trackFromGeoJSON = (geoJSON: Feature) => {
   return track;
 };
 
-export const getTracks = (): Track[] => {
-  const tracks: Track[] = [];
-
-  fs.readdirSync(DATA_URL).forEach((file) => {
-    if (!file.includes("geojson")) return;
-
-    const rawTrack = JSON.parse(readFileSync(`${DATA_URL}/${file}`, "utf8"));
-    const track = trackFromGeoJSON(rawTrack);
-    tracks.push(track);
+export const tracksToFeatureCollection = (
+  tracks: Track[]
+): FeatureCollection => {
+  const features: Feature[] = tracks.map((track) => {
+    return {
+      type: "Feature",
+      geometry: track.geometry,
+      properties: track.properties,
+    };
   });
 
-  return tracks;
+  return { type: "FeatureCollection", features };
 };

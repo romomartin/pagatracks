@@ -1,6 +1,10 @@
-import { Feature } from "geojson";
+import { Feature, FeatureCollection } from "geojson";
 import { Track } from "./track";
-import { getTracks, trackFromGeoJSON } from "./tracks-service";
+import {
+  getTracks,
+  trackFromGeoJSON,
+  tracksToFeatureCollection,
+} from "./tracks-service";
 
 describe("tracks service", () => {
   describe("get tracks", () => {
@@ -8,6 +12,8 @@ describe("tracks service", () => {
       const tracks: Track[] = getTracks();
 
       expect(tracks).toHaveLength(9);
+      expect(tracks[0].properties.name).toBeDefined();
+      expect(tracks[0].geometry).toBeDefined();
     });
   });
 
@@ -57,7 +63,40 @@ describe("tracks service", () => {
       expect(track.geometry).toEqual(feature.geometry);
     });
   });
+
+  describe("tracks to feature collection", () => {
+    it("builds feature collection from given track array", () => {
+      const track1 = aTrack("track1");
+      const track2 = aTrack("track2");
+      const track3 = aTrack("track3");
+      const tracks = [track1, track2, track3];
+
+      const trackFeaturesCollection: FeatureCollection =
+        tracksToFeatureCollection(tracks);
+
+      expect(trackFeaturesCollection.type).toBe("FeatureCollection");
+      expect(trackFeaturesCollection.features).toHaveLength(3);
+      expect(trackFeaturesCollection.features[0].geometry).toEqual(
+        track1.geometry
+      );
+    });
+  });
 });
+
+const aTrack = (name?: string): Track => {
+  return {
+    properties: { name: name || "trackName" },
+    geometry: {
+      type: "MultiLineString",
+      coordinates: [
+        [
+          [1, 2],
+          [3, 4],
+        ],
+      ],
+    },
+  };
+};
 
 const aFeature = (name?: string): Feature => {
   const featureName = name || "featureName";
