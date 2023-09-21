@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 const DATA_URL = 'dummy-data' 
-const DESTINATION_URL = 'src/data/mergedRawTracks.json'
+const DESTINATION_URL = 'public/data/mergedRawTracks.json'
 
 const mergeRawTracks = () => {
     const rawTracks = [];

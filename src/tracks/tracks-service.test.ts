@@ -8,11 +8,15 @@ import {
 
 describe("tracks service", () => {
   describe("get tracks", () => {
-    it("retrieves tracks from dummy data", () => {
-      const tracks: Track[] = getTracks();
+    it("retrieves tracks from data", async () => {
+      const featureName = "aFeatureName";
+      const otherFeatureName = "otherFeatureName";
+      fetchGlobalMock([aFeature(featureName), aFeature(otherFeatureName)]);
+      const tracks: Track[] = await getTracks();
 
-      expect(tracks).toHaveLength(9);
-      expect(tracks[0].properties.name).toBeDefined();
+      expect(tracks).toHaveLength(2);
+      expect(tracks[0].properties.name).toEqual(featureName);
+      expect(tracks[1].properties.name).toEqual(otherFeatureName);
       expect(tracks[0].geometry).toBeDefined();
     });
   });
@@ -82,6 +86,14 @@ describe("tracks service", () => {
     });
   });
 });
+
+const fetchGlobalMock = (responseJson: Object) => {
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
+      json: () => Promise.resolve(responseJson),
+    })
+  ) as jest.Mock;
+};
 
 const aTrack = (name?: string): Track => {
   return {

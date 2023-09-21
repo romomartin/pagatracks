@@ -1,11 +1,15 @@
 import { Track } from "./track";
 import { Feature, FeatureCollection } from "geojson";
-import mergedRawTracks from "../data/mergedRawTracks.json";
 
-export const getTracks = (): Track[] => {
-  const tracks: Track[] = mergedRawTracks.map((rawTrack) =>
-    trackFromGeoJSON(rawTrack as Feature)
+export const getTracks = async (): Promise<Track[]> => {
+  const mergedRawTracks = await fetch("/data/mergedRawTracks.json").then(
+    (response) => response.json()
   );
+
+  const tracks: Track[] = mergedRawTracks.map((rawTrack: Feature) =>
+    trackFromGeoJSON(rawTrack)
+  );
+
   return tracks;
 };
 

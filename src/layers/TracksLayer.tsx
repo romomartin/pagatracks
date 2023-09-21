@@ -1,5 +1,7 @@
 import { Layer, LineLayer, Source } from "react-map-gl";
 import { getTracks, tracksToFeatureCollection } from "../tracks/tracks-service";
+import { useEffect, useState } from "react";
+import { Track } from "../tracks/track";
 
 const tracksStyle: LineLayer = {
   id: "tracks",
@@ -11,7 +13,16 @@ const tracksStyle: LineLayer = {
 };
 
 export const TracksLayer = () => {
-  const tracks = getTracks();
+  const [tracks, setTracks] = useState<Track[]>([]);
+
+  const fetchTracks = async () => {
+    const tracks = await getTracks();
+    setTracks(tracks);
+  };
+
+  useEffect(() => {
+    fetchTracks();
+  }, []);
 
   const tracksFeatureCollection = tracksToFeatureCollection(tracks);
 
