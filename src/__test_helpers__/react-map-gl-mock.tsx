@@ -1,17 +1,5 @@
-const MockMap = ({
-  mapStyle,
-  initialViewState,
-}: {
-  mapStyle: string;
-  initialViewState: { longitude: number; latitude: number; zoom: number };
-}): JSX.Element => {
-  return (
-    <ul>
-      <li>{mapStyle}</li>
-      <li>{JSON.stringify(initialViewState, null, 2)}</li>
-    </ul>
-  );
-};
+import { MockMap } from "./MockMap";
+import { MockSource } from "./MockSource";
 
 export const mockReactMapGl = () => {
   jest.mock("react-map-gl", () => {
@@ -20,6 +8,7 @@ export const mockReactMapGl = () => {
     return {
       ...lib,
       Map: MockMap,
+      Source: MockSource,
     };
   });
 };
