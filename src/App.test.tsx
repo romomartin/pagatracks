@@ -8,10 +8,12 @@ describe("app", () => {
     const initialLatitude = screen.getByText(/"latitude": 43.21861/i);
     const initialLongitude = screen.getByText(/"longitude": -2.94305/i);
     const initialZoom = screen.getByText(/"zoom": 13/i);
+    const interactiveLayers = screen.getByText(/"interactiveLayerIds"tracks/i);
 
     expect(style).toBeInTheDocument();
     expect(initialLatitude).toBeInTheDocument();
     expect(initialLongitude).toBeInTheDocument();
     expect(initialZoom).toBeInTheDocument();
+    expect(interactiveLayers).toBeInTheDocument();
   });
 });

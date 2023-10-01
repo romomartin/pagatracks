@@ -8,3 +8,12 @@ export const tracksStyle: LineLayer = {
     "line-width": 3,
   },
 };
+
+export const selectedTracksStyle: LineLayer = {
+  id: "selected_track",
+  type: "line",
+  paint: {
+    "line-color": "blue",
+    "line-width": 3,
+  },
+};
