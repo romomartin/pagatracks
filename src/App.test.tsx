@@ -1,5 +1,8 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import App from "./App";
+import * as mockSelectedFeature from "./__test_helpers__/mock-selected-feature";
+import { Layer, MapboxGeoJSONFeature } from "mapbox-gl";
+import { LineString } from "geojson";
 
 describe("app", () => {
   it("renders the map on initial state", () => {
@@ -16,4 +19,40 @@ describe("app", () => {
     expect(initialZoom).toBeInTheDocument();
     expect(interactiveLayers).toBeInTheDocument();
   });
+
+  it("highlights a track when selected on the map", async () => {
+    const selectedFeatureName = "selectedTrack";
+
+    render(<App />);
+    selectFeatureOnMap(selectedFeatureName);
+    const selectedTrackLayer = await screen.findByText(
+      /layer-id: selected-track/i
+    );
+
+    expect(selectedTrackLayer).toHaveTextContent(
+      /filter: in,name,selectedTrack/i
+    );
+  });
 });
+
+const selectFeatureOnMap = (selectedFeatureName: string) => {
+  jest
+    .spyOn(mockSelectedFeature, "mockSelectedFeature")
+    .mockReturnValue(aSelectedFeature(selectedFeatureName));
+
+  const mapClick = screen.getByRole("button", { name: /mapclick/i });
+  fireEvent.click(mapClick);
+};
+
+const aSelectedFeature = (name: string): MapboxGeoJSONFeature => {
+  return {
+    id: undefined,
+    type: "Feature",
+    geometry: {} as LineString,
+    layer: {} as Layer,
+    properties: { name },
+    source: "",
+    sourceLayer: "",
+    state: {},
+  };
+};
