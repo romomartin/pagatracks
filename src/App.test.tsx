@@ -38,13 +38,13 @@ describe("app", () => {
 const selectFeatureOnMap = (selectedFeatureName: string) => {
   jest
     .spyOn(mockSelectedFeature, "mockSelectedFeature")
-    .mockReturnValue(aSelectedFeature(selectedFeatureName));
+    .mockReturnValue(aMapboxGeoJSONFeature(selectedFeatureName));
 
   const mapClick = screen.getByRole("button", { name: /mapclick/i });
   fireEvent.click(mapClick);
 };
 
-const aSelectedFeature = (name: string): MapboxGeoJSONFeature => {
+const aMapboxGeoJSONFeature = (name: string): MapboxGeoJSONFeature => {
   return {
     id: undefined,
     type: "Feature",
