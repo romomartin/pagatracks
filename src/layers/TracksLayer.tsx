@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Track } from "../tracks/track";
-import { tracksStyle, selectedTracksStyle } from "./layer-styles";
+import { tracksStyle, selectedTrackStyle } from "./layer-styles";
 import { Layer, MapboxGeoJSONFeature, Source } from "react-map-gl";
 import { Feature, FeatureCollection } from "geojson";
 
@@ -28,10 +28,10 @@ export const TracksLayer = ({ selectedTrack }: TracksLayerProps) => {
 
   return (
     <>
-      <Source type="geojson" data={tracksFeatureCollection}>
+      <Source id="tracks" type="geojson" data={tracksFeatureCollection}>
         <Layer {...tracksStyle} />
         <Layer
-          {...selectedTracksStyle}
+          {...selectedTrackStyle}
           filter={["in", "name", selectedTrackName]}
         />
       </Source>

@@ -1,17 +1,25 @@
-import { Children } from "react";
+import { FeatureCollection, GeoJsonProperties, Geometry } from "geojson";
 
-export const MockSource = (props: any): JSX.Element => {
-  const sourceProps = {
-    type: props.type,
-    data: props.data,
-  };
-  const layersProps = Children.map(props.children, (child) => child.props);
+export const MockSource = ({
+  id,
+  type,
+  data,
+  children,
+}: {
+  id: string;
+  type: string;
+  data: FeatureCollection<Geometry, GeoJsonProperties>;
+  children: JSX.Element[];
+}): JSX.Element => {
   return (
     <>
-      <ul>
-        <li>"sourceProps"{JSON.stringify(sourceProps)}</li>
-        <li>"layersProps"{JSON.stringify(layersProps)}</li>
-      </ul>
+      <div id="MockSource">
+        {`Source-id: ${id}`}
+        {`type: ${type}`}
+        {`data-type: ${data.type}`}
+        {`data-features: ${JSON.stringify(data.features)}`}
+      </div>
+      {children}
     </>
   );
 };

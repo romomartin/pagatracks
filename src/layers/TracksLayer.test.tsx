@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { TracksLayer } from "./TracksLayer";
 import { Feature } from "geojson";
-import { selectedTracksStyle, tracksStyle } from "./layer-styles";
+import { selectedTrackStyle, tracksStyle } from "./layer-styles";
 import { MapboxGeoJSONFeature } from "mapbox-gl";
 
 describe("Tracks layer", () => {
@@ -13,11 +13,12 @@ describe("Tracks layer", () => {
     setFetchGlobalMock(fetchedData);
 
     render(<TracksLayer selectedTrack={undefined} />);
-    const data = await screen.findByText(/aFeatureName/i);
+    await forDataToBeFetched(fetchedData);
+    const source = await screen.findByText(/source-id: tracks/i);
 
-    expect(data).toHaveTextContent('type":"geojson');
-    expect(data).toHaveTextContent(
-      `type":"FeatureCollection","features":${JSON.stringify(fetchedData)}`
+    expect(source).toHaveTextContent(/type: geojson/i);
+    expect(source).toHaveTextContent(
+      /data-features:.*featureName.*otherFeatureName/i
     );
   });
 
@@ -25,28 +26,51 @@ describe("Tracks layer", () => {
     setFetchGlobalMock([aFeature(featureName)]);
 
     render(<TracksLayer selectedTrack={undefined} />);
-    await screen.findByText(/aFeatureName/i);
-    const style = screen.queryByText(/layersProps/i);
+    await forDataToBeFetched([aFeature(featureName)]);
+    const tracksLayer = await screen.findByText(/layer-id: tracks/i);
 
-    expect(style).toHaveTextContent(JSON.stringify(tracksStyle));
+    expect(tracksLayer).toHaveTextContent(/type: line/i);
+    expect(tracksLayer).toHaveTextContent(
+      `paint: ${JSON.stringify(tracksStyle.paint)}`
+    );
   });
 
-  it("applies selectedTracks filter to selected track when provided", async () => {
+  it("applies selected track layer style", async () => {
     setFetchGlobalMock([aFeature(featureName)]);
-    const selectedTrack = aFeature("selectedFeature") as MapboxGeoJSONFeature;
-    const selectedTrackProps = {
-      ...selectedTracksStyle,
-      filter: ["in", "name", "selectedFeature"],
-    };
+
+    render(<TracksLayer selectedTrack={undefined} />);
+    await forDataToBeFetched([aFeature(featureName)]);
+    const selectedTrackLayer = await screen.findByText(
+      /layer-id: selected-track/i
+    );
+
+    expect(selectedTrackLayer).toHaveTextContent(/type: line/i);
+    expect(selectedTrackLayer).toHaveTextContent(
+      `paint: ${JSON.stringify(selectedTrackStyle.paint)}`
+    );
+  });
+
+  it("applies selected track filter to selected track when provided", async () => {
+    setFetchGlobalMock([aFeature(featureName)]);
+    const selectedTrack = aFeature(
+      "selectedFeatureName"
+    ) as MapboxGeoJSONFeature;
 
     render(<TracksLayer selectedTrack={selectedTrack} />);
-    await screen.findByText(/aFeatureName/i);
-    const style = screen.queryByText(/layersProps/i);
+    await forDataToBeFetched([aFeature(featureName)]);
+    const selectedTrackLayer = await screen.findByText(
+      /layer-id: selected-track/i
+    );
 
-    expect(style).toHaveTextContent(JSON.stringify(tracksStyle));
-    expect(style).toHaveTextContent(JSON.stringify(selectedTrackProps));
+    expect(selectedTrackLayer).toHaveTextContent(
+      /filter: in,name,selectedFeatureName/i
+    );
   });
 });
+
+const forDataToBeFetched = async (fetchedData: Feature[]) => {
+  await screen.findByText(JSON.stringify(fetchedData), { exact: false });
+};
 
 const setFetchGlobalMock = (responseJson: Object) => {
   global.fetch = jest.fn(() =>

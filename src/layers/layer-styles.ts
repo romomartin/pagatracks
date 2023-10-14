@@ -9,8 +9,8 @@ export const tracksStyle: LineLayer = {
   },
 };
 
-export const selectedTracksStyle: LineLayer = {
-  id: "selected_track",
+export const selectedTrackStyle: LineLayer = {
+  id: "selected-track",
   type: "line",
   paint: {
     "line-color": "blue",

@@ -1,5 +1,6 @@
 import { MockMap } from "./MockMap";
 import { MockSource } from "./MockSource";
+import { MockLayer } from "./MockLayer";
 
 export const mockReactMapGl = () => {
   jest.mock("react-map-gl", () => {
@@ -9,6 +10,7 @@ export const mockReactMapGl = () => {
       ...lib,
       Map: MockMap,
       Source: MockSource,
+      Layer: MockLayer,
     };
   });
 };
