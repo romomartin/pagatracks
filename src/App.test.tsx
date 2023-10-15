@@ -7,7 +7,9 @@ import { LineString } from "geojson";
 describe("app", () => {
   it("renders the map on initial state", () => {
     render(<App />);
-    const style = screen.getByText(/mapbox:\/\/styles\/mapbox\/outdoors-v12/i);
+    const style = screen.getByText(
+      /mapbox:\/\/styles\/piticli\/clnr51es600fq01qwhfb207vn/i
+    );
     const initialLatitude = screen.getByText(/lat: 43.21861/i);
     const initialLongitude = screen.getByText(/long: -2.94305/i);
     const initialZoom = screen.getByText(/zoom: 13/i);
