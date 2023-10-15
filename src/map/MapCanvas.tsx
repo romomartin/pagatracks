@@ -17,7 +17,7 @@ export const MapCanvas = ({ onClick, selectedTrack }: MapProps) => {
         top: 0,
         left: 0,
       }}
-      mapStyle="mapbox://styles/piticli/clnr51es600fq01qwhfb207vn"
+      mapStyle="mapbox://styles/piticli/clnra3qjx00g601o3622b5n40"
       initialViewState={{
         longitude: -2.94305,
         latitude: 43.21861,
