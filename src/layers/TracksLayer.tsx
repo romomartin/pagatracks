@@ -15,13 +15,16 @@ export const TracksLayer = ({ selectedTrack }: TracksLayerProps) => {
 
   const [tracks, setTracks] = useState<Track[]>([]);
 
-  const fetchTracks = async () => {
-    const tracks = await getTracks();
+  const setTracksFromFetch = async () => {
+    const mergedRawTracks = await getMergedRawTracks();
+    const tracks: Track[] = mergedRawTracks.map((rawTrack: Feature) =>
+      trackFromGeoJSON(rawTrack)
+    );
     setTracks(tracks);
   };
 
   useEffect(() => {
-    fetchTracks();
+    setTracksFromFetch();
   }, []);
 
   const tracksFeatureCollection = tracksToFeatureCollection(tracks);
@@ -39,21 +42,18 @@ export const TracksLayer = ({ selectedTrack }: TracksLayerProps) => {
   );
 };
 
-const getTracks = async (): Promise<Track[]> => {
-  const mergedRawTracks = await fetch("/data/mergedRawTracks.json").then(
-    (response) => response.json()
+const getMergedRawTracks = async (): Promise<any> => {
+  return await fetch("/data/mergedRawTracks.json").then((response) =>
+    response.json()
   );
-
-  const tracks: Track[] = mergedRawTracks.map((rawTrack: Feature) =>
-    trackFromGeoJSON(rawTrack)
-  );
-
-  return tracks;
 };
 
 const trackFromGeoJSON = (geoJSON: Feature) => {
   const track: Track = {
-    properties: { name: geoJSON.properties?.name || "no name" },
+    properties: {
+      name: geoJSON.properties?.name || "no name",
+      path_type: geoJSON.properties?.path_type,
+    },
     geometry: geoJSON.geometry,
   };
 
