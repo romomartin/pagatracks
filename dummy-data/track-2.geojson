@@ -14,7 +14,7 @@
         "link2_type": null,
         "number": null,
         "type": "Cycling",
-        "gpx_style_line": "        <color>35af35</color>        <opacity>0.7</opacity>        <weight>3</weight>        "
+        "path_type": "unpaved"
     },
     "geometry": {
         "type": "MultiLineString",

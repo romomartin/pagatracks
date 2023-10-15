@@ -13,7 +13,8 @@
         "link2_text": null,
         "link2_type": null,
         "number": null,
-        "type": "Cycling"
+        "type": "Cycling",
+        "path_type": "unpaved"
     },
     "geometry": {
         "type": "MultiLineString",

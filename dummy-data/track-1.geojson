@@ -1,20 +1,11 @@
 {
     "type": "Feature",
+    "id": 0,
     "properties": {
         "fid": 1,
         "name": "track-1",
-        "cmt": null,
-        "desc": null,
-        "src": null,
-        "link1_href": null,
-        "link1_text": null,
-        "link1_type": null,
-        "link2_href": null,
-        "link2_text": null,
-        "link2_type": null,
-        "number": null,
         "type": "Cycling",
-        "gpx_style_line": "        <color>35af35</color>        <opacity>0.7</opacity>        <weight>3</weight>        "
+        "path_type": "unpaved"
     },
     "geometry": {
         "type": "MultiLineString",

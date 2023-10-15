@@ -1,5 +1,6 @@
 {
     "type": "Feature",
+    "id": 0,
     "properties": {
         "fid": 1,
         "name": "track-5",
@@ -13,7 +14,8 @@
         "link2_text": null,
         "link2_type": null,
         "number": null,
-        "type": "Cycling"
+        "type": "Cycling",
+        "path_type": "singletrack"
     },
     "geometry": {
         "type": "MultiLineString",
