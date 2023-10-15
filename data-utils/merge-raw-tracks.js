@@ -16,6 +16,7 @@ const mergeRawTracks = () => {
     const mergedRawTracks = JSON.stringify(rawTracks);
   
     fs.writeFileSync(`${DESTINATION_URL}`,mergedRawTracks )
+    console.log(`✅ ${rawTracks.length} tracks merged in ${DESTINATION_URL}`)
 };
 
 mergeRawTracks()
