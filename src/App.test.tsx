@@ -23,7 +23,7 @@ describe("app", () => {
   });
 
   it("highlights a track when selected on the map", async () => {
-    const selectedFeatureName = "selectedTrack";
+    const selectedFeatureName = "aTrackName";
 
     render(<App />);
     selectFeatureOnMap(selectedFeatureName);
@@ -31,9 +31,7 @@ describe("app", () => {
       /layer-id: selected-track/i
     );
 
-    expect(selectedTrackLayer).toHaveTextContent(
-      /filter: in,name,selectedTrack/i
-    );
+    expect(selectedTrackLayer).toHaveTextContent(/filter: in,name,aTrackName/i);
   });
 });
 

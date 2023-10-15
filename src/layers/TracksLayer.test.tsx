@@ -18,7 +18,7 @@ describe("Tracks layer", () => {
 
     expect(source).toHaveTextContent(/type: geojson/i);
     expect(source).toHaveTextContent(
-      /data-features:.*featureName.*otherFeatureName/i
+      /data-features:.*aFeatureName.*otherFeatureName/i
     );
   });
 
