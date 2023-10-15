@@ -8,7 +8,7 @@ describe("app", () => {
   it("renders the map on initial state", () => {
     render(<App />);
     const style = screen.getByText(
-      /mapbox:\/\/styles\/piticli\/clnr51es600fq01qwhfb207vn/i
+      /mapbox:\/\/styles\/piticli\/clnra3qjx00g601o3622b5n40/i
     );
     const initialLatitude = screen.getByText(/lat: 43.21861/i);
     const initialLongitude = screen.getByText(/long: -2.94305/i);
