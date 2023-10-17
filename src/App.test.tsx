@@ -33,6 +33,16 @@ describe("app", () => {
 
     expect(selectedTrackLayer).toHaveTextContent(/filter: in,name,aTrackName/i);
   });
+
+  it("shows elevation chart of a track when selected on the map", async () => {
+    const selectedFeatureName = "aTrackName";
+
+    render(<App />);
+    selectFeatureOnMap(selectedFeatureName);
+    const elevationChart = screen.getByLabelText("elevation-chart");
+
+    expect(elevationChart).toHaveTextContent(/aTrackName/i);
+  });
 });
 
 const selectFeatureOnMap = (selectedFeatureName: string) => {

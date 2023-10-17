@@ -1,6 +1,7 @@
 import { MapLayerMouseEvent, MapboxGeoJSONFeature } from "mapbox-gl";
 import { MapCanvas } from "./map/MapCanvas";
 import { useState } from "react";
+import { ElevationChart } from "./elevation-chart/ElevationChart";
 
 function App() {
   const [selectedTrack, setSelectedTrack] = useState<
@@ -16,10 +17,15 @@ function App() {
   };
 
   return (
-    <MapCanvas
-      onClick={handleMapClick}
-      selectedTrack={selectedTrack}
-    ></MapCanvas>
+    <>
+      <MapCanvas
+        onClick={handleMapClick}
+        selectedTrack={selectedTrack}
+      ></MapCanvas>
+      {selectedTrack && (
+        <ElevationChart selectedTrack={selectedTrack}></ElevationChart>
+      )}
+    </>
   );
 }
 

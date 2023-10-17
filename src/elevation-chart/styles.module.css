@@ -1,0 +1,13 @@
+.container{   
+  position: absolute;
+  bottom: 25px;
+  left: 50%;
+  transform: translate(-50%,0);
+  width: 80vw;
+  max-width: 1000px;
+  height: 180px;
+  border-radius: 10px;
+  background-color: #FFFFFF;
+  z-index: 5;
+  overflow: hidden;
+}
