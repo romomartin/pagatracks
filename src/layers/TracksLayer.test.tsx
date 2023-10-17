@@ -7,7 +7,7 @@ import { MapboxGeoJSONFeature } from "mapbox-gl";
 describe("Tracks layer", () => {
   const featureName = "aFeatureName";
 
-  it("returns fetched tracks as map source", async () => {
+  it("sets fetched tracks as map source data", async () => {
     const otherFeatureName = "otherFeatureName";
     const fetchedData = [aFeature(featureName), aFeature(otherFeatureName)];
     setFetchGlobalMock(fetchedData);
@@ -17,8 +17,25 @@ describe("Tracks layer", () => {
     const source = await screen.findByText(/source-id: tracks/i);
 
     expect(source).toHaveTextContent(/type: geojson/i);
+    expect(source).toHaveTextContent(/data-type: FeatureCollection/i);
     expect(source).toHaveTextContent(
       /data-features:.*aFeatureName.*otherFeatureName/i
+    );
+  });
+
+  it("maps fetched data to source data", async () => {
+    const fetchedData = [aFeature(featureName)];
+    setFetchGlobalMock(fetchedData);
+
+    render(<TracksLayer selectedTrack={undefined} />);
+    await forDataToBeFetched(fetchedData);
+    const source = await screen.findByText(/source-id: tracks/i);
+
+    expect(source).toHaveTextContent('"type":"Feature"');
+    expect(source).toHaveTextContent('"name":"aFeatureName"');
+    expect(source).toHaveTextContent('"path_type":"paved"');
+    expect(source).toHaveTextContent(
+      '"geometry":{"type":"MultiLineString","coordinates":[[[1,2,10],[3,4,12]]]'
     );
   });
 
@@ -88,13 +105,14 @@ const aFeature = (name?: string): Feature => {
       type: "MultiLineString",
       coordinates: [
         [
-          [1, 2],
-          [3, 4],
+          [1, 2, 10],
+          [3, 4, 12],
         ],
       ],
     },
     properties: {
       name: featureName,
+      path_type: "paved",
     },
   };
 };
