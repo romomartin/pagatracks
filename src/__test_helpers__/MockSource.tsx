@@ -18,8 +18,8 @@ export const MockSource = ({
         {`type: ${type}`}
         {`data-type: ${data.type}`}
         {`data-features: ${JSON.stringify(data.features)}`}
+        {children}
       </div>
-      {children}
     </>
   );
 };
