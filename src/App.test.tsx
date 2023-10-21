@@ -2,11 +2,20 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import App from "./App";
 import * as mockSelectedFeature from "./__test_helpers__/mock-selected-feature";
 import { Layer, MapboxGeoJSONFeature } from "mapbox-gl";
-import { LineString } from "geojson";
+import { Feature, LineString } from "geojson";
+import {
+  forDataToBeFetched,
+  setFetchGlobalMock,
+} from "./__test_helpers__/mock-fetch";
 
 describe("app", () => {
-  it("renders the map on initial state", () => {
+  beforeEach(() => {
+    setFetchGlobalMock();
+  });
+
+  it("renders the map on initial state", async () => {
     render(<App />);
+    await forDataToBeFetched(screen);
     const style = screen.getByText(
       /mapbox:\/\/styles\/piticli\/clnra3qjx00g601o3622b5n40/i
     );
@@ -22,10 +31,27 @@ describe("app", () => {
     expect(interactiveLayers).toBeInTheDocument();
   });
 
+  it("renders the map with fetched tracks", async () => {
+    const featureName = "aFeatureName";
+    const otherFeatureName = "otherFeatureName";
+    const fetchedData = [aFeature(featureName), aFeature(otherFeatureName)];
+    setFetchGlobalMock(fetchedData);
+
+    render(<App />);
+    await forDataToBeFetched(screen, fetchedData);
+    const source = await screen.findByText(/source-id: tracks/i);
+
+    expect(source).toHaveTextContent(/layer-id: tracks/i);
+    expect(source).toHaveTextContent(
+      /data-features:.*aFeatureName.*otherFeatureName/i
+    );
+  });
+
   it("highlights a track when selected on the map", async () => {
     const selectedFeatureName = "aTrackName";
 
     render(<App />);
+    await forDataToBeFetched(screen);
     selectFeatureOnMap(selectedFeatureName);
     const selectedTrackLayer = await screen.findByText(
       /layer-id: selected-track/i
@@ -38,6 +64,7 @@ describe("app", () => {
     const selectedFeatureName = "aTrackName";
 
     render(<App />);
+    await forDataToBeFetched(screen);
     selectFeatureOnMap(selectedFeatureName);
     const elevationChart = screen.getByLabelText("elevation-chart");
 
@@ -64,5 +91,37 @@ const aMapboxGeoJSONFeature = (name: string): MapboxGeoJSONFeature => {
     source: "",
     sourceLayer: "",
     state: {},
+  };
+};
+
+// const forDataToBeFetched = async (fetchedData: Feature[]) => {
+//   await screen.findByText(JSON.stringify(fetchedData), { exact: false });
+// };
+
+// export const setFetchGlobalMock = (responseJson: Object) => {
+//   global.fetch = jest.fn(() =>
+//     Promise.resolve({
+//       json: () => Promise.resolve(responseJson),
+//     })
+//   ) as jest.Mock;
+// };
+
+export const aFeature = (name?: string): Feature => {
+  const featureName = name || "featureName";
+  return {
+    type: "Feature",
+    geometry: {
+      type: "MultiLineString",
+      coordinates: [
+        [
+          [1, 2, 10],
+          [3, 4, 12],
+        ],
+      ],
+    },
+    properties: {
+      name: featureName,
+      path_type: "paved",
+    },
   };
 };

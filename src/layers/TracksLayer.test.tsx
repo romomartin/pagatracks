@@ -1,19 +1,20 @@
 import { render, screen } from "@testing-library/react";
 import { TracksLayer } from "./TracksLayer";
-import { Feature } from "geojson";
+import { Feature, FeatureCollection } from "geojson";
 import { selectedTrackStyle, tracksStyle } from "./layer-styles";
 import { MapboxGeoJSONFeature } from "mapbox-gl";
 
 describe("Tracks layer", () => {
   const featureName = "aFeatureName";
 
-  it("sets fetched tracks as map source data", async () => {
+  it("sets tracks as map source data", async () => {
     const otherFeatureName = "otherFeatureName";
-    const fetchedData = [aFeature(featureName), aFeature(otherFeatureName)];
-    setFetchGlobalMock(fetchedData);
+    const tracks = {
+      type: "FeatureCollection",
+      features: [aFeature(featureName), aFeature(otherFeatureName)],
+    } as FeatureCollection;
 
-    render(<TracksLayer selectedTrack={undefined} />);
-    await forDataToBeFetched(fetchedData);
+    render(<TracksLayer tracks={tracks} selectedTrack={undefined} />);
     const source = await screen.findByText(/source-id: tracks/i);
 
     expect(source).toHaveTextContent(/type: geojson/i);
@@ -23,27 +24,13 @@ describe("Tracks layer", () => {
     );
   });
 
-  it("maps fetched data to source data", async () => {
-    const fetchedData = [aFeature(featureName)];
-    setFetchGlobalMock(fetchedData);
-
-    render(<TracksLayer selectedTrack={undefined} />);
-    await forDataToBeFetched(fetchedData);
-    const source = await screen.findByText(/source-id: tracks/i);
-
-    expect(source).toHaveTextContent('"type":"Feature"');
-    expect(source).toHaveTextContent('"name":"aFeatureName"');
-    expect(source).toHaveTextContent('"path_type":"paved"');
-    expect(source).toHaveTextContent(
-      '"geometry":{"type":"MultiLineString","coordinates":[[[1,2,10],[3,4,12]]]'
-    );
-  });
-
   it("applies tracks layer style", async () => {
-    setFetchGlobalMock([aFeature(featureName)]);
+    const tracks = {
+      type: "FeatureCollection",
+      features: [aFeature(featureName)],
+    } as FeatureCollection;
 
-    render(<TracksLayer selectedTrack={undefined} />);
-    await forDataToBeFetched([aFeature(featureName)]);
+    render(<TracksLayer tracks={tracks} selectedTrack={undefined} />);
     const tracksLayer = await screen.findByText(/layer-id: tracks/i);
 
     expect(tracksLayer).toHaveTextContent(/type: line/i);
@@ -53,10 +40,12 @@ describe("Tracks layer", () => {
   });
 
   it("applies selected track layer style", async () => {
-    setFetchGlobalMock([aFeature(featureName)]);
+    const tracks = {
+      type: "FeatureCollection",
+      features: [aFeature(featureName)],
+    } as FeatureCollection;
 
-    render(<TracksLayer selectedTrack={undefined} />);
-    await forDataToBeFetched([aFeature(featureName)]);
+    render(<TracksLayer tracks={tracks} selectedTrack={undefined} />);
     const selectedTrackLayer = await screen.findByText(
       /layer-id: selected-track/i
     );
@@ -68,13 +57,15 @@ describe("Tracks layer", () => {
   });
 
   it("applies selected track filter to selected track when provided", async () => {
-    setFetchGlobalMock([aFeature(featureName)]);
     const selectedTrack = aFeature(
       "selectedFeatureName"
     ) as MapboxGeoJSONFeature;
+    const tracks = {
+      type: "FeatureCollection",
+      features: [aFeature(featureName), selectedTrack],
+    } as FeatureCollection;
 
-    render(<TracksLayer selectedTrack={selectedTrack} />);
-    await forDataToBeFetched([aFeature(featureName)]);
+    render(<TracksLayer tracks={tracks} selectedTrack={selectedTrack} />);
     const selectedTrackLayer = await screen.findByText(
       /layer-id: selected-track/i
     );
@@ -84,18 +75,6 @@ describe("Tracks layer", () => {
     );
   });
 });
-
-const forDataToBeFetched = async (fetchedData: Feature[]) => {
-  await screen.findByText(JSON.stringify(fetchedData), { exact: false });
-};
-
-const setFetchGlobalMock = (responseJson: Object) => {
-  global.fetch = jest.fn(() =>
-    Promise.resolve({
-      json: () => Promise.resolve(responseJson),
-    })
-  ) as jest.Mock;
-};
 
 const aFeature = (name?: string): Feature => {
   const featureName = name || "featureName";
