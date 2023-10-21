@@ -3,6 +3,7 @@ import { Track } from "../tracks/track";
 import { tracksStyle, selectedTrackStyle } from "./layer-styles";
 import { Layer, MapboxGeoJSONFeature, Source } from "react-map-gl";
 import { Feature, FeatureCollection } from "geojson";
+import { texts } from "../texts";
 
 type TracksLayerProps = {
   selectedTrack: MapboxGeoJSONFeature | undefined;
@@ -51,7 +52,7 @@ const getMergedRawTracks = async (): Promise<any> => {
 const trackFromGeoJSON = (geoJSON: Feature) => {
   const track: Track = {
     properties: {
-      name: geoJSON.properties?.name || "no name",
+      name: geoJSON.properties?.name || texts.defaultTrackName,
       path_type: geoJSON.properties?.path_type,
     },
     geometry: geoJSON.geometry,
