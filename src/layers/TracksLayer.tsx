@@ -15,11 +15,11 @@ export const TracksLayer = ({ tracks, selectedTrack }: TracksLayerProps) => {
   return (
     <>
       <Source id="tracks" type="geojson" data={tracks}>
-        <Layer {...tracksStyle} />
         <Layer
           {...selectedTrackStyle}
           filter={["in", "name", selectedTrackName]}
         />
+        <Layer {...tracksStyle} />
       </Source>
     </>
   );
