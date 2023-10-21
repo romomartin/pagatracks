@@ -14,7 +14,7 @@ describe("Tracks layer", () => {
       features: [aFeature(featureName), aFeature(otherFeatureName)],
     } as FeatureCollection;
 
-    render(<TracksLayer tracks={tracks} selectedTrack={undefined} />);
+    render(<TracksLayer tracks={tracks} selectedTrackName={""} />);
     const source = await screen.findByText(/source-id: tracks/i);
 
     expect(source).toHaveTextContent(/type: geojson/i);
@@ -30,7 +30,7 @@ describe("Tracks layer", () => {
       features: [aFeature(featureName)],
     } as FeatureCollection;
 
-    render(<TracksLayer tracks={tracks} selectedTrack={undefined} />);
+    render(<TracksLayer tracks={tracks} selectedTrackName={""} />);
     const tracksLayer = await screen.findByText(/layer-id: tracks/i);
 
     expect(tracksLayer).toHaveTextContent(/type: line/i);
@@ -45,7 +45,7 @@ describe("Tracks layer", () => {
       features: [aFeature(featureName)],
     } as FeatureCollection;
 
-    render(<TracksLayer tracks={tracks} selectedTrack={undefined} />);
+    render(<TracksLayer tracks={tracks} selectedTrackName={""} />);
     const selectedTrackLayer = await screen.findByText(
       /layer-id: selected-track/i
     );
@@ -65,7 +65,9 @@ describe("Tracks layer", () => {
       features: [aFeature(featureName), selectedTrack],
     } as FeatureCollection;
 
-    render(<TracksLayer tracks={tracks} selectedTrack={selectedTrack} />);
+    render(
+      <TracksLayer tracks={tracks} selectedTrackName={"selectedFeatureName"} />
+    );
     const selectedTrackLayer = await screen.findByText(
       /layer-id: selected-track/i
     );

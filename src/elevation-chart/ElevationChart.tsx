@@ -1,18 +1,17 @@
-import { MapboxGeoJSONFeature } from "mapbox-gl";
 import style from "./styles.module.css";
 import { FunctionComponent } from "react";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 
 type Props = {
-  selectedTrack: MapboxGeoJSONFeature | undefined;
+  selectedTrackName: string | undefined;
 };
 
 export const ElevationChart: FunctionComponent<Props> = ({
-  selectedTrack,
+  selectedTrackName,
 }: Props) => {
   const chartOptions: Highcharts.Options = {
-    title: { text: selectedTrack?.properties?.name },
+    title: { text: selectedTrackName },
     series: [
       {
         type: "line",

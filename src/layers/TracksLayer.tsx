@@ -1,17 +1,16 @@
 import { tracksStyle, selectedTrackStyle } from "./layer-styles";
-import { Layer, MapboxGeoJSONFeature, Source } from "react-map-gl";
+import { Layer, Source } from "react-map-gl";
 import { FeatureCollection, GeoJsonProperties, Geometry } from "geojson";
 
 type TracksLayerProps = {
   tracks: FeatureCollection<Geometry, GeoJsonProperties>;
-  selectedTrack: MapboxGeoJSONFeature | undefined;
+  selectedTrackName: string;
 };
 
-export const TracksLayer = ({ tracks, selectedTrack }: TracksLayerProps) => {
-  const selectedTrackName: string = selectedTrack?.properties
-    ? selectedTrack.properties.name
-    : "";
-
+export const TracksLayer = ({
+  tracks,
+  selectedTrackName,
+}: TracksLayerProps) => {
   return (
     <>
       <Source id="tracks" type="geojson" data={tracks}>

@@ -1,4 +1,4 @@
-import { MapLayerMouseEvent, MapboxGeoJSONFeature } from "mapbox-gl";
+import { MapLayerMouseEvent } from "mapbox-gl";
 import { MapCanvas } from "./map/MapCanvas";
 import { useEffect, useState } from "react";
 import { ElevationChart } from "./elevation-chart/ElevationChart";
@@ -27,15 +27,14 @@ function App() {
     setTracksFromFetch();
   }, []);
 
-  const [selectedTrack, setSelectedTrack] = useState<
-    MapboxGeoJSONFeature | undefined
-  >(undefined);
+  const [selectedTrackName, setSelectedTrackName] = useState<string>("");
 
   const handleMapClick = (event: MapLayerMouseEvent) => {
+    console.log(event);
     if (event.features && event.features[0]) {
-      setSelectedTrack(event.features[0]);
+      setSelectedTrackName(event.features[0].properties?.name);
     } else {
-      setSelectedTrack(undefined);
+      setSelectedTrackName("");
     }
   };
 
@@ -44,10 +43,10 @@ function App() {
       <MapCanvas
         tracks={trackFeatures}
         onClick={handleMapClick}
-        selectedTrack={selectedTrack}
+        selectedTrackName={selectedTrackName}
       ></MapCanvas>
-      {selectedTrack && (
-        <ElevationChart selectedTrack={selectedTrack}></ElevationChart>
+      {selectedTrackName && (
+        <ElevationChart selectedTrackName={selectedTrackName}></ElevationChart>
       )}
     </>
   );
