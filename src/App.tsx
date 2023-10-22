@@ -3,7 +3,6 @@ import { MapCanvas } from "./map/MapCanvas";
 import { useEffect, useState } from "react";
 import { ElevationChart } from "./elevation-chart/ElevationChart";
 import {
-  Track,
   TrackByName,
   getMergedRawTracks,
   trackFromGeoJSON,
