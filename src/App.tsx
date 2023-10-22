@@ -47,7 +47,9 @@ function App() {
         selectedTrackName={selectedTrackName}
       ></MapCanvas>
       {selectedTrackName && (
-        <ElevationChart selectedTrackName={selectedTrackName}></ElevationChart>
+        <ElevationChart
+          selectedTrack={tracks[selectedTrackName]}
+        ></ElevationChart>
       )}
     </>
   );
