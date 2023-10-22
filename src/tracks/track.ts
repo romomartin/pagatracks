@@ -6,6 +6,8 @@ export type Track = {
   geometry: Geometry;
 };
 
+export type TrackByName = { [trackName: string]: Track };
+
 export const getMergedRawTracks = async (): Promise<any> => {
   try {
     const result = await fetch("/data/mergedRawTracks.json");
