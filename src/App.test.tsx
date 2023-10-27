@@ -48,27 +48,33 @@ describe("app", () => {
   });
 
   it("highlights a track when selected on the map", async () => {
-    const selectedFeatureName = "aTrackName";
+    const selectedTrackName = "selectedTrackName";
+    const tracksData = [aFeature("aTrackName"), aFeature(selectedTrackName)];
+    setFetchGlobalMock(tracksData);
 
     render(<App />);
-    await forDataToBeFetched(screen);
-    selectFeatureOnMap(selectedFeatureName);
+    await forDataToBeFetched(screen, tracksData);
+    selectFeatureOnMap(selectedTrackName);
     const selectedTrackLayer = await screen.findByText(
       /layer-id: selected-track/i
     );
 
-    expect(selectedTrackLayer).toHaveTextContent(/filter: in,name,aTrackName/i);
+    expect(selectedTrackLayer).toHaveTextContent(
+      /filter: in,name,selectedTrackName/i
+    );
   });
 
   it("shows elevation chart of a track when selected on the map", async () => {
-    const selectedFeatureName = "aTrackName";
+    const selectedTrackName = "selectedTrackName";
+    const tracksData = [aFeature("aTrackName"), aFeature(selectedTrackName)];
+    setFetchGlobalMock(tracksData);
 
     render(<App />);
-    await forDataToBeFetched(screen);
-    selectFeatureOnMap(selectedFeatureName);
+    await forDataToBeFetched(screen, tracksData);
+    selectFeatureOnMap(selectedTrackName);
     const elevationChart = screen.getByLabelText("elevation-chart");
 
-    expect(elevationChart).toHaveTextContent(/aTrackName/i);
+    expect(elevationChart).toHaveTextContent(/selectedTrackName/i);
   });
 });
 
@@ -85,7 +91,13 @@ const aMapboxGeoJSONFeature = (name: string): MapboxGeoJSONFeature => {
   return {
     id: undefined,
     type: "Feature",
-    geometry: {} as LineString,
+    geometry: {
+      type: "LineString",
+      coordinates: [
+        [1, 1],
+        [2, 2],
+      ],
+    } as LineString,
     layer: {} as Layer,
     properties: { name },
     source: "",
@@ -93,18 +105,6 @@ const aMapboxGeoJSONFeature = (name: string): MapboxGeoJSONFeature => {
     state: {},
   };
 };
-
-// const forDataToBeFetched = async (fetchedData: Feature[]) => {
-//   await screen.findByText(JSON.stringify(fetchedData), { exact: false });
-// };
-
-// export const setFetchGlobalMock = (responseJson: Object) => {
-//   global.fetch = jest.fn(() =>
-//     Promise.resolve({
-//       json: () => Promise.resolve(responseJson),
-//     })
-//   ) as jest.Mock;
-// };
 
 export const aFeature = (name?: string): Feature => {
   const featureName = name || "featureName";

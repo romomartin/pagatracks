@@ -15,6 +15,7 @@ export const ElevationChart: FunctionComponent<Props> = ({
   selectedTrack,
 }: Props) => {
   const trackGeometry = selectedTrack?.geometry as MultiLineString;
+
   const chartOptions: Highcharts.Options = {
     title: { text: selectedTrack?.properties.name },
     series: [

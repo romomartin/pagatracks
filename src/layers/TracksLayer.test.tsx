@@ -2,7 +2,6 @@ import { render, screen } from "@testing-library/react";
 import { TracksLayer } from "./TracksLayer";
 import { Feature, FeatureCollection } from "geojson";
 import { selectedTrackStyle, tracksStyle } from "./layer-styles";
-import { MapboxGeoJSONFeature } from "mapbox-gl";
 
 describe("Tracks layer", () => {
   const featureName = "aFeatureName";
@@ -57,12 +56,10 @@ describe("Tracks layer", () => {
   });
 
   it("applies selected track filter to selected track when provided", async () => {
-    const selectedTrack = aFeature(
-      "selectedFeatureName"
-    ) as MapboxGeoJSONFeature;
+    const selectedTrackName = "selectedFeatureName";
     const tracks = {
       type: "FeatureCollection",
-      features: [aFeature(featureName), selectedTrack],
+      features: [aFeature(featureName), aFeature(selectedTrackName)],
     } as FeatureCollection;
 
     render(
