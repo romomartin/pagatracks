@@ -24,6 +24,10 @@ export const ElevationChart: FunctionComponent<Props> = ({
         type: "line",
         name: texts.elevation,
         data: elevationDataFrom(trackGeometry),
+        tooltip: {
+          valueSuffix: "m",
+          headerFormat: "",
+        },
       },
     ],
     chart: {

@@ -23,6 +23,18 @@ describe("Elevation chart", () => {
       '"data":[[0,0],[15.743,10],[31.486,8],[47.229,25]]'
     );
   });
+
+  it("sets correct styles for series tooltip", () => {
+    render(
+      <ElevationChart selectedTrack={aTrack("selectedTrack")}></ElevationChart>
+    );
+
+    const elevationChart = screen.getByText(/title: "selectedTrack"/i);
+
+    expect(elevationChart).toHaveTextContent(
+      '"tooltip":{"valueSuffix":"m","headerFormat":""}}]'
+    );
+  });
 });
 
 const aTrack = (name: string): Track => {
