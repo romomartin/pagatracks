@@ -6,6 +6,7 @@ import { Track } from "../tracks/track";
 import { MultiLineString, Position } from "geojson";
 import { getDistance } from "geolib";
 import { GeolibInputCoordinates } from "geolib/es/types";
+import { texts } from "../texts";
 
 type Props = {
   selectedTrack: Track | undefined;
@@ -21,6 +22,7 @@ export const ElevationChart: FunctionComponent<Props> = ({
     series: [
       {
         type: "line",
+        name: texts.elevation,
         data: elevationDataFrom(trackGeometry),
       },
     ],

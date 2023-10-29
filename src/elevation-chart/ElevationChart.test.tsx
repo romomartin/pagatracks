@@ -18,6 +18,7 @@ describe("Elevation chart", () => {
     const elevationChart = screen.getByText(/title: "selectedTrack"/i);
 
     expect(elevationChart).toHaveTextContent('"type":"line"');
+    expect(elevationChart).toHaveTextContent('"name":"elevation"');
     expect(elevationChart).toHaveTextContent(
       '"data":[[0,0],[15743,10],[31486,8],[47229,25]]'
     );
