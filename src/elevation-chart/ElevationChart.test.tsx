@@ -20,7 +20,7 @@ describe("Elevation chart", () => {
     expect(elevationChart).toHaveTextContent('"type":"line"');
     expect(elevationChart).toHaveTextContent('"name":"elevation"');
     expect(elevationChart).toHaveTextContent(
-      '"data":[[0,0],[15743,10],[31486,8],[47229,25]]'
+      '"data":[[0,0],[15.743,10],[31.486,8],[47.229,25]]'
     );
   });
 });

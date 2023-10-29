@@ -54,7 +54,7 @@ const elevationDataFrom = (geometry: MultiLineString): number[][] => {
       positionToGeolibInputCoordinates(position)
     );
     previousPosition = position;
-    return [distance, position[2]];
+    return [metersToKm(distance), position[2]];
   });
   return elevationData;
 };
@@ -66,4 +66,8 @@ const positionToGeolibInputCoordinates = (
     longitude: position[0],
     latitude: position[1],
   } as GeolibInputCoordinates;
+};
+
+const metersToKm = (meters: number): number => {
+  return meters / 1000;
 };
