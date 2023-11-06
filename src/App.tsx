@@ -3,7 +3,7 @@ import { MapCanvas } from "./map/MapCanvas";
 import { useEffect, useState } from "react";
 import { ElevationChart } from "./elevation-chart/ElevationChart";
 import {
-  TrackByName,
+  TracksByName,
   getMergedRawTracks,
   trackFromGeoJSON,
   tracksToFeatureCollection,
@@ -12,7 +12,7 @@ import { Feature } from "geojson";
 import { SidePanel } from "./side-panel/SidePanel";
 
 function App() {
-  const [tracks, setTracks] = useState<TrackByName>({});
+  const [tracks, setTracks] = useState<TracksByName>({});
 
   useEffect(() => {
     setTracksFromFetch();
@@ -20,7 +20,7 @@ function App() {
 
   const setTracksFromFetch = async () => {
     const mergedRawTracks = await getMergedRawTracks();
-    const tracks: TrackByName = {};
+    const tracks: TracksByName = {};
     mergedRawTracks.forEach((rawTrack: Feature) => {
       const track = trackFromGeoJSON(rawTrack);
       tracks[track.properties.name] = track;
