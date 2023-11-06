@@ -14,7 +14,7 @@ export const getMergedRawTracks = async (): Promise<any> => {
     const data = await result.json();
     return data;
   } catch (e) {
-    console.log(e);
+    console.error(`Unable to fetch tracks ${e}`);
     return [];
   }
 };
