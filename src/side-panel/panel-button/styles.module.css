@@ -1,0 +1,32 @@
+.button{
+  width: 40px;
+  height: 40px;
+  border-color: black;
+  border-radius: 5px;
+  background-color: #FFFFFF;
+  transition: all, .3s;
+  display: flex;
+  align-items: center;
+  color: #3C3C3C
+}
+
+.button:hover{
+  width: 150px;
+  padding-left: 5px;
+}
+
+.button .name{
+  opacity: 0;
+}
+
+.button:hover .name{
+  transition-delay: .18s;
+  opacity: 1;
+  padding-left: 40px;
+}
+
+.button img{
+  position: absolute;
+  right: 0;
+  padding: 3px
+}

@@ -9,9 +9,14 @@ import {
   tracksToFeatureCollection,
 } from "./tracks/track";
 import { Feature } from "geojson";
+import { SidePanel } from "./side-panel/SidePanel";
 
 function App() {
   const [tracks, setTracks] = useState<TrackByName>({});
+
+  useEffect(() => {
+    setTracksFromFetch();
+  }, []);
 
   const setTracksFromFetch = async () => {
     const mergedRawTracks = await getMergedRawTracks();
@@ -24,10 +29,6 @@ function App() {
   };
 
   const trackFeatures = tracksToFeatureCollection(Object.values(tracks));
-
-  useEffect(() => {
-    setTracksFromFetch();
-  }, []);
 
   const [selectedTrackName, setSelectedTrackName] = useState<string>("");
 
@@ -51,6 +52,7 @@ function App() {
           selectedTrack={tracks[selectedTrackName]}
         ></ElevationChart>
       )}
+      <SidePanel></SidePanel>
     </>
   );
 }

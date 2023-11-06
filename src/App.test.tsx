@@ -76,6 +76,15 @@ describe("app", () => {
 
     expect(elevationChart).toHaveTextContent(/selectedTrackName/i);
   });
+
+  it("shows side panel", async () => {
+    render(<App />);
+    await forDataToBeFetched(screen);
+
+    const sidePanel = screen.getByLabelText("sidePanel");
+
+    expect(sidePanel).toBeInTheDocument();
+  });
 });
 
 const selectFeatureOnMap = (selectedFeatureName: string) => {
