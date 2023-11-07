@@ -9,7 +9,7 @@ import {
   tracksToFeatureCollection,
 } from "./tracks/track";
 import { Feature } from "geojson";
-import { SidePanel } from "./side-panel/SidePanel";
+import { SideMenu } from "./side-menu/SideMenu";
 
 function App() {
   const [tracks, setTracks] = useState<TracksByName>({});
@@ -52,7 +52,7 @@ function App() {
           selectedTrack={tracks[selectedTrackName]}
         ></ElevationChart>
       )}
-      <SidePanel></SidePanel>
+      <SideMenu></SideMenu>
     </>
   );
 }

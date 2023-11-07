@@ -1,11 +1,11 @@
-import { PanelButton } from "./panel-button/PanelButton";
+import { ToolButton } from "./tool-button/ToolButton";
 import { DesignRouteIcon } from "./button-icons/DesignRouteIcon";
 import style from "./styles.module.css";
 
-export const SidePanel = () => {
+export const SideMenu = () => {
   return (
     <div className={style.container} aria-label="sidePanel">
-      <PanelButton icon={DesignRouteIcon()} name={"Design route"}></PanelButton>
+      <ToolButton icon={DesignRouteIcon()} name={"Design route"}></ToolButton>
     </div>
   );
 };
