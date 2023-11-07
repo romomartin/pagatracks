@@ -1,7 +1,7 @@
 .button{
   width: 40px;
   height: 40px;
-  border-color: black;
+  border: none;
   border-radius: 5px;
   background-color: #FFFFFF;
   transition: all, .3s;
@@ -11,7 +11,7 @@
 }
 
 .button:hover{
-  width: 150px;
+  width: 130px;
   padding-left: 5px;
 }
 
@@ -20,7 +20,7 @@
 }
 
 .button:hover .name{
-  transition-delay: .18s;
+  transition-delay: .23s;
   opacity: 1;
   padding-left: 40px;
 }

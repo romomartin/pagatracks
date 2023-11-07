@@ -1,11 +1,15 @@
-import { DesignRouteIcon } from "../button-icons/DesignRouteIcon";
 import style from "./styles.module.css";
 
-export const PanelButton = () => {
+type PanelButtonProps = {
+  icon: JSX.Element;
+  name: string;
+};
+
+export const PanelButton = (panelButtonProps: PanelButtonProps) => {
   return (
-    <div className={style.button} aria-label="panelButton">
-      <DesignRouteIcon></DesignRouteIcon>
-      <span className={style.name}>Design route</span>
-    </div>
+    <button className={style.button} aria-label="panelButton">
+      {panelButtonProps.icon}
+      <span className={style.name}>{panelButtonProps.name}</span>
+    </button>
   );
 };
