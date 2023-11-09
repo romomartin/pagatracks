@@ -7,7 +7,7 @@ export type Connections = {
 };
 
 type ConnectionIndex = {
-  [edgeId: string]: { nodeAId: string; nodeBId: string };
+  [trackName: string]: { nodeAId: string; nodeBId: string };
 };
 
 export type ConnectionNode = {
