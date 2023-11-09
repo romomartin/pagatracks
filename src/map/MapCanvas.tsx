@@ -1,5 +1,5 @@
 import { Map, MapLayerMouseEvent } from "react-map-gl";
-import { TracksLayer } from "../layers/TracksLayer";
+import { TracksLayer } from "../layers/tracks/TracksLayer";
 import { FeatureCollection, GeoJsonProperties, Geometry } from "geojson";
 
 type MapProps = {

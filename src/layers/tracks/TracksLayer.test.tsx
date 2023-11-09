@@ -1,12 +1,12 @@
 import { render, screen } from "@testing-library/react";
 import { TracksLayer } from "./TracksLayer";
 import { Feature, FeatureCollection } from "geojson";
-import { selectedTrackStyle, tracksStyle } from "./layer-styles";
+import { selectedTrackStyle, tracksStyle } from "./tracks-layer-styles";
 
 describe("Tracks layer", () => {
   const featureName = "aFeatureName";
 
-  it("sets tracks as map source data", async () => {
+  it("sets given tracks as map source data", async () => {
     const otherFeatureName = "otherFeatureName";
     const tracks = {
       type: "FeatureCollection",

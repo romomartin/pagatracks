@@ -1,4 +1,4 @@
-import { tracksStyle, selectedTrackStyle } from "./layer-styles";
+import { tracksStyle, selectedTrackStyle } from "./tracks-layer-styles";
 import { Layer, Source } from "react-map-gl";
 import { FeatureCollection, GeoJsonProperties, Geometry } from "geojson";
 
