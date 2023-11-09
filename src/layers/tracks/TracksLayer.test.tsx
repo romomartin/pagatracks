@@ -1,7 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import { TracksLayer } from "./TracksLayer";
-import { Feature, FeatureCollection } from "geojson";
+import { FeatureCollection } from "geojson";
 import { selectedTrackStyle, tracksStyle } from "./tracks-layer-styles";
+import { aLineFeature } from "../../__test_helpers__/geoJSON";
 
 describe("Tracks layer", () => {
   const featureName = "aFeatureName";
@@ -10,7 +11,7 @@ describe("Tracks layer", () => {
     const otherFeatureName = "otherFeatureName";
     const tracks = {
       type: "FeatureCollection",
-      features: [aFeature(featureName), aFeature(otherFeatureName)],
+      features: [aLineFeature(featureName), aLineFeature(otherFeatureName)],
     } as FeatureCollection;
 
     render(<TracksLayer tracks={tracks} selectedTrackName={""} />);
@@ -26,7 +27,7 @@ describe("Tracks layer", () => {
   it("applies tracks layer style", async () => {
     const tracks = {
       type: "FeatureCollection",
-      features: [aFeature(featureName)],
+      features: [aLineFeature(featureName)],
     } as FeatureCollection;
 
     render(<TracksLayer tracks={tracks} selectedTrackName={""} />);
@@ -41,7 +42,7 @@ describe("Tracks layer", () => {
   it("applies selected track layer style", async () => {
     const tracks = {
       type: "FeatureCollection",
-      features: [aFeature(featureName)],
+      features: [aLineFeature(featureName)],
     } as FeatureCollection;
 
     render(<TracksLayer tracks={tracks} selectedTrackName={""} />);
@@ -59,7 +60,7 @@ describe("Tracks layer", () => {
     const selectedTrackName = "selectedFeatureName";
     const tracks = {
       type: "FeatureCollection",
-      features: [aFeature(featureName), aFeature(selectedTrackName)],
+      features: [aLineFeature(featureName), aLineFeature(selectedTrackName)],
     } as FeatureCollection;
 
     render(
@@ -74,23 +75,3 @@ describe("Tracks layer", () => {
     );
   });
 });
-
-const aFeature = (name?: string): Feature => {
-  const featureName = name || "featureName";
-  return {
-    type: "Feature",
-    geometry: {
-      type: "MultiLineString",
-      coordinates: [
-        [
-          [1, 2, 10],
-          [3, 4, 12],
-        ],
-      ],
-    },
-    properties: {
-      name: featureName,
-      path_type: "paved",
-    },
-  };
-};

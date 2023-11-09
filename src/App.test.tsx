@@ -2,11 +2,12 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import App from "./App";
 import * as mockSelectedFeature from "./__test_helpers__/mock-selected-feature";
 import { Layer, MapboxGeoJSONFeature } from "mapbox-gl";
-import { Feature, LineString } from "geojson";
+import { LineString } from "geojson";
 import {
   forDataToBeFetched,
   setFetchGlobalMock,
 } from "./__test_helpers__/mock-fetch";
+import { aLineFeature } from "./__test_helpers__/geoJSON";
 
 describe("app", () => {
   beforeEach(() => {
@@ -34,7 +35,10 @@ describe("app", () => {
   it("renders the map with fetched tracks", async () => {
     const featureName = "aFeatureName";
     const otherFeatureName = "otherFeatureName";
-    const fetchedData = [aFeature(featureName), aFeature(otherFeatureName)];
+    const fetchedData = [
+      aLineFeature(featureName),
+      aLineFeature(otherFeatureName),
+    ];
     setFetchGlobalMock(fetchedData);
 
     render(<App />);
@@ -49,7 +53,10 @@ describe("app", () => {
 
   it("highlights a track when selected on the map", async () => {
     const selectedTrackName = "selectedTrackName";
-    const tracksData = [aFeature("aTrackName"), aFeature(selectedTrackName)];
+    const tracksData = [
+      aLineFeature("aTrackName"),
+      aLineFeature(selectedTrackName),
+    ];
     setFetchGlobalMock(tracksData);
 
     render(<App />);
@@ -66,7 +73,10 @@ describe("app", () => {
 
   it("shows elevation chart of a track when selected on the map", async () => {
     const selectedTrackName = "selectedTrackName";
-    const tracksData = [aFeature("aTrackName"), aFeature(selectedTrackName)];
+    const tracksData = [
+      aLineFeature("aTrackName"),
+      aLineFeature(selectedTrackName),
+    ];
     setFetchGlobalMock(tracksData);
 
     render(<App />);
@@ -112,25 +122,5 @@ const aMapboxGeoJSONFeature = (name: string): MapboxGeoJSONFeature => {
     source: "",
     sourceLayer: "",
     state: {},
-  };
-};
-
-export const aFeature = (name?: string): Feature => {
-  const featureName = name || "featureName";
-  return {
-    type: "Feature",
-    geometry: {
-      type: "MultiLineString",
-      coordinates: [
-        [
-          [1, 2, 10],
-          [3, 4, 12],
-        ],
-      ],
-    },
-    properties: {
-      name: featureName,
-      path_type: "paved",
-    },
   };
 };

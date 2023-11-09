@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
-import { Feature, FeatureCollection } from "geojson";
+import { FeatureCollection } from "geojson";
 import { NodesLayer } from "./NodesLayer";
+import { aPointFeature } from "../../__test_helpers__/geoJSON";
 
 describe("Nodes layer", () => {
   it("Sets given nodes as source data", async () => {
@@ -21,11 +22,3 @@ describe("Nodes layer", () => {
     );
   });
 });
-
-const aPointFeature = (featureName: string): Feature => {
-  return {
-    type: "Feature",
-    geometry: { type: "Point", coordinates: [1, 2] },
-    properties: { id: featureName },
-  };
-};
