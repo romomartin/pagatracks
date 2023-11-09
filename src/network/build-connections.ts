@@ -1,21 +1,26 @@
 import { MultiLineString, Point, Position } from "geojson";
 import { TracksByName } from "../tracks/track";
 
-type Connections = { connectionIndex: ConnectionIndex; nodes: Node[] };
+export type Connections = {
+  connectionIndex: ConnectionIndex;
+  nodes: ConnectionNode[];
+};
 
 type ConnectionIndex = {
   [edgeId: string]: { nodeAId: string; nodeBId: string };
 };
 
-type Node = {
+export type ConnectionNode = {
   id: string;
   geometry: Point;
 };
 
+export const nullConnections: Connections = { connectionIndex: {}, nodes: [] };
+
 export const buildConnectionsFromTracks = (
   tracks: TracksByName
 ): Connections => {
-  let nodes: Node[] = [];
+  let nodes: ConnectionNode[] = [];
   let connectionIndex: ConnectionIndex = {};
 
   Object.entries(tracks).forEach(([trackName, track]) => {
@@ -63,20 +68,20 @@ const lineEndPoint = (lineGeometry: MultiLineString): Position => {
   return endLineString[endLineString.length - 1];
 };
 
-const alreadyInNodes = (nodes: Node[], nodeGeom: Point): boolean => {
+const alreadyInNodes = (nodes: ConnectionNode[], nodeGeom: Point): boolean => {
   return nodes.some((node) => {
     return JSON.stringify(node.geometry) === JSON.stringify(nodeGeom);
   });
 };
 
-const nodeFrom = (nodes: Node[], nodeGeom: Point): Node => {
+const nodeFrom = (nodes: ConnectionNode[], nodeGeom: Point): ConnectionNode => {
   return {
     geometry: nodeGeom,
     id: `node${nodes.length}`,
   };
 };
 
-const getNodeId = (nodes: Node[], nodeGeom: Point): string => {
+const getNodeId = (nodes: ConnectionNode[], nodeGeom: Point): string => {
   const node = nodes.find((node) => {
     return JSON.stringify(node.geometry) === JSON.stringify(nodeGeom);
   });

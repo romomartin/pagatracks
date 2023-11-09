@@ -1,14 +1,21 @@
 import { Map, MapLayerMouseEvent } from "react-map-gl";
 import { TracksLayer } from "../layers/tracks/TracksLayer";
-import { FeatureCollection, GeoJsonProperties, Geometry } from "geojson";
+import { FeatureCollection } from "geojson";
+import { NodesLayer } from "../layers/nodes/NodesLayer";
 
 type MapProps = {
-  tracks: FeatureCollection<Geometry, GeoJsonProperties>;
+  tracks: FeatureCollection;
+  nodes: FeatureCollection;
   onClick: (e: MapLayerMouseEvent) => void;
   selectedTrackName: string;
 };
 
-export const MapCanvas = ({ tracks, onClick, selectedTrackName }: MapProps) => {
+export const MapCanvas = ({
+  tracks,
+  nodes,
+  onClick,
+  selectedTrackName,
+}: MapProps) => {
   return (
     <Map
       mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
@@ -32,6 +39,7 @@ export const MapCanvas = ({ tracks, onClick, selectedTrackName }: MapProps) => {
         tracks={tracks}
         selectedTrackName={selectedTrackName}
       ></TracksLayer>
+      <NodesLayer nodes={nodes}></NodesLayer>
     </Map>
   );
 };

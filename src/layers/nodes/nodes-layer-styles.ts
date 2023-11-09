@@ -1,7 +1,10 @@
 import { CircleLayer } from "mapbox-gl";
 
 export const nodesStyle: CircleLayer = {
-  id: "tracks",
+  id: "nodes",
   type: "circle",
-  paint: {},
+  paint: {
+    "circle-radius": 8,
+    "circle-color": "rgba(55,148,179,1)",
+  },
 };

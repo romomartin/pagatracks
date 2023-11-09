@@ -33,11 +33,11 @@ describe("app", () => {
   });
 
   it("renders the map with fetched tracks", async () => {
-    const featureName = "aFeatureName";
-    const otherFeatureName = "otherFeatureName";
+    const lineFeatureName = "aTrackName";
+    const otherLineFeatureName = "otherTrackName";
     const fetchedData = [
-      aLineFeature(featureName),
-      aLineFeature(otherFeatureName),
+      aLineFeature(lineFeatureName),
+      aLineFeature(otherLineFeatureName),
     ];
     setFetchGlobalMock(fetchedData);
 
@@ -47,7 +47,7 @@ describe("app", () => {
 
     expect(source).toHaveTextContent(/layer-id: tracks/i);
     expect(source).toHaveTextContent(
-      /data-features:.*aFeatureName.*otherFeatureName/i
+      /data-features:.*aTrackName.*otherTrackName/i
     );
   });
 
@@ -69,6 +69,19 @@ describe("app", () => {
     expect(selectedTrackLayer).toHaveTextContent(
       /filter: in,name,selectedTrackName/i
     );
+  });
+
+  it("renders the map with connection nodes as nodes layer", async () => {
+    const lineFeatureName = "aTrackName";
+    const fetchedData = [aLineFeature(lineFeatureName)];
+    setFetchGlobalMock(fetchedData);
+
+    render(<App />);
+    await forDataToBeFetched(screen, fetchedData);
+    const source = await screen.findByText(/source-id: nodes/i);
+
+    expect(source).toHaveTextContent(/layer-id: nodes/i);
+    expect(source).toHaveTextContent(/data-features:.*[1, 2, 10].*[3, 4, 12]/i);
   });
 
   it("shows elevation chart of a track when selected on the map", async () => {

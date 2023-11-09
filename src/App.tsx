@@ -10,13 +10,24 @@ import {
 } from "./tracks/track";
 import { Feature } from "geojson";
 import { SideMenu } from "./side-menu/SideMenu";
+import {
+  Connections,
+  buildConnectionsFromTracks,
+  nullConnections,
+} from "./network/build-connections";
+import { nodesToFeatureCollection } from "./network/nodes-to-feature-collection";
 
 function App() {
   const [tracks, setTracks] = useState<TracksByName>({});
+  const [connections, setConnections] = useState<Connections>(nullConnections);
 
   useEffect(() => {
     setTracksFromFetch();
   }, []);
+
+  useEffect(() => {
+    setConnections(buildConnectionsFromTracks(tracks));
+  }, [tracks]);
 
   const setTracksFromFetch = async () => {
     const mergedRawTracks = await getMergedRawTracks();
@@ -29,6 +40,7 @@ function App() {
   };
 
   const trackFeatures = tracksToFeatureCollection(Object.values(tracks));
+  const nodeFeatures = nodesToFeatureCollection(connections.nodes);
 
   const [selectedTrackName, setSelectedTrackName] = useState<string>("");
 
@@ -44,6 +56,7 @@ function App() {
     <>
       <MapCanvas
         tracks={trackFeatures}
+        nodes={nodeFeatures}
         onClick={handleMapClick}
         selectedTrackName={selectedTrackName}
       ></MapCanvas>
