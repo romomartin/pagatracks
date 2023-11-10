@@ -1,7 +1,6 @@
 import {
   tracksStyle,
   selectedTrackStyle,
-  hoveredTrackStyle,
   selectableTracksStyle,
 } from "./tracks-layer-styles";
 import { Layer, Source } from "react-map-gl";
@@ -22,19 +21,21 @@ export const TracksLayer = ({
     <>
       <Source id="tracks" type="geojson" data={tracks}>
         <Layer
+          id="selected-track"
           {...selectedTrackStyle}
           filter={["in", "name", selectedTrackName]}
         />
         <Layer
-          {...hoveredTrackStyle}
+          id="hovered-track"
+          {...selectedTrackStyle}
           filter={[
             "in",
             "name",
             hoveredTrackName === selectedTrackName ? "" : hoveredTrackName,
           ]}
         />
-        <Layer {...selectableTracksStyle} />
-        <Layer {...tracksStyle} />
+        <Layer id="selectable-tracks" {...selectableTracksStyle} />
+        <Layer id="tracks" {...tracksStyle} />
       </Source>
     </>
   );

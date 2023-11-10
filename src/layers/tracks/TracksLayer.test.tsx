@@ -2,7 +2,6 @@ import { render, screen } from "@testing-library/react";
 import { TracksLayer } from "./TracksLayer";
 import { FeatureCollection } from "geojson";
 import {
-  hoveredTrackStyle,
   selectableTracksStyle,
   selectedTrackStyle,
   tracksStyle,
@@ -98,7 +97,7 @@ describe("Tracks layer", () => {
 
     expect(hoveredTrackLayer).toHaveTextContent(/type: line/i);
     expect(hoveredTrackLayer).toHaveTextContent(
-      `paint: ${JSON.stringify(hoveredTrackStyle.paint)}`
+      `paint: ${JSON.stringify(selectedTrackStyle.paint)}`
     );
   });
 
