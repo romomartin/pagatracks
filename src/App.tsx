@@ -52,13 +52,25 @@ function App() {
     }
   };
 
+  const [hoveredTrackName, setHoveredTrackName] = useState<string>("");
+
+  const handleMapMouseOver = (event: MapLayerMouseEvent) => {
+    if (event.features && event.features[0]) {
+      setHoveredTrackName(event.features[0].properties?.name);
+    } else {
+      setHoveredTrackName("");
+    }
+  };
+
   return (
     <>
       <MapCanvas
         tracks={trackFeatures}
         nodes={nodeFeatures}
         onClick={handleMapClick}
+        onMouseMove={handleMapMouseOver}
         selectedTrackName={selectedTrackName}
+        hoveredTrackName={hoveredTrackName}
       ></MapCanvas>
       {selectedTrackName && (
         <ElevationChart

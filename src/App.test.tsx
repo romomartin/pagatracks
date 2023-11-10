@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import App from "./App";
 import * as mockSelectedFeature from "./__test_helpers__/mock-selected-feature";
+import * as mockHoveredFeature from "./__test_helpers__/mock-hovered-feature";
 import { Layer, MapboxGeoJSONFeature } from "mapbox-gl";
 import { LineString } from "geojson";
 import {
@@ -71,6 +72,26 @@ describe("app", () => {
     );
   });
 
+  it("highlights a track when hovered on the map", async () => {
+    const hoveredTrackName = "hoveredTrackName";
+    const tracksData = [
+      aLineFeature("aTrackName"),
+      aLineFeature(hoveredTrackName),
+    ];
+    setFetchGlobalMock(tracksData);
+
+    render(<App />);
+    await forDataToBeFetched(screen, tracksData);
+    hoverFeatureOnMap(hoveredTrackName);
+    const hoveredTrackLayer = await screen.findByText(
+      /layer-id: hovered-track/i
+    );
+
+    expect(hoveredTrackLayer).toHaveTextContent(
+      /filter: in,name,hoveredTrackName/i
+    );
+  });
+
   it("renders the map with connection nodes as nodes layer", async () => {
     const lineFeatureName = "aTrackName";
     const fetchedData = [aLineFeature(lineFeatureName)];
@@ -117,6 +138,15 @@ const selectFeatureOnMap = (selectedFeatureName: string) => {
 
   const mapClick = screen.getByRole("button", { name: /mapclick/i });
   fireEvent.click(mapClick);
+};
+
+const hoverFeatureOnMap = (hoveredFeatureName: string) => {
+  jest
+    .spyOn(mockHoveredFeature, "mockHoveredFeature")
+    .mockReturnValue(aMapboxGeoJSONFeature(hoveredFeatureName));
+
+  const mapHover = screen.getByRole("button", { name: /maphover/i });
+  fireEvent.mouseOver(mapHover);
 };
 
 const aMapboxGeoJSONFeature = (name: string): MapboxGeoJSONFeature => {

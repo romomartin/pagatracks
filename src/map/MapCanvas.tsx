@@ -7,14 +7,18 @@ type MapProps = {
   tracks: FeatureCollection;
   nodes: FeatureCollection;
   onClick: (e: MapLayerMouseEvent) => void;
+  onMouseMove: (e: MapLayerMouseEvent) => void;
   selectedTrackName: string;
+  hoveredTrackName: string;
 };
 
 export const MapCanvas = ({
   tracks,
   nodes,
   onClick,
+  onMouseMove,
   selectedTrackName,
+  hoveredTrackName,
 }: MapProps) => {
   return (
     <Map
@@ -32,12 +36,14 @@ export const MapCanvas = ({
         latitude: 43.21861,
         zoom: 13,
       }}
-      interactiveLayerIds={["tracks"]}
+      interactiveLayerIds={["selectable-tracks"]}
       onClick={onClick}
+      onMouseMove={onMouseMove}
     >
       <TracksLayer
         tracks={tracks}
         selectedTrackName={selectedTrackName}
+        hoveredTrackName={hoveredTrackName}
       ></TracksLayer>
       <NodesLayer nodes={nodes}></NodesLayer>
     </Map>
