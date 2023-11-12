@@ -45,21 +45,21 @@ function App() {
   const [selectedTrackName, setSelectedTrackName] = useState<string>("");
 
   const handleMapClick = (event: MapLayerMouseEvent) => {
-    if (event.features && event.features[0]) {
-      setSelectedTrackName(event.features[0].properties?.name);
-    } else {
-      setSelectedTrackName("");
-    }
+    const selectedTrackName =
+      event.features && event.features[0]
+        ? event.features[0].properties?.name
+        : "";
+    setSelectedTrackName(selectedTrackName);
   };
 
   const [hoveredTrackName, setHoveredTrackName] = useState<string>("");
 
   const handleMapMouseOver = (event: MapLayerMouseEvent) => {
-    if (event.features && event.features[0]) {
-      setHoveredTrackName(event.features[0].properties?.name);
-    } else {
-      setHoveredTrackName("");
-    }
+    const hoveredTrackName =
+      event.features && event.features[0]
+        ? event.features[0].properties?.name
+        : "";
+    setHoveredTrackName(hoveredTrackName);
   };
 
   return (
