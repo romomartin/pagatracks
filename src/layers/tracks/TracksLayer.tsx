@@ -1,10 +1,17 @@
 import {
   tracksStyle,
-  selectedTrackStyle,
+  highlightedTrackStyle,
   selectableTracksStyle,
 } from "./tracks-layer-styles";
 import { Layer, Source } from "react-map-gl";
 import { FeatureCollection, GeoJsonProperties, Geometry } from "geojson";
+
+export enum TrackLayerIds {
+  SELECTED_TRACK = "selected-track",
+  HOVERED_TRACK = "hovered-track",
+  SELECTABLE_TRACKS = "selectable-tracks",
+  TRACKS = "tracks",
+}
 
 type TracksLayerProps = {
   tracks: FeatureCollection<Geometry, GeoJsonProperties>;
@@ -21,21 +28,24 @@ export const TracksLayer = ({
     <>
       <Source id="tracks" type="geojson" data={tracks}>
         <Layer
-          id="selected-track"
-          {...selectedTrackStyle}
+          id={TrackLayerIds.SELECTED_TRACK}
+          {...highlightedTrackStyle}
           filter={["in", "name", selectedTrackName]}
         />
         <Layer
-          id="hovered-track"
-          {...selectedTrackStyle}
+          id={TrackLayerIds.HOVERED_TRACK}
+          {...highlightedTrackStyle}
           filter={[
             "in",
             "name",
             hoveredTrackName === selectedTrackName ? "" : hoveredTrackName,
           ]}
         />
-        <Layer id="selectable-tracks" {...selectableTracksStyle} />
-        <Layer id="tracks" {...tracksStyle} />
+        <Layer
+          id={TrackLayerIds.SELECTABLE_TRACKS}
+          {...selectableTracksStyle}
+        />
+        <Layer id={TrackLayerIds.TRACKS} {...tracksStyle} />
       </Source>
     </>
   );

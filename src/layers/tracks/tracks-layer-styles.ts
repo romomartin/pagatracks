@@ -33,7 +33,7 @@ export const selectableTracksStyle: Omit<LineLayer, "id"> = {
   },
 };
 
-export const selectedTrackStyle: Omit<LineLayer, "id"> = {
+export const highlightedTrackStyle: Omit<LineLayer, "id"> = {
   type: "line",
   paint: {
     "line-color": [

@@ -2,6 +2,10 @@ import { FeatureCollection } from "geojson";
 import { Layer, Source } from "react-map-gl";
 import { nodesStyle } from "./nodes-layer-styles";
 
+export enum NodeLayerIds {
+  NODES = "nodes",
+}
+
 type NodesLayerProps = {
   nodes: FeatureCollection;
 };
@@ -9,7 +13,7 @@ type NodesLayerProps = {
 export const NodesLayer = ({ nodes }: NodesLayerProps): JSX.Element => {
   return (
     <>
-      <Source id="nodes" type="geojson" data={nodes}>
+      <Source id={NodeLayerIds.NODES} type="geojson" data={nodes}>
         <Layer {...nodesStyle} />
       </Source>
     </>

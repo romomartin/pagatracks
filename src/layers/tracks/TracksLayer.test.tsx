@@ -3,7 +3,7 @@ import { TracksLayer } from "./TracksLayer";
 import { FeatureCollection } from "geojson";
 import {
   selectableTracksStyle,
-  selectedTrackStyle,
+  highlightedTrackStyle,
   tracksStyle,
 } from "./tracks-layer-styles";
 import { aLineFeature } from "../../__test_helpers__/geoJSON";
@@ -74,7 +74,7 @@ describe("Tracks layer", () => {
 
     expect(selectedTrackLayer).toHaveTextContent(/type: line/i);
     expect(selectedTrackLayer).toHaveTextContent(
-      `paint: ${JSON.stringify(selectedTrackStyle.paint)}`
+      `paint: ${JSON.stringify(highlightedTrackStyle.paint)}`
     );
   });
 
@@ -97,7 +97,7 @@ describe("Tracks layer", () => {
 
     expect(hoveredTrackLayer).toHaveTextContent(/type: line/i);
     expect(hoveredTrackLayer).toHaveTextContent(
-      `paint: ${JSON.stringify(selectedTrackStyle.paint)}`
+      `paint: ${JSON.stringify(highlightedTrackStyle.paint)}`
     );
   });
 
