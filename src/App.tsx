@@ -1,4 +1,4 @@
-import { MapLayerMouseEvent } from "mapbox-gl";
+import { MapLayerMouseEvent, Visibility } from "mapbox-gl";
 import { MapCanvas } from "./map/MapCanvas";
 import { useEffect, useState } from "react";
 import { ElevationChart } from "./elevation-chart/ElevationChart";
@@ -62,11 +62,20 @@ function App() {
     setHoveredTrackName(hoveredTrackName);
   };
 
+  const [nodesVisibility, setNodesVisibility] = useState<Visibility>("none");
+
+  const toggleNodesVisibility = (): void => {
+    nodesVisibility === "none"
+      ? setNodesVisibility("visible")
+      : setNodesVisibility("none");
+  };
+
   return (
     <>
       <MapCanvas
         tracks={trackFeatures}
         nodes={nodeFeatures}
+        nodesVisibility={nodesVisibility}
         onClick={handleMapClick}
         onMouseMove={handleMapMouseOver}
         selectedTrackName={selectedTrackName}
@@ -77,7 +86,7 @@ function App() {
           selectedTrack={tracks[selectedTrackName]}
         ></ElevationChart>
       )}
-      <SideMenu></SideMenu>
+      <SideMenu handleCreateNewRoute={toggleNodesVisibility}></SideMenu>
     </>
   );
 }

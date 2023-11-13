@@ -5,7 +5,11 @@ import { CreateRoutePanel } from "./tool-panel/CreateRoutePanel";
 import { useState } from "react";
 import { texts } from "../texts";
 
-export const SideMenu = () => {
+type SideMenuProps = {
+  handleCreateNewRoute: () => void;
+};
+
+export const SideMenu = ({ handleCreateNewRoute }: SideMenuProps) => {
   const [panelVisibility, setPanelVisibility] = useState<boolean>(false);
 
   const togglePanelVisibility = (): void => {
@@ -22,7 +26,10 @@ export const SideMenu = () => {
         ></CreateRouteButton>
       </div>
       <div className={style.panelCol}>
-        <CreateRoutePanel isVisible={panelVisibility}></CreateRoutePanel>
+        <CreateRoutePanel
+          isVisible={panelVisibility}
+          handleCreateNewRoute={handleCreateNewRoute}
+        ></CreateRoutePanel>
       </div>
     </div>
   );

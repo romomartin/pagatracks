@@ -1,13 +1,21 @@
 import { texts } from "../../texts";
 import style from "./styles.module.css";
 
-export const CreateRoutePanel = ({ isVisible }: { isVisible: boolean }) => {
+type CreateRoutePanelProps = {
+  isVisible: boolean;
+  handleCreateNewRoute: () => void;
+};
+
+export const CreateRoutePanel = ({
+  isVisible,
+  handleCreateNewRoute,
+}: CreateRoutePanelProps) => {
   return (
     <div
       className={isVisible ? style.panel : style.hidden}
       aria-label="toolPanel"
     >
-      <button>{texts.createNewRoute}</button>
+      <button onClick={handleCreateNewRoute}>{texts.createNewRoute}</button>
     </div>
   );
 };

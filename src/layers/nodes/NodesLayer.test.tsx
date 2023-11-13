@@ -13,7 +13,7 @@ describe("Nodes layer", () => {
       features: [aPointFeature(nodeName), aPointFeature(otherNodeName)],
     } as FeatureCollection;
 
-    render(<NodesLayer nodes={nodes} />);
+    render(<NodesLayer nodes={nodes} nodesVisibility="none" />);
     const source = await screen.findByText(/source-id: nodes/i);
 
     expect(source).toHaveTextContent(/type: geojson/i);
@@ -31,7 +31,7 @@ describe("Nodes layer", () => {
       features: [aPointFeature(nodeName), aPointFeature(otherNodeName)],
     } as FeatureCollection;
 
-    render(<NodesLayer nodes={nodes} />);
+    render(<NodesLayer nodes={nodes} nodesVisibility="none" />);
     const nodesLayer = await screen.findByText(/layer-id: nodes/i);
 
     expect(nodesLayer).toHaveTextContent(/type: circle/i);
@@ -40,14 +40,14 @@ describe("Nodes layer", () => {
     );
   });
 
-  it("sets default visibillity as non visible", async () => {
+  it("sets nodes visibillity from prop value", async () => {
     const nodeName = "nodeName";
     const nodes = {
       type: "FeatureCollection",
       features: [aPointFeature(nodeName)],
     } as FeatureCollection;
 
-    render(<NodesLayer nodes={nodes} />);
+    render(<NodesLayer nodes={nodes} nodesVisibility="none" />);
     const nodesLayer = await screen.findByText(/layer-id: nodes/i);
 
     expect(nodesLayer).toHaveTextContent(/visibility: none/i);

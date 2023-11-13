@@ -2,10 +2,12 @@ import { Map, MapLayerMouseEvent } from "react-map-gl";
 import { TracksLayer } from "../layers/tracks/TracksLayer";
 import { FeatureCollection } from "geojson";
 import { NodesLayer } from "../layers/nodes/NodesLayer";
+import { Visibility } from "mapbox-gl";
 
 type MapProps = {
   tracks: FeatureCollection;
   nodes: FeatureCollection;
+  nodesVisibility: Visibility;
   onClick: (e: MapLayerMouseEvent) => void;
   onMouseMove: (e: MapLayerMouseEvent) => void;
   selectedTrackName: string;
@@ -15,6 +17,7 @@ type MapProps = {
 export const MapCanvas = ({
   tracks,
   nodes,
+  nodesVisibility,
   onClick,
   onMouseMove,
   selectedTrackName,
@@ -45,7 +48,7 @@ export const MapCanvas = ({
         selectedTrackName={selectedTrackName}
         hoveredTrackName={hoveredTrackName}
       ></TracksLayer>
-      <NodesLayer nodes={nodes}></NodesLayer>
+      <NodesLayer nodes={nodes} nodesVisibility={nodesVisibility}></NodesLayer>
     </Map>
   );
 };

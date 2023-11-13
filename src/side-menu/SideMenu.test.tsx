@@ -3,7 +3,7 @@ import { SideMenu } from "./SideMenu";
 
 describe("Side menu", () => {
   it("has tool button", () => {
-    render(<SideMenu></SideMenu>);
+    render(<SideMenu handleCreateNewRoute={() => {}}></SideMenu>);
 
     const toolButtons = screen.getAllByLabelText("toolButton");
 
@@ -11,7 +11,7 @@ describe("Side menu", () => {
   });
 
   it("shows tool panel when tool button is clicked", () => {
-    render(<SideMenu></SideMenu>);
+    render(<SideMenu handleCreateNewRoute={() => {}}></SideMenu>);
     const toolButtons = screen.getAllByLabelText("toolButton");
     fireEvent.click(toolButtons[0]);
 

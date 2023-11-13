@@ -1,7 +1,6 @@
 import { CircleLayer } from "mapbox-gl";
 
-export const nodesStyle: CircleLayer = {
-  id: "nodes",
+export const nodesStyle: Omit<CircleLayer, "id"> = {
   type: "circle",
   paint: {
     "circle-radius": 8,

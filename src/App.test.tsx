@@ -129,6 +129,19 @@ describe("app", () => {
 
     expect(sidePanel).toBeInTheDocument();
   });
+
+  describe("create new route", () => {
+    it("shows connection nodes when starting new route", async () => {
+      render(<App />);
+      await forDataToBeFetched(screen);
+
+      const createNewRouteButton = screen.getByText("Create new route");
+      fireEvent.click(createNewRouteButton);
+      const nodesLayer = await screen.findByText(/layer-id: nodes/i);
+
+      expect(nodesLayer).toHaveTextContent(/visibility: visible/i);
+    });
+  });
 });
 
 const selectFeatureOnMap = (selectedFeatureName: string) => {
