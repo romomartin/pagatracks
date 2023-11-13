@@ -1,7 +1,7 @@
 import { texts } from "../../texts";
 import style from "./styles.module.css";
 
-export const ToolPanel = ({ isVisible }: { isVisible: boolean }) => {
+export const CreateRoutePanel = ({ isVisible }: { isVisible: boolean }) => {
   return (
     <div
       className={isVisible ? style.panel : style.hidden}

@@ -1,17 +1,17 @@
 import { useState } from "react";
 import style from "./styles.module.css";
 
-type ToolButtonProps = {
+type CreateRouteButtonProps = {
   icon: JSX.Element;
   name: string;
   togglePanelVisibility: () => void;
 };
 
-export const ToolButton = ({
+export const CreateRouteButton = ({
   icon,
   name,
   togglePanelVisibility,
-}: ToolButtonProps) => {
+}: CreateRouteButtonProps) => {
   const [isToggled, setIstoggled] = useState<boolean>(false);
 
   const onClick = () => {

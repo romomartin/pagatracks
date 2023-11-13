@@ -1,7 +1,7 @@
-import { ToolButton } from "./tool-button/ToolButton";
-import { DesignRouteIcon } from "./button-icons/DesignRouteIcon";
+import { CreateRouteButton } from "./tool-button/CreateRouteButton";
+import { CreateRouteIcon } from "./button-icons/CreateRouteIcon";
 import style from "./styles.module.css";
-import { ToolPanel } from "./tool-panel/ToolPanel";
+import { CreateRoutePanel } from "./tool-panel/CreateRoutePanel";
 import { useState } from "react";
 import { texts } from "../texts";
 
@@ -15,14 +15,14 @@ export const SideMenu = () => {
   return (
     <div className={style.container} aria-label="sidePanel">
       <div className={style.buttonCol}>
-        <ToolButton
-          icon={DesignRouteIcon()}
+        <CreateRouteButton
+          icon={CreateRouteIcon()}
           name={texts.designRoute}
           togglePanelVisibility={togglePanelVisibility}
-        ></ToolButton>
+        ></CreateRouteButton>
       </div>
       <div className={style.panelCol}>
-        <ToolPanel isVisible={panelVisibility}></ToolPanel>
+        <CreateRoutePanel isVisible={panelVisibility}></CreateRoutePanel>
       </div>
     </div>
   );

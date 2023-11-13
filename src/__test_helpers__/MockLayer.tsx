@@ -20,7 +20,7 @@ export const MockLayer = ({
         {`type: ${type}`}
         {`paint: ${JSON.stringify(paint)}`}
         {`filter: ${filter}`}
-        {`visibility: ${layout.visibility}`}
+        {`visibility: ${layout?.visibility ?? ""}`}
       </div>
     </>
   );
