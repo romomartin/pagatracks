@@ -141,6 +141,19 @@ describe("app", () => {
 
       expect(nodesLayer).toHaveTextContent(/visibility: visible/i);
     });
+
+    it("shows hint when starting new route", async () => {
+      render(<App />);
+      await forDataToBeFetched(screen);
+
+      const createNewRouteButton = screen.getByText("Create new route");
+      fireEvent.click(createNewRouteButton);
+      const createRoutePanel = screen.getByLabelText("createRoutePanel");
+
+      expect(createRoutePanel).toHaveTextContent(
+        /Select your route's starting point/i
+      );
+    });
   });
 });
 
