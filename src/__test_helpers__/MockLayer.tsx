@@ -5,11 +5,13 @@ export const MockLayer = ({
   type,
   paint,
   filter,
+  layout,
 }: {
   id: string;
   type: string;
   paint: mapboxgl.LinePaint;
   filter: string;
+  layout: mapboxgl.Layout;
 }): JSX.Element => {
   return (
     <>
@@ -18,6 +20,7 @@ export const MockLayer = ({
         {`type: ${type}`}
         {`paint: ${JSON.stringify(paint)}`}
         {`filter: ${filter}`}
+        {`visibility: ${layout.visibility}`}
       </div>
     </>
   );

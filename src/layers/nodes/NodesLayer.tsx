@@ -14,7 +14,7 @@ export const NodesLayer = ({ nodes }: NodesLayerProps): JSX.Element => {
   return (
     <>
       <Source id={NodeLayerIds.NODES} type="geojson" data={nodes}>
-        <Layer {...nodesStyle} />
+        <Layer {...nodesStyle} layout={{ visibility: "none" }} />
       </Source>
     </>
   );
