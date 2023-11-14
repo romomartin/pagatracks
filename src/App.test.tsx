@@ -177,6 +177,35 @@ describe("app", () => {
       expect(mockMap).not.toHaveTextContent(/interactiveLayerIds:.*tracks/i);
     });
 
+    it("clears selected track when starting new route", async () => {
+      const selectedTrackName = "selectedTrackName";
+      const tracksLayerId = "selectable-tracks";
+      const tracksData = [
+        aLineFeature("aTrackName"),
+        aLineFeature(selectedTrackName),
+      ];
+      setFetchGlobalMock(tracksData);
+
+      render(<App />);
+      await forDataToBeFetched(screen, tracksData);
+      selectFeatureOnMap(selectedTrackName, tracksLayerId);
+      let selectedTrackLayer = await screen.findByText(
+        /layer-id: selected-track/i
+      );
+
+      expect(selectedTrackLayer).toHaveTextContent(
+        /filter: in,name,selectedTrackName/i
+      );
+
+      const createNewRouteButton = screen.getByText("Create new route");
+      fireEvent.click(createNewRouteButton);
+      selectedTrackLayer = await screen.findByText(/layer-id: selected-track/i);
+
+      expect(selectedTrackLayer).not.toHaveTextContent(
+        /filter: in,name,selectedTrackName/i
+      );
+    });
+
     it("enables nodes selection when starting new route", async () => {
       const selectedTrackName = "selectedTrackName";
       const tracksData = [

@@ -48,7 +48,6 @@ function App() {
   const [selectedTrackName, setSelectedTrackName] = useState<string>("");
 
   const handleMapClick = (event: MapLayerMouseEvent) => {
-    console.log(event.features);
     const selectedTrackName =
       event.features &&
       event.features[0] &&
@@ -75,12 +74,13 @@ function App() {
     TrackLayerIds.SELECTABLE_TRACKS,
   ]);
 
-  const toggleNodesVisibility = (): void => {
+  const createNewRoute = (): void => {
     nodesVisibility === "none"
       ? setNodesVisibility("visible")
       : setNodesVisibility("none");
 
     setInteractiveLayers([NodeLayerIds.NODES]);
+    setSelectedTrackName("");
   };
 
   return (
@@ -100,7 +100,7 @@ function App() {
           selectedTrack={tracks[selectedTrackName]}
         ></ElevationChart>
       )}
-      <SideMenu handleCreateNewRoute={toggleNodesVisibility}></SideMenu>
+      <SideMenu handleCreateNewRoute={createNewRoute}></SideMenu>
     </>
   );
 }
