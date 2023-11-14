@@ -1,9 +1,9 @@
-import { CreateRouteButton } from "./tool-button/CreateRouteButton";
-import { CreateRouteIcon } from "./button-icons/CreateRouteIcon";
 import style from "./styles.module.css";
-import { CreateRoutePanel } from "./tool-panel/CreateRoutePanel";
+import { CreateRoutePanel } from "../create-route/panel/CreateRoutePanel";
 import { useState } from "react";
 import { texts } from "../texts";
+import { CreateRouteButton } from "../create-route/button/CreateRouteButton";
+import { CreateRouteIcon } from "../create-route/CreateRouteIcon";
 
 type SideMenuProps = {
   handleCreateNewRoute: () => void;
