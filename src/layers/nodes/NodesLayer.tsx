@@ -1,20 +1,23 @@
 import { FeatureCollection } from "geojson";
 import { Layer, Source } from "react-map-gl";
-import { nodesStyle } from "./nodes-layer-styles";
+import { highlightedNodeStyle, nodesStyle } from "./nodes-layer-styles";
 import { Visibility } from "mapbox-gl";
 
 export enum NodeLayerIds {
   NODES = "nodes",
+  HOVERED_NODE = "hovered-node",
 }
 
 type NodesLayerProps = {
   nodes: FeatureCollection;
   nodesVisibility: Visibility;
+  hoveredNodeId: string;
 };
 
 export const NodesLayer = ({
   nodes,
   nodesVisibility,
+  hoveredNodeId,
 }: NodesLayerProps): JSX.Element => {
   return (
     <>
@@ -23,6 +26,12 @@ export const NodesLayer = ({
           id={NodeLayerIds.NODES}
           {...nodesStyle}
           layout={{ visibility: nodesVisibility }}
+        />
+        <Layer
+          id={NodeLayerIds.HOVERED_NODE}
+          {...highlightedNodeStyle}
+          layout={{ visibility: nodesVisibility }}
+          filter={["in", "id", hoveredNodeId]}
         />
       </Source>
     </>

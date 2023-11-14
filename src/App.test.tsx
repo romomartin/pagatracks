@@ -206,12 +206,26 @@ describe("app", () => {
       );
     });
 
+    it("enables nodes hovering when starting new route", async () => {
+      const hoveredNodeId = "node0";
+      const nodesLayerId = "nodes";
+      const tracksData = [aLineFeature("aTrackName")];
+      setFetchGlobalMock(tracksData);
+      render(<App />);
+      await forDataToBeFetched(screen, tracksData);
+
+      const createNewRouteButton = screen.getByText("Create new route");
+      fireEvent.click(createNewRouteButton);
+      hoverFeatureOnMap(hoveredNodeId, nodesLayerId);
+      const hoveredTrackLayer = await screen.findByText(
+        /layer-id: hovered-node/i
+      );
+
+      expect(hoveredTrackLayer).toHaveTextContent(/filter: in,id,node0/i);
+    });
+
     it("enables nodes selection when starting new route", async () => {
-      const selectedTrackName = "selectedTrackName";
-      const tracksData = [
-        aLineFeature("aTrackName"),
-        aLineFeature(selectedTrackName),
-      ];
+      const tracksData = [aLineFeature("aTrackName")];
       setFetchGlobalMock(tracksData);
       render(<App />);
       await forDataToBeFetched(screen, tracksData);
@@ -244,7 +258,7 @@ const hoverFeatureOnMap = (hoveredFeatureName: string, layerId: string) => {
 };
 
 const aMapboxGeoJSONFeature = (
-  name: string,
+  identifier: string,
   layerId: string
 ): MapboxGeoJSONFeature => {
   return {
@@ -258,7 +272,7 @@ const aMapboxGeoJSONFeature = (
       ],
     } as LineString,
     layer: { id: layerId } as Layer,
-    properties: { name },
+    properties: { name: identifier, id: identifier },
     source: "",
     sourceLayer: "",
     state: {},
