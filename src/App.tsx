@@ -16,6 +16,9 @@ import {
   nullConnections,
 } from "./network/build-connections";
 import { nodesToFeatureCollection } from "./network/nodes-to-feature-collection";
+import { LayerIds } from "./layers";
+import { TrackLayerIds } from "./layers/tracks/TracksLayer";
+import { NodeLayerIds } from "./layers/nodes/NodesLayer";
 
 function App() {
   const [tracks, setTracks] = useState<TracksByName>({});
@@ -45,8 +48,11 @@ function App() {
   const [selectedTrackName, setSelectedTrackName] = useState<string>("");
 
   const handleMapClick = (event: MapLayerMouseEvent) => {
+    console.log(event.features);
     const selectedTrackName =
-      event.features && event.features[0]
+      event.features &&
+      event.features[0] &&
+      event.features[0]?.layer.id === TrackLayerIds.SELECTABLE_TRACKS
         ? event.features[0].properties?.name
         : "";
     setSelectedTrackName(selectedTrackName);
@@ -56,18 +62,25 @@ function App() {
 
   const handleMapMouseOver = (event: MapLayerMouseEvent) => {
     const hoveredTrackName =
-      event.features && event.features[0]
+      event.features &&
+      event.features[0] &&
+      event.features[0].layer.id === TrackLayerIds.SELECTABLE_TRACKS
         ? event.features[0].properties?.name
         : "";
     setHoveredTrackName(hoveredTrackName);
   };
 
   const [nodesVisibility, setNodesVisibility] = useState<Visibility>("none");
+  const [interactiveLayers, setInteractiveLayers] = useState<LayerIds[]>([
+    TrackLayerIds.SELECTABLE_TRACKS,
+  ]);
 
   const toggleNodesVisibility = (): void => {
     nodesVisibility === "none"
       ? setNodesVisibility("visible")
       : setNodesVisibility("none");
+
+    setInteractiveLayers([NodeLayerIds.NODES]);
   };
 
   return (
@@ -76,6 +89,7 @@ function App() {
         tracks={trackFeatures}
         nodes={nodeFeatures}
         nodesVisibility={nodesVisibility}
+        interactiveLayers={interactiveLayers}
         onClick={handleMapClick}
         onMouseMove={handleMapMouseOver}
         selectedTrackName={selectedTrackName}

@@ -3,11 +3,13 @@ import { TracksLayer } from "../layers/tracks/TracksLayer";
 import { FeatureCollection } from "geojson";
 import { NodesLayer } from "../layers/nodes/NodesLayer";
 import { Visibility } from "mapbox-gl";
+import { LayerIds } from "../layers";
 
 type MapProps = {
   tracks: FeatureCollection;
   nodes: FeatureCollection;
   nodesVisibility: Visibility;
+  interactiveLayers: LayerIds[];
   onClick: (e: MapLayerMouseEvent) => void;
   onMouseMove: (e: MapLayerMouseEvent) => void;
   selectedTrackName: string;
@@ -18,6 +20,7 @@ export const MapCanvas = ({
   tracks,
   nodes,
   nodesVisibility,
+  interactiveLayers,
   onClick,
   onMouseMove,
   selectedTrackName,
@@ -39,7 +42,7 @@ export const MapCanvas = ({
         latitude: 43.21861,
         zoom: 13,
       }}
-      interactiveLayerIds={["selectable-tracks"]}
+      interactiveLayerIds={interactiveLayers}
       onClick={onClick}
       onMouseMove={onMouseMove}
     >

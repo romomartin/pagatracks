@@ -24,7 +24,9 @@ describe("app", () => {
     const initialLatitude = screen.getByText(/lat: 43.21861/i);
     const initialLongitude = screen.getByText(/long: -2.94305/i);
     const initialZoom = screen.getByText(/zoom: 13/i);
-    const interactiveLayers = screen.getByText(/interactiveLayerIds:.*tracks/i);
+    const interactiveLayers = screen.getByText(
+      /interactiveLayerIds:*selectable-tracks/i
+    );
 
     expect(style).toBeInTheDocument();
     expect(initialLatitude).toBeInTheDocument();
@@ -54,6 +56,7 @@ describe("app", () => {
 
   it("highlights a track when selected on the map", async () => {
     const selectedTrackName = "selectedTrackName";
+    const tracksLayerId = "selectable-tracks";
     const tracksData = [
       aLineFeature("aTrackName"),
       aLineFeature(selectedTrackName),
@@ -62,7 +65,7 @@ describe("app", () => {
 
     render(<App />);
     await forDataToBeFetched(screen, tracksData);
-    selectFeatureOnMap(selectedTrackName);
+    selectFeatureOnMap(selectedTrackName, tracksLayerId);
     const selectedTrackLayer = await screen.findByText(
       /layer-id: selected-track/i
     );
@@ -74,6 +77,7 @@ describe("app", () => {
 
   it("highlights a track when hovered on the map", async () => {
     const hoveredTrackName = "hoveredTrackName";
+    const tracksLayerId = "selectable-tracks";
     const tracksData = [
       aLineFeature("aTrackName"),
       aLineFeature(hoveredTrackName),
@@ -82,7 +86,7 @@ describe("app", () => {
 
     render(<App />);
     await forDataToBeFetched(screen, tracksData);
-    hoverFeatureOnMap(hoveredTrackName);
+    hoverFeatureOnMap(hoveredTrackName, tracksLayerId);
     const hoveredTrackLayer = await screen.findByText(
       /layer-id: hovered-track/i
     );
@@ -107,6 +111,7 @@ describe("app", () => {
 
   it("shows elevation chart of a track when selected on the map", async () => {
     const selectedTrackName = "selectedTrackName";
+    const tracksLayerId = "selectable-tracks";
     const tracksData = [
       aLineFeature("aTrackName"),
       aLineFeature(selectedTrackName),
@@ -115,7 +120,7 @@ describe("app", () => {
 
     render(<App />);
     await forDataToBeFetched(screen, tracksData);
-    selectFeatureOnMap(selectedTrackName);
+    selectFeatureOnMap(selectedTrackName, tracksLayerId);
     const elevationChart = screen.getByLabelText("elevation-chart");
 
     expect(elevationChart).toHaveTextContent(/selectedTrackName/i);
@@ -131,7 +136,7 @@ describe("app", () => {
   });
 
   describe("create new route", () => {
-    it("shows connection nodes when starting new route", async () => {
+    it("shows connection nodes when starting create new route", async () => {
       render(<App />);
       await forDataToBeFetched(screen);
 
@@ -142,7 +147,7 @@ describe("app", () => {
       expect(nodesLayer).toHaveTextContent(/visibility: visible/i);
     });
 
-    it("shows hint when starting new route", async () => {
+    it("shows hint when starting create new route", async () => {
       render(<App />);
       await forDataToBeFetched(screen);
 
@@ -154,28 +159,65 @@ describe("app", () => {
         /Select your route's starting point/i
       );
     });
+
+    it("disables track selection and hovering when starting new route", async () => {
+      const selectedTrackName = "selectedTrackName";
+      const tracksData = [
+        aLineFeature("aTrackName"),
+        aLineFeature(selectedTrackName),
+      ];
+      setFetchGlobalMock(tracksData);
+      render(<App />);
+      await forDataToBeFetched(screen, tracksData);
+
+      const createNewRouteButton = screen.getByText("Create new route");
+      fireEvent.click(createNewRouteButton);
+      const mockMap = screen.getByText(/mapstyle:mapbox/i);
+
+      expect(mockMap).not.toHaveTextContent(/interactiveLayerIds:.*tracks/i);
+    });
+
+    it("enables nodes selection when starting new route", async () => {
+      const selectedTrackName = "selectedTrackName";
+      const tracksData = [
+        aLineFeature("aTrackName"),
+        aLineFeature(selectedTrackName),
+      ];
+      setFetchGlobalMock(tracksData);
+      render(<App />);
+      await forDataToBeFetched(screen, tracksData);
+
+      const createNewRouteButton = screen.getByText("Create new route");
+      fireEvent.click(createNewRouteButton);
+      const mockMap = screen.getByText(/mapstyle:mapbox/i);
+
+      expect(mockMap).toHaveTextContent(/interactiveLayerIds:.*nodes/i);
+    });
   });
 });
 
-const selectFeatureOnMap = (selectedFeatureName: string) => {
+const selectFeatureOnMap = (selectedFeatureName: string, layerId: string) => {
   jest
     .spyOn(mockSelectedFeature, "mockSelectedFeature")
-    .mockReturnValue(aMapboxGeoJSONFeature(selectedFeatureName));
+    .mockReturnValue(aMapboxGeoJSONFeature(selectedFeatureName, layerId));
 
   const mapClick = screen.getByRole("button", { name: /mapclick/i });
   fireEvent.click(mapClick);
 };
 
-const hoverFeatureOnMap = (hoveredFeatureName: string) => {
+const hoverFeatureOnMap = (hoveredFeatureName: string, layerId: string) => {
   jest
     .spyOn(mockHoveredFeature, "mockHoveredFeature")
-    .mockReturnValue(aMapboxGeoJSONFeature(hoveredFeatureName));
+    .mockReturnValue(aMapboxGeoJSONFeature(hoveredFeatureName, layerId));
 
   const mapHover = screen.getByRole("button", { name: /maphover/i });
   fireEvent.mouseOver(mapHover);
 };
 
-const aMapboxGeoJSONFeature = (name: string): MapboxGeoJSONFeature => {
+const aMapboxGeoJSONFeature = (
+  name: string,
+  layerId: string
+): MapboxGeoJSONFeature => {
   return {
     id: undefined,
     type: "Feature",
@@ -186,7 +228,7 @@ const aMapboxGeoJSONFeature = (name: string): MapboxGeoJSONFeature => {
         [2, 2],
       ],
     } as LineString,
-    layer: {} as Layer,
+    layer: { id: layerId } as Layer,
     properties: { name },
     source: "",
     sourceLayer: "",
