@@ -38,6 +38,7 @@ export const MapCanvas = ({
         top: 0,
         left: 0,
       }}
+      cursor="auto"
       mapStyle="mapbox://styles/piticli/clnra3qjx00g601o3622b5n40"
       initialViewState={{
         longitude: -2.94305,

@@ -4,6 +4,7 @@ import { mockHoveredFeature } from "./mock-hovered-feature";
 
 export const MockMap = ({
   mapStyle,
+  cursor,
   initialViewState,
   interactiveLayerIds,
   onClick,
@@ -11,6 +12,7 @@ export const MockMap = ({
   children,
 }: {
   mapStyle: string;
+  cursor: string;
   initialViewState: { longitude: number; latitude: number; zoom: number };
   interactiveLayerIds: string[];
   onClick: (event: MapLayerMouseEvent) => void;
@@ -21,6 +23,7 @@ export const MockMap = ({
     <>
       <div id="MockMap">
         mapstyle:{mapStyle}
+        cursor:{cursor}
         initialViewState:
         {`lat: ${initialViewState.latitude}`}
         {`long: ${initialViewState.longitude}`}

@@ -21,6 +21,7 @@ describe("app", () => {
     const style = screen.getByText(
       /mapbox:\/\/styles\/piticli\/clnra3qjx00g601o3622b5n40/i
     );
+    const cursor = screen.getByText(/cursor:*auto/i);
     const initialLatitude = screen.getByText(/lat: 43.21861/i);
     const initialLongitude = screen.getByText(/long: -2.94305/i);
     const initialZoom = screen.getByText(/zoom: 13/i);
@@ -29,6 +30,7 @@ describe("app", () => {
     );
 
     expect(style).toBeInTheDocument();
+    expect(cursor).toBeInTheDocument();
     expect(initialLatitude).toBeInTheDocument();
     expect(initialLongitude).toBeInTheDocument();
     expect(initialZoom).toBeInTheDocument();
