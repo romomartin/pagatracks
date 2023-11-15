@@ -46,15 +46,29 @@ function App() {
   const nodeFeatures = nodesToFeatureCollection(connections.nodes);
 
   const [selectedTrackName, setSelectedTrackName] = useState<string>("");
+  const [selectedNodeId, setSelectedNodeId] = useState<string>("");
 
   const handleMapClick = (event: MapLayerMouseEvent) => {
-    const selectedTrackName =
-      event.features &&
-      event.features[0] &&
-      event.features[0]?.layer.id === TrackLayerIds.SELECTABLE_TRACKS
-        ? event.features[0].properties?.name
-        : "";
+    let selectedTrackName = "";
+    let selectedNodeId = "";
+
+    const selectedFeature = event.features?.length
+      ? event.features[0]
+      : undefined;
+
+    if (!selectedFeature) {
+      setSelectedTrackName(selectedTrackName);
+      setSelectedNodeId(selectedNodeId);
+      return;
+    }
+
+    if (selectedFeature.layer.id === TrackLayerIds.SELECTABLE_TRACKS)
+      selectedTrackName = selectedFeature.properties?.name;
+    if (selectedFeature.layer.id === NodeLayerIds.NODES)
+      selectedNodeId = selectedFeature.properties?.id;
+
     setSelectedTrackName(selectedTrackName);
+    setSelectedNodeId(selectedNodeId);
   };
 
   const [hoveredTrackName, setHoveredTrackName] = useState<string>("");
@@ -109,6 +123,7 @@ function App() {
         selectedTrackName={selectedTrackName}
         hoveredTrackName={hoveredTrackName}
         hoveredNodeId={hoveredNodeId}
+        selectedNodeId={selectedNodeId}
       ></MapCanvas>
       {selectedTrackName && (
         <ElevationChart

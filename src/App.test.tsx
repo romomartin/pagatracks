@@ -208,25 +208,7 @@ describe("app", () => {
       );
     });
 
-    it("enables nodes hovering when starting new route", async () => {
-      const hoveredNodeId = "node0";
-      const nodesLayerId = "nodes";
-      const tracksData = [aLineFeature("aTrackName")];
-      setFetchGlobalMock(tracksData);
-      render(<App />);
-      await forDataToBeFetched(screen, tracksData);
-
-      const createNewRouteButton = screen.getByText("Create new route");
-      fireEvent.click(createNewRouteButton);
-      hoverFeatureOnMap(hoveredNodeId, nodesLayerId);
-      const hoveredTrackLayer = await screen.findByText(
-        /layer-id: hovered-node/i
-      );
-
-      expect(hoveredTrackLayer).toHaveTextContent(/filter: in,id,node0/i);
-    });
-
-    it("enables nodes selection when starting new route", async () => {
+    it("enables nodes selection and hovering when starting new route", async () => {
       const tracksData = [aLineFeature("aTrackName")];
       setFetchGlobalMock(tracksData);
       render(<App />);
@@ -238,22 +220,64 @@ describe("app", () => {
 
       expect(mockMap).toHaveTextContent(/interactiveLayerIds:.*nodes/i);
     });
+
+    it("allows nodes hovering when starting new route", async () => {
+      const hoveredNodeId = "node0";
+      const nodesLayerId = "nodes";
+      const tracksData = [aLineFeature("aTrackName")];
+      setFetchGlobalMock(tracksData);
+      render(<App />);
+      await forDataToBeFetched(screen, tracksData);
+
+      const createNewRouteButton = screen.getByText("Create new route");
+      fireEvent.click(createNewRouteButton);
+      hoverFeatureOnMap(hoveredNodeId, nodesLayerId);
+      const hoveredNodeLayer = await screen.findByText(
+        /layer-id: hovered-node/i
+      );
+
+      expect(hoveredNodeLayer).toHaveTextContent(/filter: in,id,node0/i);
+    });
+
+    it("allows nodes selection when starting new route", async () => {
+      const selectedNodeId = "node0";
+      const nodesLayerId = "nodes";
+      const tracksData = [aLineFeature("aTrackName")];
+      setFetchGlobalMock(tracksData);
+      render(<App />);
+      await forDataToBeFetched(screen, tracksData);
+
+      const createNewRouteButton = screen.getByText("Create new route");
+      fireEvent.click(createNewRouteButton);
+      selectFeatureOnMap(selectedNodeId, nodesLayerId);
+      const selectedNodeLayer = await screen.findByText(
+        /layer-id: selected-node/i
+      );
+
+      expect(selectedNodeLayer).toHaveTextContent(/filter: in,id,node0/i);
+    });
   });
 });
 
-const selectFeatureOnMap = (selectedFeatureName: string, layerId: string) => {
+const selectFeatureOnMap = (
+  selectedFeatureIdentifier: string,
+  layerId: string
+) => {
   jest
     .spyOn(mockSelectedFeature, "mockSelectedFeature")
-    .mockReturnValue(aMapboxGeoJSONFeature(selectedFeatureName, layerId));
+    .mockReturnValue(aMapboxGeoJSONFeature(selectedFeatureIdentifier, layerId));
 
   const mapClick = screen.getByRole("button", { name: /mapclick/i });
   fireEvent.click(mapClick);
 };
 
-const hoverFeatureOnMap = (hoveredFeatureName: string, layerId: string) => {
+const hoverFeatureOnMap = (
+  hoveredFeatureIdentifier: string,
+  layerId: string
+) => {
   jest
     .spyOn(mockHoveredFeature, "mockHoveredFeature")
-    .mockReturnValue(aMapboxGeoJSONFeature(hoveredFeatureName, layerId));
+    .mockReturnValue(aMapboxGeoJSONFeature(hoveredFeatureIdentifier, layerId));
 
   const mapHover = screen.getByRole("button", { name: /maphover/i });
   fireEvent.mouseOver(mapHover);

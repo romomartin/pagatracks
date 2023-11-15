@@ -15,6 +15,7 @@ type MapProps = {
   selectedTrackName: string;
   hoveredTrackName: string;
   hoveredNodeId: string;
+  selectedNodeId: string;
 };
 
 export const MapCanvas = ({
@@ -27,6 +28,7 @@ export const MapCanvas = ({
   selectedTrackName,
   hoveredTrackName,
   hoveredNodeId,
+  selectedNodeId,
 }: MapProps) => {
   return (
     <Map
@@ -58,6 +60,7 @@ export const MapCanvas = ({
         nodes={nodes}
         nodesVisibility={nodesVisibility}
         hoveredNodeId={hoveredNodeId}
+        selectedNodeId={selectedNodeId}
       ></NodesLayer>
     </Map>
   );

@@ -2,7 +2,11 @@ import { render, screen } from "@testing-library/react";
 import { FeatureCollection } from "geojson";
 import { NodesLayer } from "./NodesLayer";
 import { aPointFeature } from "../../__test_helpers__/geoJSON";
-import { highlightedNodeStyle, nodesStyle } from "./nodes-layer-styles";
+import {
+  highlightedNodeStyle,
+  nodesStyle,
+  selectedNodeStyle,
+} from "./nodes-layer-styles";
 
 describe("Nodes layer", () => {
   it("sets given nodes as source data", async () => {
@@ -14,7 +18,12 @@ describe("Nodes layer", () => {
     } as FeatureCollection;
 
     render(
-      <NodesLayer nodes={nodes} nodesVisibility="none" hoveredNodeId="" />
+      <NodesLayer
+        nodes={nodes}
+        nodesVisibility="none"
+        hoveredNodeId=""
+        selectedNodeId=""
+      />
     );
     const source = await screen.findByText(/source-id: nodes/i);
 
@@ -32,7 +41,12 @@ describe("Nodes layer", () => {
     } as FeatureCollection;
 
     render(
-      <NodesLayer nodes={nodes} nodesVisibility="none" hoveredNodeId="" />
+      <NodesLayer
+        nodes={nodes}
+        nodesVisibility="none"
+        hoveredNodeId=""
+        selectedNodeId=""
+      />
     );
     const nodesLayer = await screen.findByText(/layer-id: nodes/i);
 
@@ -50,7 +64,12 @@ describe("Nodes layer", () => {
     } as FeatureCollection;
 
     render(
-      <NodesLayer nodes={nodes} nodesVisibility="none" hoveredNodeId="" />
+      <NodesLayer
+        nodes={nodes}
+        nodesVisibility="none"
+        hoveredNodeId=""
+        selectedNodeId=""
+      />
     );
     const nodesLayer = await screen.findByText(/layer-id: nodes/i);
 
@@ -65,7 +84,12 @@ describe("Nodes layer", () => {
     } as FeatureCollection;
 
     render(
-      <NodesLayer nodes={nodes} nodesVisibility="none" hoveredNodeId="" />
+      <NodesLayer
+        nodes={nodes}
+        nodesVisibility="none"
+        hoveredNodeId=""
+        selectedNodeId=""
+      />
     );
     const hoveredNodeLayer = await screen.findByText(/layer-id: hovered-node/i);
 
@@ -83,10 +107,62 @@ describe("Nodes layer", () => {
     } as FeatureCollection;
 
     render(
-      <NodesLayer nodes={nodes} nodesVisibility="none" hoveredNodeId={nodeId} />
+      <NodesLayer
+        nodes={nodes}
+        nodesVisibility="none"
+        hoveredNodeId={nodeId}
+        selectedNodeId=""
+      />
     );
     const hoveredNodeLayer = await screen.findByText(/layer-id: hovered-node/i);
 
     expect(hoveredNodeLayer).toHaveTextContent(/filter: in,id,node3/i);
+  });
+
+  it("applies selected node layer style", async () => {
+    const nodeId = "node3";
+    const nodes = {
+      type: "FeatureCollection",
+      features: [aPointFeature(nodeId)],
+    } as FeatureCollection;
+
+    render(
+      <NodesLayer
+        nodes={nodes}
+        nodesVisibility="none"
+        hoveredNodeId=""
+        selectedNodeId=""
+      />
+    );
+    const selectedNodeLayer = await screen.findByText(
+      /layer-id: selected-node/i
+    );
+
+    expect(selectedNodeLayer).toHaveTextContent(/type: circle/i);
+    expect(selectedNodeLayer).toHaveTextContent(
+      `paint: ${JSON.stringify(selectedNodeStyle.paint)}`
+    );
+  });
+
+  it("applies selected node filter to selected node layer when provided", async () => {
+    const nodeId = "node3";
+    const nodes = {
+      type: "FeatureCollection",
+      features: [aPointFeature(nodeId)],
+    } as FeatureCollection;
+
+    render(
+      <NodesLayer
+        nodes={nodes}
+        nodesVisibility="none"
+        hoveredNodeId=""
+        selectedNodeId={nodeId}
+      />
+    );
+    const selectedNodeLayer = await screen.findByText(
+      /layer-id: selected-node/i
+    );
+
+    expect(selectedNodeLayer).toHaveTextContent(/filter: in,id,node3/i);
   });
 });
