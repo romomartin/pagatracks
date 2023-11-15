@@ -3,7 +3,7 @@
   top: 25%;
   left: 30px;
   width: 300px;
-  height: 200px;
+  height: auto;
   border-color: black;
   border-width: 2px;
   display: flex;
