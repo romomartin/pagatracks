@@ -1,35 +1,18 @@
 import style from "./styles.module.css";
-import { CreateRoutePanel } from "../create-route/panel/CreateRoutePanel";
-import { useState } from "react";
-import { texts } from "../texts";
-import { CreateRouteButton } from "../create-route/button/CreateRouteButton";
-import { CreateRouteIcon } from "../create-route/CreateRouteIcon";
+import { TrackTool } from "../track-tools";
 
 type SideMenuProps = {
-  handleCreateNewRoute: () => void;
+  trackTools: TrackTool[];
 };
 
-export const SideMenu = ({ handleCreateNewRoute }: SideMenuProps) => {
-  const [panelVisibility, setPanelVisibility] = useState<boolean>(false);
-
-  const togglePanelVisibility = (): void => {
-    setPanelVisibility(!panelVisibility);
-  };
-
+export const SideMenu = ({ trackTools }: SideMenuProps) => {
   return (
     <div className={style.container} aria-label="sidePanel">
       <div className={style.buttonCol}>
-        <CreateRouteButton
-          icon={CreateRouteIcon()}
-          name={texts.designRoute}
-          togglePanelVisibility={togglePanelVisibility}
-        ></CreateRouteButton>
+        {trackTools.map((tool) => tool.button)}
       </div>
       <div className={style.panelCol}>
-        <CreateRoutePanel
-          isVisible={panelVisibility}
-          handleCreateNewRoute={handleCreateNewRoute}
-        ></CreateRoutePanel>
+        {trackTools.map((tool) => tool.panel)}
       </div>
     </div>
   );

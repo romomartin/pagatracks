@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { texts } from "../../texts";
+import { texts } from "../../../texts";
 import style from "./styles.module.css";
 
 type CreateRoutePanelProps = {

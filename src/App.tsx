@@ -19,6 +19,7 @@ import { nodesToFeatureCollection } from "./network/nodes-to-feature-collection"
 import { LayerIds } from "./layers";
 import { TrackLayerIds } from "./layers/tracks/TracksLayer";
 import { NodeLayerIds } from "./layers/nodes/NodesLayer";
+import { CreateRoute } from "./track-tools";
 
 function App() {
   const [tracks, setTracks] = useState<TracksByName>({});
@@ -111,6 +112,10 @@ function App() {
     setSelectedTrackName("");
   };
 
+  const createRoute = CreateRoute({
+    handleCreateNewRoute: createNewRoute,
+  });
+
   return (
     <>
       <MapCanvas
@@ -130,7 +135,7 @@ function App() {
           selectedTrack={tracks[selectedTrackName]}
         ></ElevationChart>
       )}
-      <SideMenu handleCreateNewRoute={createNewRoute}></SideMenu>
+      <SideMenu trackTools={[createRoute]}></SideMenu>
     </>
   );
 }
