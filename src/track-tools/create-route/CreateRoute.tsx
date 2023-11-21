@@ -15,19 +15,17 @@ export const CreateRoute = ({
   const togglePanelVisibility = (): void => {
     setPanelVisibility(!panelVisibility);
   };
-  return {
-    button: (
-      <CreateRouteButton
-        icon={CreateRouteIcon()}
-        name={texts.designRoute}
-        togglePanelVisibility={togglePanelVisibility}
-      ></CreateRouteButton>
-    ),
-    panel: (
-      <CreateRoutePanel
-        isVisible={panelVisibility}
-        handleCreateNewRoute={handleCreateNewRoute}
-      ></CreateRoutePanel>
-    ),
-  };
+
+  const button = CreateRouteButton({
+    icon: CreateRouteIcon(),
+    name: texts.designRoute,
+    togglePanelVisibility: togglePanelVisibility,
+  });
+
+  const panel = CreateRoutePanel({
+    isVisible: panelVisibility,
+    handleCreateNewRoute,
+  });
+
+  return { button, panel };
 };
