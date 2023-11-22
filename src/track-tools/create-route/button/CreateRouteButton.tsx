@@ -20,6 +20,7 @@ export const CreateRouteButton = ({
   };
   return (
     <button
+      key="createRoute"
       className={isToggled ? style.toggled : style.unToggled}
       aria-label="toolButton"
       onClick={onClick}

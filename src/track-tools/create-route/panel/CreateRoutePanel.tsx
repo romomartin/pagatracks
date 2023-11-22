@@ -20,6 +20,7 @@ export const CreateRoutePanel = ({
 
   return (
     <div
+      key="createRoute"
       className={isVisible ? style.panel : style.hidden}
       aria-label="createRoutePanel"
     >
