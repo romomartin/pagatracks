@@ -34,32 +34,20 @@ describe("tracks", () => {
   });
 
   describe("track from geojson", () => {
-    const aTrackId = "track135";
-
     it("builds a track object from a geojson file", () => {
       const feature: Feature = aFeature();
 
-      const track = trackFromGeoJSON(feature, aTrackId);
+      const track = trackFromGeoJSON(feature);
 
       expect(track.properties.name).toBeDefined();
       expect(track.geometry).toBeDefined();
-    });
-
-    it("sets track id from given id", () => {
-      const featureName = "aName";
-      const trackId = "track145";
-      const feature: Feature = aFeature(featureName);
-
-      const track = trackFromGeoJSON(feature, trackId);
-
-      expect(track.id).toEqual(trackId);
     });
 
     it("sets track name from feature name", () => {
       const featureName = "aName";
       const feature: Feature = aFeature(featureName);
 
-      const track = trackFromGeoJSON(feature, aTrackId);
+      const track = trackFromGeoJSON(feature);
 
       expect(track.properties.name).toEqual(featureName);
     });
@@ -78,7 +66,7 @@ describe("tracks", () => {
         },
       } as Feature;
 
-      const track = trackFromGeoJSON(featureWithoutName, aTrackId);
+      const track = trackFromGeoJSON(featureWithoutName);
 
       expect(track.properties.name).toEqual("no name");
     });
@@ -86,7 +74,7 @@ describe("tracks", () => {
     it("sets geometry from feature geometry", () => {
       const feature: Feature = aFeature();
 
-      const track = trackFromGeoJSON(feature, aTrackId);
+      const track = trackFromGeoJSON(feature);
 
       expect(track.geometry).toEqual(feature.geometry);
     });
@@ -113,7 +101,6 @@ describe("tracks", () => {
 
 const aTrack = (name?: string): Track => {
   return {
-    id: "track1",
     properties: { name: name || "trackName", path_type: "unpaved" },
     geometry: {
       type: "MultiLineString",

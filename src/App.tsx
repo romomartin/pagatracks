@@ -36,9 +36,8 @@ function App() {
   const setTracksFromFetch = async () => {
     const mergedRawTracks = await getMergedRawTracks();
     const tracks: TracksByName = {};
-    mergedRawTracks.forEach((rawTrack: Feature, index) => {
-      const id = `track${index}`;
-      const track = trackFromGeoJSON(rawTrack, id);
+    mergedRawTracks.forEach((rawTrack: Feature) => {
+      const track = trackFromGeoJSON(rawTrack);
       tracks[track.properties.name] = track;
     });
     setTracks(tracks);
