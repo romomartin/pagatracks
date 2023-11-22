@@ -20,12 +20,14 @@ describe("tracks", () => {
     it("throws error if fetch fails", async () => {
       const expectedError =
         "Unable to fetch tracks TypeError: Cannot read properties of undefined (reading 'json')";
-      const logErrorSpy = jest.spyOn(global.console, "error");
+      const logErrorSpy = jest
+        .spyOn(global.console, "error")
+        .mockImplementation(() => {});
 
       await getMergedRawTracks();
 
-      expect(logErrorSpy).toHaveBeenCalled();
-      expect(logErrorSpy).toHaveBeenCalledWith(expectedError);
+      expect(console.error).toHaveBeenCalled();
+      expect(console.error).toHaveBeenCalledWith(expectedError);
 
       logErrorSpy.mockRestore();
     });
