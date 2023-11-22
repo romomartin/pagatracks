@@ -8,7 +8,7 @@ export type Track = {
 
 export type TracksByName = { [trackName: string]: Track };
 
-export const getMergedRawTracks = async (): Promise<any> => {
+export const getMergedRawTracks = async (): Promise<Feature[]> => {
   try {
     const result = await fetch("/data/mergedRawTracks.json");
     const data = await result.json();
