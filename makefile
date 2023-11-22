@@ -9,3 +9,6 @@ clean:
 
 test: 
 	docker-compose run --rm pagatracks npm run test 
+
+test-watch: 
+	docker-compose run --rm pagatracks npm run test -- --watch 
