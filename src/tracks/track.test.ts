@@ -8,7 +8,7 @@ import {
 import { setFetchGlobalMock } from "../__test_helpers__/mock-fetch";
 
 describe("tracks", () => {
-  describe("get tracks", () => {
+  describe("getMergedRawTracks", () => {
     it("retrieves merged raw tracks from data", async () => {
       setFetchGlobalMock();
 
@@ -33,7 +33,7 @@ describe("tracks", () => {
     });
   });
 
-  describe("track from geojson", () => {
+  describe("trackFromGeoJSON", () => {
     it("builds a track object from a geojson file", () => {
       const feature: Feature = aFeature();
 
@@ -80,7 +80,7 @@ describe("tracks", () => {
     });
   });
 
-  describe("tracks to feature collection", () => {
+  describe("tracksToFeatureCollection", () => {
     it("builds feature collection from given track array", () => {
       const track1 = aTrack("track1");
       const track2 = aTrack("track2");
