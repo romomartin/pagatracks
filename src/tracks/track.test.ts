@@ -39,7 +39,7 @@ describe("tracks", () => {
 
       const track = trackFromGeoJSON(feature);
 
-      expect(track.properties.id).toBeDefined();
+      expect(track.id).toBeDefined();
       expect(track.properties.name).toBeDefined();
       expect(track.geometry).toBeDefined();
     });
@@ -58,7 +58,7 @@ describe("tracks", () => {
 
       const track = trackFromGeoJSON(feature);
 
-      expect(track.properties.id).toEqual(feature.properties?.fid);
+      expect(track.id).toEqual(feature.properties?.fid);
     });
 
     it("sets 'no name' as name if feature has no name property", () => {
@@ -104,9 +104,10 @@ describe("tracks", () => {
       expect(trackFeaturesCollection.features[0].geometry).toEqual(
         track1.geometry
       );
-      expect(trackFeaturesCollection.features[0].properties).toEqual(
-        track1.properties
-      );
+      expect(trackFeaturesCollection.features[0].properties).toEqual({
+        id: track1.id,
+        ...track1.properties,
+      });
     });
   });
 });

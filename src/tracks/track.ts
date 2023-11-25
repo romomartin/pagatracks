@@ -1,7 +1,8 @@
 import { Feature, FeatureCollection, Geometry } from "geojson";
 
 export type Track = {
-  properties: { id: string; name: string; path_type: string };
+  id: string;
+  properties: { name: string; path_type: string };
   geometry: Geometry;
 };
 
@@ -20,8 +21,8 @@ export const getMergedRawTracks = async (): Promise<Feature[]> => {
 
 export const trackFromGeoJSON = (geoJSON: Feature) => {
   const track: Track = {
+    id: geoJSON.properties?.fid,
     properties: {
-      id: geoJSON.properties?.fid,
       name: geoJSON.properties?.name || "no name",
       path_type: geoJSON.properties?.path_type,
     },
@@ -38,7 +39,7 @@ export const tracksToFeatureCollection = (
     return {
       type: "Feature",
       geometry: track.geometry,
-      properties: track.properties,
+      properties: { id: track.id, ...track.properties },
     };
   });
 

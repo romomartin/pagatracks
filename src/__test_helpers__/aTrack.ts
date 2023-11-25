@@ -11,8 +11,8 @@ export const aTrack = ({
   coordinates?: Position[][];
 }): Track => {
   return {
+    id: id || "track143",
     properties: {
-      id: id || "track143",
       name: name || "trackName",
       path_type: "unpaved",
     },
