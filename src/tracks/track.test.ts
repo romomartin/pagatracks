@@ -1,11 +1,11 @@
 import { Feature, FeatureCollection } from "geojson";
 import {
-  Track,
   getMergedRawTracks,
   trackFromGeoJSON,
   tracksToFeatureCollection,
 } from "./track";
 import { setFetchGlobalMock } from "../__test_helpers__/mock-fetch";
+import { aTrack } from "../__test_helpers__/aTrack";
 
 describe("tracks", () => {
   describe("getMergedRawTracks", () => {
@@ -110,25 +110,6 @@ describe("tracks", () => {
     });
   });
 });
-
-const aTrack = ({ id, name }: { id?: string; name?: string }): Track => {
-  return {
-    properties: {
-      id: id || "track143",
-      name: name || "trackName",
-      path_type: "unpaved",
-    },
-    geometry: {
-      type: "MultiLineString",
-      coordinates: [
-        [
-          [1, 2],
-          [3, 4],
-        ],
-      ],
-    },
-  };
-};
 
 const aFeature = (name?: string): Feature => {
   const featureName = name || "featureName";

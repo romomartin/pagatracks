@@ -1,11 +1,11 @@
-import { Position } from "geojson";
 import { Track } from "../tracks/track";
 import { buildConnectionsFromTracks } from "./build-connections";
+import { aTrack } from "../__test_helpers__/aTrack";
 
 describe("Build connections from tracks", () => {
   it("returns connections from a single track", () => {
     const trackName = "myTrackName";
-    const track: Track = aTrack(trackName);
+    const track: Track = aTrack({ name: trackName });
 
     const { connectionIndex, nodes } = buildConnectionsFromTracks({
       trackName: track,
@@ -29,13 +29,16 @@ describe("Build connections from tracks", () => {
   it("does not duplicate nodes for contiguous tracks", () => {
     const trackName = "myTrackName";
     const otherTrackName = "otherTrackName";
-    const track: Track = aTrack(trackName);
-    const contiguousTrack: Track = aTrack(otherTrackName, [
-      [
-        [0.3, 0.3, 25],
-        [3, 3, 10],
+    const track: Track = aTrack({ name: trackName });
+    const contiguousTrack: Track = aTrack({
+      name: otherTrackName,
+      coordinates: [
+        [
+          [0.3, 0.3, 25],
+          [3, 3, 10],
+        ],
       ],
-    ]);
+    });
 
     const { connectionIndex, nodes } = buildConnectionsFromTracks({
       trackName: track,
@@ -63,23 +66,3 @@ describe("Build connections from tracks", () => {
     ]);
   });
 });
-
-const aTrack = (name: string, coordinates?: Position[][]): Track => {
-  return {
-    properties: {
-      name,
-      path_type: "paved",
-    },
-    geometry: {
-      type: "MultiLineString",
-      coordinates: coordinates || [
-        [
-          [0, 0, 0],
-          [0.1, 0.1, 10],
-          [0.2, 0.2, 8],
-          [0.3, 0.3, 25],
-        ],
-      ],
-    },
-  };
-};

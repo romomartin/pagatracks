@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import { Track } from "../tracks/track";
 import { ElevationChart } from "./ElevationChart";
+import { aTrack } from "../__test_helpers__/aTrack";
 
 jest.mock("highcharts-react-official", () => ({
   ...jest.requireActual("highcharts-react-official"),
@@ -12,7 +12,9 @@ jest.mock("highcharts-react-official", () => ({
 describe("Elevation chart", () => {
   it("shows elevation profile of track", () => {
     render(
-      <ElevationChart selectedTrack={aTrack("selectedTrack")}></ElevationChart>
+      <ElevationChart
+        selectedTrack={aTrack({ name: "selectedTrack" })}
+      ></ElevationChart>
     );
 
     const elevationChart = screen.getByText(/title: "selectedTrack"/i);
@@ -26,7 +28,9 @@ describe("Elevation chart", () => {
 
   it("sets correct styles for series tooltip", () => {
     render(
-      <ElevationChart selectedTrack={aTrack("selectedTrack")}></ElevationChart>
+      <ElevationChart
+        selectedTrack={aTrack({ name: "selectedTrack" })}
+      ></ElevationChart>
     );
 
     const elevationChart = screen.getByText(/title: "selectedTrack"/i);
@@ -36,23 +40,3 @@ describe("Elevation chart", () => {
     );
   });
 });
-
-const aTrack = (name: string): Track => {
-  return {
-    properties: {
-      name,
-      path_type: "paved",
-    },
-    geometry: {
-      type: "MultiLineString",
-      coordinates: [
-        [
-          [0, 0, 0],
-          [0.1, 0.1, 10],
-          [0.2, 0.2, 8],
-          [0.3, 0.3, 25],
-        ],
-      ],
-    },
-  };
-};
