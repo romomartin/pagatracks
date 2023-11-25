@@ -39,6 +39,7 @@ describe("tracks", () => {
 
       const track = trackFromGeoJSON(feature);
 
+      expect(track.properties.id).toBeDefined();
       expect(track.properties.name).toBeDefined();
       expect(track.geometry).toBeDefined();
     });
@@ -50,6 +51,14 @@ describe("tracks", () => {
       const track = trackFromGeoJSON(feature);
 
       expect(track.properties.name).toEqual(featureName);
+    });
+
+    it("sets track id from feature id", () => {
+      const feature: Feature = aFeature();
+
+      const track = trackFromGeoJSON(feature);
+
+      expect(track.properties.id).toEqual(feature.properties?.fid);
     });
 
     it("sets 'no name' as name if feature has no name property", () => {
@@ -82,9 +91,9 @@ describe("tracks", () => {
 
   describe("tracksToFeatureCollection", () => {
     it("builds feature collection from given track array", () => {
-      const track1 = aTrack("track1");
-      const track2 = aTrack("track2");
-      const track3 = aTrack("track3");
+      const track1 = aTrack({});
+      const track2 = aTrack({});
+      const track3 = aTrack({});
       const tracks = [track1, track2, track3];
 
       const trackFeaturesCollection: FeatureCollection =
@@ -95,13 +104,20 @@ describe("tracks", () => {
       expect(trackFeaturesCollection.features[0].geometry).toEqual(
         track1.geometry
       );
+      expect(trackFeaturesCollection.features[0].properties).toEqual(
+        track1.properties
+      );
     });
   });
 });
 
-const aTrack = (name?: string): Track => {
+const aTrack = ({ id, name }: { id?: string; name?: string }): Track => {
   return {
-    properties: { name: name || "trackName", path_type: "unpaved" },
+    properties: {
+      id: id || "track143",
+      name: name || "trackName",
+      path_type: "unpaved",
+    },
     geometry: {
       type: "MultiLineString",
       coordinates: [
@@ -119,6 +135,7 @@ const aFeature = (name?: string): Feature => {
   return {
     type: "Feature",
     properties: {
+      fid: 13,
       name: featureName,
     },
     geometry: {
