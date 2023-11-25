@@ -44,8 +44,8 @@ export const buildConnectionsFromTracks = (
 
 const getNodesGeometryFrom = (lineGeometry: MultiLineString): Point[] => {
   const nodesCoordinates = [
-    lineStartPoint(lineGeometry),
-    lineEndPoint(lineGeometry),
+    lineStartCoordinates(lineGeometry),
+    lineEndCoordinates(lineGeometry),
   ];
 
   return nodesCoordinates.map(
@@ -57,11 +57,11 @@ const getNodesGeometryFrom = (lineGeometry: MultiLineString): Point[] => {
   );
 };
 
-const lineStartPoint = (lineGeometry: MultiLineString): Position => {
+const lineStartCoordinates = (lineGeometry: MultiLineString): Position => {
   return lineGeometry.coordinates[0][0];
 };
 
-const lineEndPoint = (lineGeometry: MultiLineString): Position => {
+const lineEndCoordinates = (lineGeometry: MultiLineString): Position => {
   const endLineString =
     lineGeometry.coordinates[lineGeometry.coordinates.length - 1];
 
