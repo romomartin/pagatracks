@@ -37,7 +37,6 @@ function App() {
     const rawTracks = await getTracks();
 
     const tracks = rawTracks.features.reduce((acc, rawTrack: Feature) => {
-      console.log(rawTrack);
       const track = trackFromGeoJSON(rawTrack);
       acc[track.properties.name] = track;
       return acc;
