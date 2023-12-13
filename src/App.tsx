@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { ElevationChart } from "./elevation-chart/ElevationChart";
 import {
   TracksByName,
-  getMergedRawTracks,
+  getTracks,
   trackFromGeoJSON,
   tracksToFeatureCollection,
 } from "./tracks/track";
@@ -34,12 +34,15 @@ function App() {
   }, [tracks]);
 
   const setTracksFromFetch = async () => {
-    const mergedRawTracks = await getMergedRawTracks();
-    const tracks: TracksByName = {};
-    mergedRawTracks.forEach((rawTrack: Feature) => {
+    const rawTracks = await getTracks();
+
+    const tracks = rawTracks.features.reduce((acc, rawTrack: Feature) => {
+      console.log(rawTrack);
       const track = trackFromGeoJSON(rawTrack);
-      tracks[track.properties.name] = track;
-    });
+      acc[track.properties.name] = track;
+      return acc;
+    }, {} as TracksByName);
+
     setTracks(tracks);
   };
 

@@ -8,14 +8,14 @@ export type Track = {
 
 export type TracksByName = { [trackName: string]: Track };
 
-export const getMergedRawTracks = async (): Promise<Feature[]> => {
+export const getTracks = async (): Promise<FeatureCollection> => {
   try {
-    const result = await fetch("/data/mergedRawTracks.json");
+    const result = await fetch("/data/tracks.json");
     const data = await result.json();
     return data;
   } catch (e) {
     console.error(`Unable to fetch tracks ${e}`);
-    return [];
+    return {} as FeatureCollection;
   }
 };
 

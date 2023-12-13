@@ -1,4 +1,13 @@
-import { Feature } from "geojson";
+import { Feature, FeatureCollection } from "geojson";
+
+export const aFeatureCollectionWith = (
+  features: Feature[]
+): FeatureCollection => {
+  return {
+    type: "FeatureCollection",
+    features,
+  };
+};
 
 export const aLineFeature = (name?: string): Feature => {
   const featureName = name || "featureName";

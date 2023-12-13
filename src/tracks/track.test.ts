@@ -1,6 +1,6 @@
 import { Feature, FeatureCollection } from "geojson";
 import {
-  getMergedRawTracks,
+  getTracks,
   trackFromGeoJSON,
   tracksToFeatureCollection,
 } from "./track";
@@ -12,9 +12,11 @@ describe("tracks", () => {
     it("retrieves merged raw tracks from data", async () => {
       setFetchGlobalMock();
 
-      const tracks: Feature[] = await getMergedRawTracks();
+      const tracks: FeatureCollection = await getTracks();
 
-      expect(tracks).toHaveLength(1);
+      expect(tracks).toBeDefined();
+      expect(tracks).toHaveProperty("type", "FeatureCollection");
+      expect(tracks).toHaveProperty("features");
     });
 
     it("throws error if fetch fails", async () => {
@@ -24,7 +26,7 @@ describe("tracks", () => {
         .spyOn(global.console, "error")
         .mockImplementation(() => {});
 
-      await getMergedRawTracks();
+      await getTracks();
 
       expect(console.error).toHaveBeenCalled();
       expect(console.error).toHaveBeenCalledWith(expectedError);

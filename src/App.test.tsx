@@ -8,7 +8,10 @@ import {
   forDataToBeFetched,
   setFetchGlobalMock,
 } from "./__test_helpers__/mock-fetch";
-import { aLineFeature } from "./__test_helpers__/geoJSON";
+import {
+  aFeatureCollectionWith,
+  aLineFeature,
+} from "./__test_helpers__/geoJSON";
 
 describe("app", () => {
   beforeEach(() => {
@@ -40,10 +43,10 @@ describe("app", () => {
   it("renders the map with fetched tracks", async () => {
     const lineFeatureName = "aTrackName";
     const otherLineFeatureName = "otherTrackName";
-    const fetchedData = [
+    const fetchedData = aFeatureCollectionWith([
       aLineFeature(lineFeatureName),
       aLineFeature(otherLineFeatureName),
-    ];
+    ]);
     setFetchGlobalMock(fetchedData);
 
     render(<App />);
@@ -59,10 +62,10 @@ describe("app", () => {
   it("highlights a track when selected on the map", async () => {
     const selectedTrackName = "selectedTrackName";
     const tracksLayerId = "selectable-tracks";
-    const tracksData = [
+    const tracksData = aFeatureCollectionWith([
       aLineFeature("aTrackName"),
       aLineFeature(selectedTrackName),
-    ];
+    ]);
     setFetchGlobalMock(tracksData);
 
     render(<App />);
@@ -80,10 +83,10 @@ describe("app", () => {
   it("highlights a track when hovered on the map", async () => {
     const hoveredTrackName = "hoveredTrackName";
     const tracksLayerId = "selectable-tracks";
-    const tracksData = [
+    const tracksData = aFeatureCollectionWith([
       aLineFeature("aTrackName"),
       aLineFeature(hoveredTrackName),
-    ];
+    ]);
     setFetchGlobalMock(tracksData);
 
     render(<App />);
@@ -100,7 +103,7 @@ describe("app", () => {
 
   it("renders the map with connection nodes as nodes layer", async () => {
     const lineFeatureName = "aTrackName";
-    const fetchedData = [aLineFeature(lineFeatureName)];
+    const fetchedData = aFeatureCollectionWith([aLineFeature(lineFeatureName)]);
     setFetchGlobalMock(fetchedData);
 
     render(<App />);
@@ -114,10 +117,10 @@ describe("app", () => {
   it("shows elevation chart of a track when selected on the map", async () => {
     const selectedTrackName = "selectedTrackName";
     const tracksLayerId = "selectable-tracks";
-    const tracksData = [
+    const tracksData = aFeatureCollectionWith([
       aLineFeature("aTrackName"),
       aLineFeature(selectedTrackName),
-    ];
+    ]);
     setFetchGlobalMock(tracksData);
 
     render(<App />);
@@ -164,10 +167,10 @@ describe("app", () => {
 
     it("disables track selection and hovering when starting new route", async () => {
       const selectedTrackName = "selectedTrackName";
-      const tracksData = [
+      const tracksData = aFeatureCollectionWith([
         aLineFeature("aTrackName"),
         aLineFeature(selectedTrackName),
-      ];
+      ]);
       setFetchGlobalMock(tracksData);
       render(<App />);
       await forDataToBeFetched(screen, tracksData);
@@ -182,10 +185,10 @@ describe("app", () => {
     it("clears selected track when starting new route", async () => {
       const selectedTrackName = "selectedTrackName";
       const tracksLayerId = "selectable-tracks";
-      const tracksData = [
+      const tracksData = aFeatureCollectionWith([
         aLineFeature("aTrackName"),
         aLineFeature(selectedTrackName),
-      ];
+      ]);
       setFetchGlobalMock(tracksData);
 
       render(<App />);
@@ -209,7 +212,7 @@ describe("app", () => {
     });
 
     it("enables nodes selection and hovering when starting new route", async () => {
-      const tracksData = [aLineFeature("aTrackName")];
+      const tracksData = aFeatureCollectionWith([aLineFeature("aTrackName")]);
       setFetchGlobalMock(tracksData);
       render(<App />);
       await forDataToBeFetched(screen, tracksData);
@@ -224,7 +227,7 @@ describe("app", () => {
     it("allows nodes hovering when starting new route", async () => {
       const hoveredNodeId = "node0";
       const nodesLayerId = "nodes";
-      const tracksData = [aLineFeature("aTrackName")];
+      const tracksData = aFeatureCollectionWith([aLineFeature("aTrackName")]);
       setFetchGlobalMock(tracksData);
       render(<App />);
       await forDataToBeFetched(screen, tracksData);
@@ -242,7 +245,7 @@ describe("app", () => {
     it("allows nodes selection when starting new route", async () => {
       const selectedNodeId = "node0";
       const nodesLayerId = "nodes";
-      const tracksData = [aLineFeature("aTrackName")];
+      const tracksData = aFeatureCollectionWith([aLineFeature("aTrackName")]);
       setFetchGlobalMock(tracksData);
       render(<App />);
       await forDataToBeFetched(screen, tracksData);
