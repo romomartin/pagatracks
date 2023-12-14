@@ -1,5 +1,5 @@
 import { Position } from "geojson";
-import { Track } from "../tracks/track";
+import { PathTypes, Track } from "../tracks/track";
 
 export const aTrack = ({
   id,
@@ -14,7 +14,7 @@ export const aTrack = ({
     id: id || "track143",
     properties: {
       name: name || "trackName",
-      path_type: "unpaved",
+      path_type: PathTypes.UNPAVED,
     },
     geometry: {
       type: "MultiLineString",

@@ -2,9 +2,16 @@ import { Feature, FeatureCollection, Geometry } from "geojson";
 
 export type Track = {
   id: string;
-  properties: { name: string; path_type: string };
+  properties: { name: string; path_type: PathTypes };
   geometry: Geometry;
 };
+
+export enum PathTypes {
+  PAVED = "paved",
+  UNPAVED = "unpaved",
+  SINGLETRACK = "singletrack",
+  UNKNOWN = "unknown",
+}
 
 export type TracksByName = { [trackName: string]: Track };
 
@@ -20,11 +27,15 @@ export const getTracks = async (): Promise<FeatureCollection> => {
 };
 
 export const trackFromGeoJSON = (geoJSON: Feature) => {
+  const rawPathType = geoJSON.properties?.path_type;
+
   const track: Track = {
     id: geoJSON.properties?.id,
     properties: {
       name: geoJSON.properties?.name || "no name",
-      path_type: geoJSON.properties?.path_type,
+      path_type: isValidType(rawPathType)
+        ? (rawPathType as PathTypes)
+        : PathTypes.UNKNOWN,
     },
     geometry: geoJSON.geometry,
   };
@@ -44,4 +55,10 @@ export const tracksToFeatureCollection = (
   });
 
   return { type: "FeatureCollection", features };
+};
+
+const isValidType = (rawPathType: string): boolean => {
+  const pathTypeValues = Object.entries(PathTypes).map((type) => type[1]);
+
+  return pathTypeValues.filter((type) => type === rawPathType).length > 0;
 };

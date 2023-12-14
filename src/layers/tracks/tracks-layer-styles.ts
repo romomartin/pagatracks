@@ -1,4 +1,5 @@
 import { LineLayer } from "mapbox-gl";
+import { PathTypes } from "../../tracks/track";
 
 const UNPAVED_COLOR = "#368E91";
 const PAVED_COLOR = "#6D6784";
@@ -12,11 +13,11 @@ export const tracksStyle: Omit<LineLayer, "id"> = {
     "line-color": [
       "match",
       ["string", ["get", "path_type"]],
-      "unpaved",
+      PathTypes.UNPAVED,
       UNPAVED_COLOR,
-      "paved",
+      PathTypes.PAVED,
       PAVED_COLOR,
-      "singletrack",
+      PathTypes.SINGLETRACK,
       SINGLETRACK_COLOR,
       /* other */ "purple",
     ],
@@ -39,11 +40,11 @@ export const highlightedTrackStyle: Omit<LineLayer, "id"> = {
     "line-color": [
       "match",
       ["string", ["get", "path_type"]],
-      "unpaved",
+      PathTypes.UNPAVED,
       UNPAVED_COLOR,
-      "paved",
+      PathTypes.PAVED,
       PAVED_COLOR,
-      "singletrack",
+      PathTypes.SINGLETRACK,
       SINGLETRACK_COLOR,
       /* other */ "purple",
     ],

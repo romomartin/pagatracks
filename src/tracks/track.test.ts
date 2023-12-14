@@ -53,15 +53,15 @@ describe("tracks", () => {
 
       const track = trackFromGeoJSON(feature);
 
-      expect(track.properties.name).toEqual(featureName);
+      expect(track.properties.name).toEqual("aName");
     });
 
     it("sets track id from feature id", () => {
-      const feature: Feature = aTrackFeature();
+      const feature: Feature = aTrackFeature({ id: "track_245" });
 
       const track = trackFromGeoJSON(feature);
 
-      expect(track.id).toEqual(feature.properties?.id);
+      expect(track.id).toEqual("track_245");
     });
 
     it("sets 'no name' as name if feature has no name property", () => {
@@ -81,6 +81,22 @@ describe("tracks", () => {
       const track = trackFromGeoJSON(featureWithoutName);
 
       expect(track.properties.name).toEqual("no name");
+    });
+
+    it("sets track path type from feature property", () => {
+      const feature: Feature = aTrackFeature({ path_type: "paved" });
+
+      const track = trackFromGeoJSON(feature);
+
+      expect(track.properties.path_type).toEqual("paved");
+    });
+
+    it("sets unknown track path type when feature property is not known type", () => {
+      const feature: Feature = aTrackFeature({ path_type: "adoquines" });
+
+      const track = trackFromGeoJSON(feature);
+
+      expect(track.properties.path_type).toEqual("unknown");
     });
 
     it("sets geometry from feature geometry", () => {
