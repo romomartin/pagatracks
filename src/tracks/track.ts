@@ -21,7 +21,7 @@ export const getTracks = async (): Promise<FeatureCollection> => {
 
 export const trackFromGeoJSON = (geoJSON: Feature) => {
   const track: Track = {
-    id: geoJSON.properties?.fid,
+    id: geoJSON.properties?.id,
     properties: {
       name: geoJSON.properties?.name || "no name",
       path_type: geoJSON.properties?.path_type,

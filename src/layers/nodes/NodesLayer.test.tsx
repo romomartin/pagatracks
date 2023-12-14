@@ -21,8 +21,8 @@ describe("Nodes layer", () => {
       <NodesLayer
         nodes={nodes}
         nodesVisibility="none"
-        hoveredNodeId=""
-        selectedNodeId=""
+        hoveredFeatureId=""
+        selectedFeatureId=""
       />
     );
     const source = await screen.findByText(/source-id: nodes/i);
@@ -44,8 +44,8 @@ describe("Nodes layer", () => {
       <NodesLayer
         nodes={nodes}
         nodesVisibility="none"
-        hoveredNodeId=""
-        selectedNodeId=""
+        hoveredFeatureId=""
+        selectedFeatureId=""
       />
     );
     const nodesLayer = await screen.findByText(/layer-id: nodes/i);
@@ -67,8 +67,8 @@ describe("Nodes layer", () => {
       <NodesLayer
         nodes={nodes}
         nodesVisibility="none"
-        hoveredNodeId=""
-        selectedNodeId=""
+        hoveredFeatureId=""
+        selectedFeatureId=""
       />
     );
     const nodesLayer = await screen.findByText(/layer-id: nodes/i);
@@ -87,8 +87,8 @@ describe("Nodes layer", () => {
       <NodesLayer
         nodes={nodes}
         nodesVisibility="none"
-        hoveredNodeId=""
-        selectedNodeId=""
+        hoveredFeatureId=""
+        selectedFeatureId=""
       />
     );
     const hoveredNodeLayer = await screen.findByText(/layer-id: hovered-node/i);
@@ -110,8 +110,8 @@ describe("Nodes layer", () => {
       <NodesLayer
         nodes={nodes}
         nodesVisibility="none"
-        hoveredNodeId={nodeId}
-        selectedNodeId=""
+        hoveredFeatureId={nodeId}
+        selectedFeatureId=""
       />
     );
     const hoveredNodeLayer = await screen.findByText(/layer-id: hovered-node/i);
@@ -130,8 +130,8 @@ describe("Nodes layer", () => {
       <NodesLayer
         nodes={nodes}
         nodesVisibility="none"
-        hoveredNodeId=""
-        selectedNodeId=""
+        hoveredFeatureId=""
+        selectedFeatureId=""
       />
     );
     const selectedNodeLayer = await screen.findByText(
@@ -155,8 +155,8 @@ describe("Nodes layer", () => {
       <NodesLayer
         nodes={nodes}
         nodesVisibility="none"
-        hoveredNodeId=""
-        selectedNodeId={nodeId}
+        hoveredFeatureId=""
+        selectedFeatureId={nodeId}
       />
     );
     const selectedNodeLayer = await screen.findByText(

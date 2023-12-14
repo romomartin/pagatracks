@@ -15,14 +15,14 @@ export enum TrackLayerIds {
 
 type TracksLayerProps = {
   tracks: FeatureCollection<Geometry, GeoJsonProperties>;
-  selectedTrackName: string;
-  hoveredTrackName: string;
+  selectedFeatureId: string;
+  hoveredFeatureId: string;
 };
 
 export const TracksLayer = ({
   tracks,
-  selectedTrackName,
-  hoveredTrackName,
+  selectedFeatureId,
+  hoveredFeatureId,
 }: TracksLayerProps) => {
   return (
     <>
@@ -30,15 +30,15 @@ export const TracksLayer = ({
         <Layer
           id={TrackLayerIds.SELECTED_TRACK}
           {...highlightedTrackStyle}
-          filter={["in", "name", selectedTrackName]}
+          filter={["in", "id", selectedFeatureId]}
         />
         <Layer
           id={TrackLayerIds.HOVERED_TRACK}
           {...highlightedTrackStyle}
           filter={[
             "in",
-            "name",
-            hoveredTrackName === selectedTrackName ? "" : hoveredTrackName,
+            "id",
+            hoveredFeatureId === selectedFeatureId ? "" : hoveredFeatureId,
           ]}
         />
         <Layer

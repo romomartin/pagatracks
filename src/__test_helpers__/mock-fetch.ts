@@ -1,5 +1,6 @@
 import { Screen } from "@testing-library/react";
 import { FeatureCollection } from "geojson";
+import { aTrackFeature } from "./geoJSON";
 
 export const setFetchGlobalMock = (
   responseJson: Object = defaultFetchedData
@@ -22,22 +23,5 @@ export const forDataToBeFetched = async (
 
 const defaultFetchedData: FeatureCollection = {
   type: "FeatureCollection",
-  features: [
-    {
-      type: "Feature",
-      geometry: {
-        type: "MultiLineString",
-        coordinates: [
-          [
-            [1, 2, 10],
-            [3, 4, 12],
-          ],
-        ],
-      },
-      properties: {
-        name: "featureName",
-        path_type: "paved",
-      },
-    },
-  ],
+  features: [aTrackFeature()],
 };

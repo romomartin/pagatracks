@@ -6,6 +6,7 @@ import {
 } from "./track";
 import { setFetchGlobalMock } from "../__test_helpers__/mock-fetch";
 import { aTrack } from "../__test_helpers__/aTrack";
+import { aTrackFeature } from "../__test_helpers__/geoJSON";
 
 describe("tracks", () => {
   describe("getMergedRawTracks", () => {
@@ -37,7 +38,7 @@ describe("tracks", () => {
 
   describe("trackFromGeoJSON", () => {
     it("builds a track object from a geojson file", () => {
-      const feature: Feature = aFeature();
+      const feature: Feature = aTrackFeature();
 
       const track = trackFromGeoJSON(feature);
 
@@ -48,7 +49,7 @@ describe("tracks", () => {
 
     it("sets track name from feature name", () => {
       const featureName = "aName";
-      const feature: Feature = aFeature(featureName);
+      const feature: Feature = aTrackFeature({ name: featureName });
 
       const track = trackFromGeoJSON(feature);
 
@@ -56,11 +57,11 @@ describe("tracks", () => {
     });
 
     it("sets track id from feature id", () => {
-      const feature: Feature = aFeature();
+      const feature: Feature = aTrackFeature();
 
       const track = trackFromGeoJSON(feature);
 
-      expect(track.id).toEqual(feature.properties?.fid);
+      expect(track.id).toEqual(feature.properties?.id);
     });
 
     it("sets 'no name' as name if feature has no name property", () => {
@@ -83,7 +84,7 @@ describe("tracks", () => {
     });
 
     it("sets geometry from feature geometry", () => {
-      const feature: Feature = aFeature();
+      const feature: Feature = aTrackFeature();
 
       const track = trackFromGeoJSON(feature);
 
@@ -113,23 +114,3 @@ describe("tracks", () => {
     });
   });
 });
-
-const aFeature = (name?: string): Feature => {
-  const featureName = name || "featureName";
-  return {
-    type: "Feature",
-    properties: {
-      fid: 13,
-      name: featureName,
-    },
-    geometry: {
-      type: "MultiLineString",
-      coordinates: [
-        [
-          [1, 2],
-          [3, 4],
-        ],
-      ],
-    },
-  };
-};

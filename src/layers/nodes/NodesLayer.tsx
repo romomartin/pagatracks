@@ -16,15 +16,15 @@ export enum NodeLayerIds {
 type NodesLayerProps = {
   nodes: FeatureCollection;
   nodesVisibility: Visibility;
-  hoveredNodeId: string;
-  selectedNodeId: string;
+  selectedFeatureId: string;
+  hoveredFeatureId: string;
 };
 
 export const NodesLayer = ({
   nodes,
   nodesVisibility,
-  hoveredNodeId,
-  selectedNodeId,
+  selectedFeatureId,
+  hoveredFeatureId,
 }: NodesLayerProps): JSX.Element => {
   return (
     <>
@@ -33,7 +33,7 @@ export const NodesLayer = ({
           id={NodeLayerIds.SELECTED}
           {...selectedNodeStyle}
           layout={{ visibility: nodesVisibility }}
-          filter={["in", "id", selectedNodeId]}
+          filter={["in", "id", selectedFeatureId]}
         />
         <Layer
           id={NodeLayerIds.NODES}
@@ -44,7 +44,7 @@ export const NodesLayer = ({
           id={NodeLayerIds.HOVERED_NODE}
           {...highlightedNodeStyle}
           layout={{ visibility: nodesVisibility }}
-          filter={["in", "id", hoveredNodeId]}
+          filter={["in", "id", hoveredFeatureId]}
         />
       </Source>
     </>

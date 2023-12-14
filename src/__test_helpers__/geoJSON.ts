@@ -1,5 +1,11 @@
 import { Feature, FeatureCollection } from "geojson";
 
+export type TrackFeatureProps = {
+  id?: string;
+  name?: string;
+  path_type?: string;
+};
+
 export const aFeatureCollectionWith = (
   features: Feature[]
 ): FeatureCollection => {
@@ -9,8 +15,13 @@ export const aFeatureCollectionWith = (
   };
 };
 
-export const aLineFeature = (name?: string): Feature => {
-  const featureName = name || "featureName";
+export const aTrackFeature = (properties?: TrackFeatureProps): Feature => {
+  const trackProperties: TrackFeatureProps = {
+    id: "aTrackId",
+    name: "aTrackName",
+    path_type: "paved",
+    ...properties,
+  };
   return {
     type: "Feature",
     geometry: {
@@ -22,10 +33,7 @@ export const aLineFeature = (name?: string): Feature => {
         ],
       ],
     },
-    properties: {
-      name: featureName,
-      path_type: "paved",
-    },
+    properties: trackProperties,
   };
 };
 

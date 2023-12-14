@@ -6,7 +6,7 @@ import {
   highlightedTrackStyle,
   tracksStyle,
 } from "./tracks-layer-styles";
-import { aLineFeature } from "../../__test_helpers__/geoJSON";
+import { aTrackFeature } from "../../__test_helpers__/geoJSON";
 
 describe("Tracks layer", () => {
   const featureName = "aFeatureName";
@@ -15,14 +15,17 @@ describe("Tracks layer", () => {
     const otherFeatureName = "otherFeatureName";
     const tracks = {
       type: "FeatureCollection",
-      features: [aLineFeature(featureName), aLineFeature(otherFeatureName)],
+      features: [
+        aTrackFeature({ name: featureName }),
+        aTrackFeature({ name: otherFeatureName }),
+      ],
     } as FeatureCollection;
 
     render(
       <TracksLayer
         tracks={tracks}
-        selectedTrackName={""}
-        hoveredTrackName={""}
+        selectedFeatureId={""}
+        hoveredFeatureId={""}
       />
     );
     const source = await screen.findByText(/source-id: tracks/i);
@@ -37,14 +40,14 @@ describe("Tracks layer", () => {
   it("applies tracks layer style", async () => {
     const tracks = {
       type: "FeatureCollection",
-      features: [aLineFeature(featureName)],
+      features: [aTrackFeature({ name: featureName })],
     } as FeatureCollection;
 
     render(
       <TracksLayer
         tracks={tracks}
-        selectedTrackName={""}
-        hoveredTrackName={""}
+        selectedFeatureId={""}
+        hoveredFeatureId={""}
       />
     );
     const tracksLayer = await screen.findByText(/layer-id: tracks/i);
@@ -58,14 +61,14 @@ describe("Tracks layer", () => {
   it("applies selected track layer style", async () => {
     const tracks = {
       type: "FeatureCollection",
-      features: [aLineFeature(featureName)],
+      features: [aTrackFeature({ name: featureName })],
     } as FeatureCollection;
 
     render(
       <TracksLayer
         tracks={tracks}
-        selectedTrackName={""}
-        hoveredTrackName={""}
+        selectedFeatureId={""}
+        hoveredFeatureId={""}
       />
     );
     const selectedTrackLayer = await screen.findByText(
@@ -81,14 +84,14 @@ describe("Tracks layer", () => {
   it("applies hovered track layer style", async () => {
     const tracks = {
       type: "FeatureCollection",
-      features: [aLineFeature(featureName)],
+      features: [aTrackFeature({ name: featureName })],
     } as FeatureCollection;
 
     render(
       <TracksLayer
         tracks={tracks}
-        selectedTrackName={""}
-        hoveredTrackName={""}
+        selectedFeatureId={""}
+        hoveredFeatureId={""}
       />
     );
     const hoveredTrackLayer = await screen.findByText(
@@ -104,14 +107,14 @@ describe("Tracks layer", () => {
   it("applies selectable helper track layer style", async () => {
     const tracks = {
       type: "FeatureCollection",
-      features: [aLineFeature(featureName)],
+      features: [aTrackFeature({ name: featureName })],
     } as FeatureCollection;
 
     render(
       <TracksLayer
         tracks={tracks}
-        selectedTrackName={""}
-        hoveredTrackName={""}
+        selectedFeatureId={""}
+        hoveredFeatureId={""}
       />
     );
     const selectableTrackLayer = await screen.findByText(
@@ -125,63 +128,59 @@ describe("Tracks layer", () => {
   });
 
   it("applies selected track filter to selected track when provided", async () => {
-    const selectedTrackName = "selectedFeatureName";
+    const selectedTrackId = "track_134";
     const tracks = {
       type: "FeatureCollection",
-      features: [aLineFeature(featureName), aLineFeature(selectedTrackName)],
+      features: [aTrackFeature({ id: selectedTrackId })],
     } as FeatureCollection;
 
     render(
       <TracksLayer
         tracks={tracks}
-        selectedTrackName={"selectedFeatureName"}
-        hoveredTrackName={""}
+        selectedFeatureId={"track_134"}
+        hoveredFeatureId={""}
       />
     );
     const selectedTrackLayer = await screen.findByText(
       /layer-id: selected-track/i
     );
 
-    expect(selectedTrackLayer).toHaveTextContent(
-      /filter: in,name,selectedFeatureName/i
-    );
+    expect(selectedTrackLayer).toHaveTextContent(/filter: in,id,track_134/i);
   });
 
   it("applies hovered track filter to hovered track when provided", async () => {
-    const hoveredTrackName = "hoveredFeatureName";
+    const hoveredTrackId = "track_134";
     const tracks = {
       type: "FeatureCollection",
-      features: [aLineFeature(featureName), aLineFeature(hoveredTrackName)],
+      features: [aTrackFeature({ id: hoveredTrackId })],
     } as FeatureCollection;
 
     render(
       <TracksLayer
         tracks={tracks}
-        selectedTrackName={""}
-        hoveredTrackName={"hoveredFeatureName"}
+        selectedFeatureId={""}
+        hoveredFeatureId={"track_134"}
       />
     );
     const hoveredTrackLayer = await screen.findByText(
       /layer-id: hovered-track/i
     );
 
-    expect(hoveredTrackLayer).toHaveTextContent(
-      /filter: in,name,hoveredFeatureName/i
-    );
+    expect(hoveredTrackLayer).toHaveTextContent(/filter: in,id,track_134/i);
   });
 
   it("does not apply hovered track filter to hovered track when similar to selected track", async () => {
-    const trackName = "arrastaleku";
+    const trackId = "track_21";
     const tracks = {
       type: "FeatureCollection",
-      features: [aLineFeature(featureName), aLineFeature(trackName)],
+      features: [aTrackFeature({ name: trackId, id: trackId })],
     } as FeatureCollection;
 
     render(
       <TracksLayer
         tracks={tracks}
-        selectedTrackName={trackName}
-        hoveredTrackName={trackName}
+        selectedFeatureId={trackId}
+        hoveredFeatureId={trackId}
       />
     );
     const hoveredTrackLayer = await screen.findByText(
@@ -191,11 +190,7 @@ describe("Tracks layer", () => {
       /layer-id: selected-track/i
     );
 
-    expect(hoveredTrackLayer).not.toHaveTextContent(
-      /filter: in,name,arrastaleku/i
-    );
-    expect(selectedTrackLayer).toHaveTextContent(
-      /filter: in,name,arrastaleku/i
-    );
+    expect(hoveredTrackLayer).not.toHaveTextContent(/filter: in,id,track_21/i);
+    expect(selectedTrackLayer).toHaveTextContent(/filter: in,id,track_21/i);
   });
 });

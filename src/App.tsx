@@ -1,4 +1,8 @@
-import { MapLayerMouseEvent, Visibility } from "mapbox-gl";
+import {
+  MapLayerMouseEvent,
+  MapboxGeoJSONFeature,
+  Visibility,
+} from "mapbox-gl";
 import { MapCanvas } from "./map/MapCanvas";
 import { useEffect, useState } from "react";
 import { ElevationChart } from "./elevation-chart/ElevationChart";
@@ -48,56 +52,25 @@ function App() {
   const trackFeatures = tracksToFeatureCollection(Object.values(tracks));
   const nodeFeatures = nodesToFeatureCollection(connections.nodes);
 
-  const [selectedTrackName, setSelectedTrackName] = useState<string>("");
-  const [selectedNodeId, setSelectedNodeId] = useState<string>("");
+  const [selectedFeature, setSelectedFeature] = useState<
+    MapboxGeoJSONFeature | undefined
+  >(undefined);
+  const [hoveredFeatureId, setHoveredFeatureId] = useState<string>("");
 
   const handleMapClick = (event: MapLayerMouseEvent) => {
-    let selectedTrackName = "";
-    let selectedNodeId = "";
-
     const selectedFeature = event.features?.length
       ? event.features[0]
       : undefined;
 
-    if (!selectedFeature) {
-      setSelectedTrackName(selectedTrackName);
-      setSelectedNodeId(selectedNodeId);
-      return;
-    }
-
-    if (selectedFeature.layer.id === TrackLayerIds.SELECTABLE_TRACKS)
-      selectedTrackName = selectedFeature.properties?.name;
-    if (selectedFeature.layer.id === NodeLayerIds.NODES)
-      selectedNodeId = selectedFeature.properties?.id;
-
-    setSelectedTrackName(selectedTrackName);
-    setSelectedNodeId(selectedNodeId);
+    setSelectedFeature(selectedFeature);
   };
 
-  const [hoveredTrackName, setHoveredTrackName] = useState<string>("");
-  const [hoveredNodeId, setHoveredNodeId] = useState<string>("");
-
   const handleMapMouseOver = (event: MapLayerMouseEvent) => {
-    let hoveredTrackName = "";
-    let hoveredNodeId = "";
-
-    const hoveredFeature = event.features?.length
+    const selectedFeature = event.features?.length
       ? event.features[0]
       : undefined;
 
-    if (!hoveredFeature) {
-      setHoveredTrackName(hoveredTrackName);
-      setHoveredNodeId(hoveredNodeId);
-      return;
-    }
-
-    if (hoveredFeature.layer.id === TrackLayerIds.SELECTABLE_TRACKS)
-      hoveredTrackName = hoveredFeature.properties?.name;
-    if (hoveredFeature.layer.id === NodeLayerIds.NODES)
-      hoveredNodeId = hoveredFeature.properties?.id;
-
-    setHoveredTrackName(hoveredTrackName);
-    setHoveredNodeId(hoveredNodeId);
+    setHoveredFeatureId(selectedFeature ? selectedFeature.properties?.id : "");
   };
 
   const [nodesVisibility, setNodesVisibility] = useState<Visibility>("none");
@@ -111,7 +84,7 @@ function App() {
       : setNodesVisibility("none");
 
     setInteractiveLayers([NodeLayerIds.NODES]);
-    setSelectedTrackName("");
+    setSelectedFeature(undefined);
   };
 
   const createRoute = CreateRoute({
@@ -127,14 +100,12 @@ function App() {
         interactiveLayers={interactiveLayers}
         onClick={handleMapClick}
         onMouseMove={handleMapMouseOver}
-        selectedTrackName={selectedTrackName}
-        hoveredTrackName={hoveredTrackName}
-        hoveredNodeId={hoveredNodeId}
-        selectedNodeId={selectedNodeId}
+        selectedFeatureId={selectedFeature?.properties?.id || ""}
+        hoveredFeatureId={hoveredFeatureId}
       ></MapCanvas>
-      {selectedTrackName && (
+      {selectedFeature?.properties?.name && (
         <ElevationChart
-          selectedTrack={tracks[selectedTrackName]}
+          selectedTrack={tracks[selectedFeature?.properties?.name]}
         ></ElevationChart>
       )}
       <SideMenu trackTools={[createRoute]}></SideMenu>
