@@ -51,18 +51,16 @@ function App() {
   const [selectedFeatureId, setSelectedFeatureId] = useState<
     string | undefined
   >(undefined);
-  const [hoveredFeatureId, setHoveredFeatureId] = useState<string>("");
+  const [hoveredFeatureId, setHoveredFeatureId] = useState<string | undefined>(
+    undefined
+  );
 
   const handleSelectedFeatureId = (selectedFeatureId: string) => {
     setSelectedFeatureId(selectedFeatureId);
   };
 
-  const handleMapMouseOver = (event: MapLayerMouseEvent) => {
-    const selectedFeature = event.features?.length
-      ? event.features[0]
-      : undefined;
-
-    setHoveredFeatureId(selectedFeature ? selectedFeature.properties?.id : "");
+  const handleHoveredFeatureId = (hoveredFeatureId: string) => {
+    setHoveredFeatureId(hoveredFeatureId);
   };
 
   const [nodesVisibility, setNodesVisibility] = useState<Visibility>("none");
@@ -91,9 +89,9 @@ function App() {
         nodesVisibility={nodesVisibility}
         interactiveLayers={interactiveLayers}
         onSelectedFeature={handleSelectedFeatureId}
-        onMouseMove={handleMapMouseOver}
+        onHoveredFeature={handleHoveredFeatureId}
         selectedFeatureId={selectedFeatureId || ""}
-        hoveredFeatureId={hoveredFeatureId}
+        hoveredFeatureId={hoveredFeatureId || ""}
       ></MapCanvas>
       {selectedFeatureId && tracks[selectedFeatureId] && (
         <ElevationChart

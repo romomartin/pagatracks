@@ -11,7 +11,7 @@ type MapProps = {
   nodesVisibility: Visibility;
   interactiveLayers: LayerIds[];
   onSelectedFeature: (selectedFeatureId: string) => void;
-  onMouseMove: (e: MapLayerMouseEvent) => void;
+  onHoveredFeature: (hoveredFeatureId: string) => void;
   selectedFeatureId: string;
   hoveredFeatureId: string;
 };
@@ -22,7 +22,7 @@ export const MapCanvas = ({
   nodesVisibility,
   interactiveLayers,
   onSelectedFeature,
-  onMouseMove,
+  onHoveredFeature,
   selectedFeatureId,
   hoveredFeatureId,
 }: MapProps) => {
@@ -32,6 +32,14 @@ export const MapCanvas = ({
       : undefined;
 
     onSelectedFeature(selectedFeature?.properties?.id);
+  };
+
+  const handleMapMouseOver = (event: MapLayerMouseEvent) => {
+    const hoveredFeature = event.features?.length
+      ? event.features[0]
+      : undefined;
+
+    onHoveredFeature(hoveredFeature?.properties?.id);
   };
 
   return (
@@ -53,7 +61,7 @@ export const MapCanvas = ({
       }}
       interactiveLayerIds={interactiveLayers}
       onClick={handleMapClick}
-      onMouseMove={onMouseMove}
+      onMouseMove={handleMapMouseOver}
     >
       <TracksLayer
         tracks={tracks}
