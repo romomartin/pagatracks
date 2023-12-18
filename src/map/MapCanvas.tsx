@@ -10,7 +10,7 @@ type MapProps = {
   nodes: FeatureCollection;
   nodesVisibility: Visibility;
   interactiveLayers: LayerIds[];
-  onClick: (e: MapLayerMouseEvent) => void;
+  onSelectedFeature: (selectedFeatureId: string) => void;
   onMouseMove: (e: MapLayerMouseEvent) => void;
   selectedFeatureId: string;
   hoveredFeatureId: string;
@@ -21,11 +21,19 @@ export const MapCanvas = ({
   nodes,
   nodesVisibility,
   interactiveLayers,
-  onClick,
+  onSelectedFeature,
   onMouseMove,
   selectedFeatureId,
   hoveredFeatureId,
 }: MapProps) => {
+  const handleMapClick = (event: MapLayerMouseEvent) => {
+    const selectedFeature = event.features?.length
+      ? event.features[0]
+      : undefined;
+
+    onSelectedFeature(selectedFeature?.properties?.id);
+  };
+
   return (
     <Map
       mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
@@ -44,7 +52,7 @@ export const MapCanvas = ({
         zoom: 13,
       }}
       interactiveLayerIds={interactiveLayers}
-      onClick={onClick}
+      onClick={handleMapClick}
       onMouseMove={onMouseMove}
     >
       <TracksLayer

@@ -1,8 +1,4 @@
-import {
-  MapLayerMouseEvent,
-  MapboxGeoJSONFeature,
-  Visibility,
-} from "mapbox-gl";
+import { MapLayerMouseEvent, Visibility } from "mapbox-gl";
 import { MapCanvas } from "./map/MapCanvas";
 import { useEffect, useState } from "react";
 import { ElevationChart } from "./elevation-chart/ElevationChart";
@@ -52,17 +48,13 @@ function App() {
   const trackFeatures = tracksToFeatureCollection(Object.values(tracks));
   const nodeFeatures = nodesToFeatureCollection(connections.nodes);
 
-  const [selectedFeature, setSelectedFeature] = useState<
-    MapboxGeoJSONFeature | undefined
+  const [selectedFeatureId, setSelectedFeatureId] = useState<
+    string | undefined
   >(undefined);
   const [hoveredFeatureId, setHoveredFeatureId] = useState<string>("");
 
-  const handleMapClick = (event: MapLayerMouseEvent) => {
-    const selectedFeature = event.features?.length
-      ? event.features[0]
-      : undefined;
-
-    setSelectedFeature(selectedFeature);
+  const handleSelectedFeatureId = (selectedFeatureId: string) => {
+    setSelectedFeatureId(selectedFeatureId);
   };
 
   const handleMapMouseOver = (event: MapLayerMouseEvent) => {
@@ -84,7 +76,7 @@ function App() {
       : setNodesVisibility("none");
 
     setInteractiveLayers([NodeLayerIds.NODES]);
-    setSelectedFeature(undefined);
+    setSelectedFeatureId(undefined);
   };
 
   const createRoute = CreateRoute({
@@ -98,14 +90,14 @@ function App() {
         nodes={nodeFeatures}
         nodesVisibility={nodesVisibility}
         interactiveLayers={interactiveLayers}
-        onClick={handleMapClick}
+        onSelectedFeature={handleSelectedFeatureId}
         onMouseMove={handleMapMouseOver}
-        selectedFeatureId={selectedFeature?.properties?.id || ""}
+        selectedFeatureId={selectedFeatureId || ""}
         hoveredFeatureId={hoveredFeatureId}
       ></MapCanvas>
-      {selectedFeature?.properties?.name && (
+      {selectedFeatureId && tracks[selectedFeatureId] && (
         <ElevationChart
-          selectedTrack={tracks[selectedFeature?.properties?.id]}
+          selectedTrack={tracks[selectedFeatureId]}
         ></ElevationChart>
       )}
       <SideMenu trackTools={[createRoute]}></SideMenu>
