@@ -13,7 +13,7 @@ export enum PathTypes {
   UNKNOWN = "unknown",
 }
 
-export type TracksByName = { [trackName: string]: Track };
+export type TracksById = { [trackId: string]: Track };
 
 export const getTracks = async (): Promise<FeatureCollection> => {
   try {

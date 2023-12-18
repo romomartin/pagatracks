@@ -41,11 +41,11 @@ describe("app", () => {
   });
 
   it("renders the map with fetched tracks", async () => {
-    const trackName = "aTrackName";
-    const otherTrackName = "otherTrackName";
+    const trackId = "track1";
+    const otherTrackId = "track2";
     const fetchedData = aFeatureCollectionWith([
-      aTrackFeature({ name: trackName }),
-      aTrackFeature({ name: otherTrackName }),
+      aTrackFeature({ id: trackId }),
+      aTrackFeature({ id: otherTrackId }),
     ]);
     setFetchGlobalMock(fetchedData);
 
@@ -54,9 +54,7 @@ describe("app", () => {
     const source = await screen.findByText(/source-id: tracks/i);
 
     expect(source).toHaveTextContent(/layer-id: tracks/i);
-    expect(source).toHaveTextContent(
-      /data-features:.*aTrackName.*otherTrackName/i
-    );
+    expect(source).toHaveTextContent(/data-features:.*track1.*track2/i);
   });
 
   it("highlights a track when selected on the map", async () => {

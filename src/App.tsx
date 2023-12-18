@@ -7,7 +7,7 @@ import { MapCanvas } from "./map/MapCanvas";
 import { useEffect, useState } from "react";
 import { ElevationChart } from "./elevation-chart/ElevationChart";
 import {
-  TracksByName,
+  TracksById,
   getTracks,
   trackFromGeoJSON,
   tracksToFeatureCollection,
@@ -26,7 +26,7 @@ import { NodeLayerIds } from "./layers/nodes/NodesLayer";
 import { CreateRoute } from "./track-tools";
 
 function App() {
-  const [tracks, setTracks] = useState<TracksByName>({});
+  const [tracks, setTracks] = useState<TracksById>({});
   const [connections, setConnections] = useState<Connections>(nullConnections);
 
   useEffect(() => {
@@ -42,9 +42,9 @@ function App() {
 
     const tracks = rawTracks.features.reduce((acc, rawTrack: Feature) => {
       const track = trackFromGeoJSON(rawTrack);
-      acc[track.properties.name] = track;
+      acc[track.id] = track;
       return acc;
-    }, {} as TracksByName);
+    }, {} as TracksById);
 
     setTracks(tracks);
   };
@@ -105,7 +105,7 @@ function App() {
       ></MapCanvas>
       {selectedFeature?.properties?.name && (
         <ElevationChart
-          selectedTrack={tracks[selectedFeature?.properties?.name]}
+          selectedTrack={tracks[selectedFeature?.properties?.id]}
         ></ElevationChart>
       )}
       <SideMenu trackTools={[createRoute]}></SideMenu>

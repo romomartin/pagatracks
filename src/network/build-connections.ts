@@ -1,5 +1,5 @@
 import { MultiLineString, Point, Position } from "geojson";
-import { TracksByName } from "../tracks/track";
+import { TracksById } from "../tracks/track";
 
 export type Connections = {
   connectionIndex: ConnectionIndex;
@@ -17,13 +17,11 @@ export type ConnectionNode = {
 
 export const nullConnections: Connections = { connectionIndex: {}, nodes: [] };
 
-export const buildConnectionsFromTracks = (
-  tracks: TracksByName
-): Connections => {
+export const buildConnectionsFromTracks = (tracks: TracksById): Connections => {
   let nodes: ConnectionNode[] = [];
   let connectionIndex: ConnectionIndex = {};
 
-  Object.entries(tracks).forEach(([trackName, track]) => {
+  Object.entries(tracks).forEach(([trackId, track]) => {
     const nodesGeometry = getNodesGeometryFrom(
       track.geometry as MultiLineString
     );
@@ -36,7 +34,7 @@ export const buildConnectionsFromTracks = (
       return node.id;
     });
 
-    connectionIndex[trackName] = { nodeAId: nodeIds[0], nodeBId: nodeIds[1] };
+    connectionIndex[trackId] = { nodeAId: nodeIds[0], nodeBId: nodeIds[1] };
   });
 
   return { connectionIndex, nodes };
