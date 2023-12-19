@@ -1,4 +1,4 @@
-import { MapLayerMouseEvent, Visibility } from "mapbox-gl";
+import { Visibility } from "mapbox-gl";
 import { MapCanvas } from "./map/MapCanvas";
 import { useEffect, useState } from "react";
 import { ElevationChart } from "./elevation-chart/ElevationChart";
@@ -18,7 +18,6 @@ import {
 import { nodesToFeatureCollection } from "./network/nodes-to-feature-collection";
 import { LayerIds } from "./layers";
 import { TrackLayerIds } from "./layers/tracks/TracksLayer";
-import { NodeLayerIds } from "./layers/nodes/NodesLayer";
 import { CreateRoute } from "./track-tools";
 
 function App() {
@@ -55,7 +54,7 @@ function App() {
     undefined
   );
 
-  const handleSelectedFeatureId = (selectedFeatureId: string) => {
+  const changeSelectedFeatureId = (selectedFeatureId: string) => {
     setSelectedFeatureId(selectedFeatureId);
   };
 
@@ -64,21 +63,21 @@ function App() {
   };
 
   const [nodesVisibility, setNodesVisibility] = useState<Visibility>("none");
+  const changeNodesVisibility = (visibility: Visibility) => {
+    setNodesVisibility(visibility);
+  };
+
   const [interactiveLayers, setInteractiveLayers] = useState<LayerIds[]>([
     TrackLayerIds.SELECTABLE_TRACKS,
   ]);
-
-  const createNewRoute = (): void => {
-    nodesVisibility === "none"
-      ? setNodesVisibility("visible")
-      : setNodesVisibility("none");
-
-    setInteractiveLayers([NodeLayerIds.NODES]);
-    setSelectedFeatureId(undefined);
+  const changeInteractiveLayers = (layerIds: LayerIds[]) => {
+    setInteractiveLayers(layerIds);
   };
 
   const createRoute = CreateRoute({
-    handleCreateNewRoute: createNewRoute,
+    changeNodesVisibility,
+    changeInteractiveLayers,
+    changeSelectedFeatureId,
   });
 
   return (
@@ -88,7 +87,7 @@ function App() {
         nodes={nodeFeatures}
         nodesVisibility={nodesVisibility}
         interactiveLayers={interactiveLayers}
-        onSelectedFeature={handleSelectedFeatureId}
+        onSelectedFeature={changeSelectedFeatureId}
         onHoveredFeature={handleHoveredFeatureId}
         selectedFeatureId={selectedFeatureId || ""}
         hoveredFeatureId={hoveredFeatureId || ""}

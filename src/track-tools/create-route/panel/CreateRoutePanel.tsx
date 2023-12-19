@@ -4,17 +4,17 @@ import style from "./styles.module.css";
 
 type CreateRoutePanelProps = {
   isVisible: boolean;
-  handleCreateNewRoute: () => void;
+  createNewRoute: () => void;
 };
 
 export const CreateRoutePanel = ({
   isVisible,
-  handleCreateNewRoute,
+  createNewRoute,
 }: CreateRoutePanelProps) => {
   const [isCreatingRoute, setIsCreatingRoute] = useState<boolean>(false);
 
   const handleClick = () => {
-    handleCreateNewRoute();
+    createNewRoute();
     setIsCreatingRoute(true);
   };
 

@@ -4,16 +4,29 @@ import { CreateRouteIcon } from "./CreateRouteIcon";
 import { CreateRouteButton } from "./button/CreateRouteButton";
 import { CreateRoutePanel } from "./panel/CreateRoutePanel";
 import { TrackTool } from "..";
+import { Visibility } from "mapbox-gl";
+import { LayerIds } from "../../layers";
+import { NodeLayerIds } from "../../layers/nodes/NodesLayer";
 
 export const CreateRoute = ({
-  handleCreateNewRoute,
+  changeNodesVisibility,
+  changeInteractiveLayers,
+  changeSelectedFeatureId,
 }: {
-  handleCreateNewRoute: () => void;
+  changeNodesVisibility: (visibility: Visibility) => void;
+  changeInteractiveLayers: (ids: LayerIds[]) => void;
+  changeSelectedFeatureId: (selectedFeatureId: string) => void;
 }): TrackTool => {
   const [panelVisibility, setPanelVisibility] = useState<boolean>(false);
 
   const togglePanelVisibility = (): void => {
     setPanelVisibility(!panelVisibility);
+  };
+
+  const createNewRoute = (): void => {
+    changeNodesVisibility("visible");
+    changeInteractiveLayers([NodeLayerIds.NODES]);
+    changeSelectedFeatureId("");
   };
 
   const button = CreateRouteButton({
@@ -24,7 +37,7 @@ export const CreateRoute = ({
 
   const panel = CreateRoutePanel({
     isVisible: panelVisibility,
-    handleCreateNewRoute,
+    createNewRoute,
   });
 
   return { button, panel };
