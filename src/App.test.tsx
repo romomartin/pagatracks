@@ -243,6 +243,23 @@ describe("app", () => {
 
       expect(selectedNodeLayer).toHaveTextContent(/filter: in,id,node0/i);
     });
+
+    it("sets selected node as route's starting point", async () => {
+      const selectedNodeId = "node0";
+      const nodesLayerId = "nodes";
+      render(<App />);
+      await forDataToBeFetched(screen);
+
+      const createNewRouteButton = screen.getByText("Create new route");
+      fireEvent.click(createNewRouteButton);
+      selectFeatureOnMap(selectedNodeId, nodesLayerId);
+      const createRoutePanel = screen.getByLabelText("createRoutePanel");
+
+      expect(createRoutePanel).not.toHaveTextContent(
+        /Select your route's starting point/i
+      );
+      expect(createRoutePanel).toHaveTextContent(/Select route's next track/i);
+    });
   });
 });
 

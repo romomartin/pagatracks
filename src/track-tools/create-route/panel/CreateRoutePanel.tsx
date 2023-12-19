@@ -5,11 +5,13 @@ import style from "./styles.module.css";
 type CreateRoutePanelProps = {
   isVisible: boolean;
   createNewRoute: () => void;
+  selectedNodeId: string | undefined;
 };
 
 export const CreateRoutePanel = ({
   isVisible,
   createNewRoute,
+  selectedNodeId,
 }: CreateRoutePanelProps) => {
   const [isCreatingRoute, setIsCreatingRoute] = useState<boolean>(false);
 
@@ -27,7 +29,8 @@ export const CreateRoutePanel = ({
       {!isCreatingRoute && (
         <button onClick={handleClick}>{texts.createNewRoute}</button>
       )}
-      {isCreatingRoute && texts.selectStartingPoint}
+      {isCreatingRoute && !selectedNodeId && texts.selectStartingPoint}
+      {isCreatingRoute && selectedNodeId && texts.selectNextTrack}
     </div>
   );
 };

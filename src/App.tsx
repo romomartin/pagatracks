@@ -78,6 +78,7 @@ function App() {
     changeNodesVisibility,
     changeInteractiveLayers,
     changeSelectedFeatureId,
+    selectedNodeId: selectedFeatureId,
   });
 
   return (

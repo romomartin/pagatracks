@@ -12,10 +12,12 @@ export const CreateRoute = ({
   changeNodesVisibility,
   changeInteractiveLayers,
   changeSelectedFeatureId,
+  selectedNodeId,
 }: {
   changeNodesVisibility: (visibility: Visibility) => void;
   changeInteractiveLayers: (ids: LayerIds[]) => void;
   changeSelectedFeatureId: (selectedFeatureId: string) => void;
+  selectedNodeId: string | undefined;
 }): TrackTool => {
   const [panelVisibility, setPanelVisibility] = useState<boolean>(false);
 
@@ -38,6 +40,7 @@ export const CreateRoute = ({
   const panel = CreateRoutePanel({
     isVisible: panelVisibility,
     createNewRoute,
+    selectedNodeId,
   });
 
   return { button, panel };
