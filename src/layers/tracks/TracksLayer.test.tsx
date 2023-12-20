@@ -26,6 +26,7 @@ describe("Tracks layer", () => {
         tracks={tracks}
         selectedFeatureId={""}
         hoveredFeatureId={""}
+        routeNextPossibleTrackIds={[]}
       />
     );
     const source = await screen.findByText(/source-id: tracks/i);
@@ -48,6 +49,7 @@ describe("Tracks layer", () => {
         tracks={tracks}
         selectedFeatureId={""}
         hoveredFeatureId={""}
+        routeNextPossibleTrackIds={[]}
       />
     );
     const tracksLayer = await screen.findByText(/layer-id: tracks/i);
@@ -69,6 +71,7 @@ describe("Tracks layer", () => {
         tracks={tracks}
         selectedFeatureId={""}
         hoveredFeatureId={""}
+        routeNextPossibleTrackIds={[]}
       />
     );
     const selectedTrackLayer = await screen.findByText(
@@ -92,6 +95,7 @@ describe("Tracks layer", () => {
         tracks={tracks}
         selectedFeatureId={""}
         hoveredFeatureId={""}
+        routeNextPossibleTrackIds={[]}
       />
     );
     const hoveredTrackLayer = await screen.findByText(
@@ -115,6 +119,7 @@ describe("Tracks layer", () => {
         tracks={tracks}
         selectedFeatureId={""}
         hoveredFeatureId={""}
+        routeNextPossibleTrackIds={[]}
       />
     );
     const selectableTrackLayer = await screen.findByText(
@@ -139,6 +144,7 @@ describe("Tracks layer", () => {
         tracks={tracks}
         selectedFeatureId={"track_134"}
         hoveredFeatureId={""}
+        routeNextPossibleTrackIds={[]}
       />
     );
     const selectedTrackLayer = await screen.findByText(
@@ -160,6 +166,7 @@ describe("Tracks layer", () => {
         tracks={tracks}
         selectedFeatureId={""}
         hoveredFeatureId={"track_134"}
+        routeNextPossibleTrackIds={[]}
       />
     );
     const hoveredTrackLayer = await screen.findByText(
@@ -181,6 +188,7 @@ describe("Tracks layer", () => {
         tracks={tracks}
         selectedFeatureId={trackId}
         hoveredFeatureId={trackId}
+        routeNextPossibleTrackIds={[]}
       />
     );
     const hoveredTrackLayer = await screen.findByText(
@@ -192,5 +200,67 @@ describe("Tracks layer", () => {
 
     expect(hoveredTrackLayer).not.toHaveTextContent(/filter: in,id,track_21/i);
     expect(selectedTrackLayer).toHaveTextContent(/filter: in,id,track_21/i);
+  });
+
+  it("animated tracks layer visibility blinks", async () => {
+    const aTrackId = "track_1";
+    const tracks = {
+      type: "FeatureCollection",
+      features: [aTrackFeature({ id: aTrackId })],
+    } as FeatureCollection;
+
+    render(
+      <TracksLayer
+        tracks={tracks}
+        selectedFeatureId={""}
+        hoveredFeatureId={""}
+        routeNextPossibleTrackIds={[aTrackId]}
+      />
+    );
+    let visibleAnimatedTracksLayer = await screen.findByText(
+      /layer-id: animated-tracks.*visibility: visible/i
+    );
+
+    expect(visibleAnimatedTracksLayer).toBeInTheDocument();
+
+    const hidenAnimatedTracksLayer = await screen.findByText(
+      /layer-id: animated-tracks.*visibility: visible/i
+    );
+
+    expect(hidenAnimatedTracksLayer).toBeInTheDocument();
+
+    visibleAnimatedTracksLayer = await screen.findByText(
+      /layer-id: animated-tracks.*visibility: visible/i
+    );
+
+    expect(visibleAnimatedTracksLayer).toBeInTheDocument();
+  });
+
+  it("allows to show an animated blinking style on a given set of tracks", async () => {
+    const aTrackId = "track_1";
+    const otherTrackId = "track_2";
+    const tracks = {
+      type: "FeatureCollection",
+      features: [
+        aTrackFeature({ id: aTrackId }),
+        aTrackFeature({ id: otherTrackId }),
+      ],
+    } as FeatureCollection;
+
+    render(
+      <TracksLayer
+        tracks={tracks}
+        selectedFeatureId={""}
+        hoveredFeatureId={""}
+        routeNextPossibleTrackIds={[aTrackId, otherTrackId]}
+      />
+    );
+    const animatedTracksLayer = await screen.findByText(
+      /layer-id: animated-tracks/i
+    );
+
+    expect(animatedTracksLayer).toHaveTextContent(
+      /filter: in,id,track_1,track_2/i
+    );
   });
 });
