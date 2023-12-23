@@ -54,11 +54,11 @@ function App() {
     undefined
   );
 
-  const changeSelectedFeatureId = (selectedFeatureId: string) => {
+  const changeSelectedFeatureId = (selectedFeatureId: string | undefined) => {
     setSelectedFeatureId(selectedFeatureId);
   };
 
-  const handleHoveredFeatureId = (hoveredFeatureId: string) => {
+  const handleHoveredFeatureId = (hoveredFeatureId: string | undefined) => {
     setHoveredFeatureId(hoveredFeatureId);
   };
 

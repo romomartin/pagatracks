@@ -1,23 +1,21 @@
-import { useState } from "react";
 import { texts } from "../../../texts";
 import style from "./styles.module.css";
 
 type CreateRoutePanelProps = {
   isVisible: boolean;
+  isCreatingRoute: boolean;
   createNewRoute: () => void;
-  selectedNodeId: string | undefined;
+  startNodeId: string | undefined;
 };
 
 export const CreateRoutePanel = ({
   isVisible,
+  isCreatingRoute,
   createNewRoute,
-  selectedNodeId,
+  startNodeId,
 }: CreateRoutePanelProps) => {
-  const [isCreatingRoute, setIsCreatingRoute] = useState<boolean>(false);
-
   const handleClick = () => {
     createNewRoute();
-    setIsCreatingRoute(true);
   };
 
   return (
@@ -29,8 +27,8 @@ export const CreateRoutePanel = ({
       {!isCreatingRoute && (
         <button onClick={handleClick}>{texts.createNewRoute}</button>
       )}
-      {isCreatingRoute && !selectedNodeId && texts.selectStartingPoint}
-      {isCreatingRoute && selectedNodeId && texts.selectNextTrack}
+      {isCreatingRoute && !startNodeId && texts.selectStartingPoint}
+      {isCreatingRoute && startNodeId && texts.selectNextTrack}
     </div>
   );
 };
