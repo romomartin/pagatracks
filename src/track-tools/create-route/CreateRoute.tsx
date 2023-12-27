@@ -4,18 +4,20 @@ import { CreateRouteIcon } from "./CreateRouteIcon";
 import { CreateRouteButton } from "./button/CreateRouteButton";
 import { CreateRoutePanel } from "./panel/CreateRoutePanel";
 import { TrackTool } from "..";
-import { Visibility } from "mapbox-gl";
-import { LayerIds } from "../../layers";
+import { LayerIds, LayerVisibility } from "../../layers";
 import { NodeLayerIds } from "../../layers/nodes/NodesLayer";
 import { TrackLayerIds } from "../../layers/tracks/TracksLayer";
 
 export const CreateRoute = ({
-  changeNodesVisibility,
+  changeLayersVisibility,
   changeInteractiveLayers,
   changeSelectedFeatureId,
   selectedNodeId,
 }: {
-  changeNodesVisibility: (visibility: Visibility) => void;
+  changeLayersVisibility: (
+    layerIds: LayerIds[],
+    visibility: LayerVisibility
+  ) => void;
   changeInteractiveLayers: (ids: LayerIds[]) => void;
   changeSelectedFeatureId: (selectedFeatureId: string | undefined) => void;
   selectedNodeId: string | undefined;
@@ -29,13 +31,25 @@ export const CreateRoute = ({
   };
 
   const createNewRoute = (): void => {
-    changeNodesVisibility("visible");
+    changeLayersVisibility(
+      [
+        NodeLayerIds.HOVERED_NODE,
+        NodeLayerIds.NODES,
+        NodeLayerIds.SELECTED_NODE,
+      ],
+      LayerVisibility.VISIBLE
+    );
     changeInteractiveLayers([NodeLayerIds.NODES]);
     changeSelectedFeatureId(undefined);
     setIsCreatingRoute(true);
   };
 
   const onStartNodeId = () => {
+    changeLayersVisibility([NodeLayerIds.NODES], LayerVisibility.NONE);
+    changeLayersVisibility(
+      [NodeLayerIds.SELECTED_NODE],
+      LayerVisibility.VISIBLE
+    );
     changeInteractiveLayers([TrackLayerIds.SELECTABLE_TRACKS]);
   };
 

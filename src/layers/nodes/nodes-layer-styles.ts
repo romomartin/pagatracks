@@ -21,9 +21,7 @@ export const highlightedNodeStyle: Omit<CircleLayer, "id"> = {
 export const selectedNodeStyle: Omit<CircleLayer, "id"> = {
   type: "circle",
   paint: {
-    "circle-radius": 15,
+    "circle-radius": 6.5,
     "circle-color": "#37BFE4",
-    "circle-opacity": 0.3,
-    "circle-blur": 0.3,
   },
 };

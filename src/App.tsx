@@ -1,4 +1,3 @@
-import { Visibility } from "mapbox-gl";
 import { MapCanvas } from "./map/MapCanvas";
 import { useEffect, useState } from "react";
 import { ElevationChart } from "./elevation-chart/ElevationChart";
@@ -16,7 +15,7 @@ import {
   nullConnections,
 } from "./network/build-connections";
 import { nodesToFeatureCollection } from "./network/nodes-to-feature-collection";
-import { LayerIds } from "./layers";
+import { LayerIds, LayerVisibility, LayersVisibility } from "./layers";
 import { TrackLayerIds } from "./layers/tracks/TracksLayer";
 import { CreateRoute } from "./track-tools";
 
@@ -62,9 +61,16 @@ function App() {
     setHoveredFeatureId(hoveredFeatureId);
   };
 
-  const [nodesVisibility, setNodesVisibility] = useState<Visibility>("none");
-  const changeNodesVisibility = (visibility: Visibility) => {
-    setNodesVisibility(visibility);
+  const [layersVisibility, setLayersVisibility] = useState<LayersVisibility>(
+    {}
+  );
+
+  const changeLayersVisibility = (
+    layerIds: LayerIds[],
+    visibility: LayerVisibility
+  ) => {
+    layerIds.forEach((id) => (layersVisibility[id] = visibility));
+    setLayersVisibility(layersVisibility);
   };
 
   const [interactiveLayers, setInteractiveLayers] = useState<LayerIds[]>([
@@ -75,7 +81,7 @@ function App() {
   };
 
   const createRoute = CreateRoute({
-    changeNodesVisibility,
+    changeLayersVisibility,
     changeInteractiveLayers,
     changeSelectedFeatureId,
     selectedNodeId: selectedFeatureId,
@@ -86,7 +92,7 @@ function App() {
       <MapCanvas
         tracks={trackFeatures}
         nodes={nodeFeatures}
-        nodesVisibility={nodesVisibility}
+        layersVisibility={layersVisibility}
         interactiveLayers={interactiveLayers}
         onSelectedFeature={changeSelectedFeatureId}
         onHoveredFeature={handleHoveredFeatureId}

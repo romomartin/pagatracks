@@ -1,6 +1,13 @@
 import { NodeLayerIds } from "./nodes/NodesLayer";
 import { TrackLayerIds } from "./tracks/TracksLayer";
 
-const LayerIds = { ...NodeLayerIds, ...TrackLayerIds };
-
 export type LayerIds = NodeLayerIds | TrackLayerIds;
+
+export enum LayerVisibility {
+  VISIBLE = "visible",
+  NONE = "none",
+}
+
+export type LayersVisibility = {
+  [layerId: string]: LayerVisibility;
+};

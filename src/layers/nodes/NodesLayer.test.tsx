@@ -20,7 +20,7 @@ describe("Nodes layer", () => {
     render(
       <NodesLayer
         nodes={nodes}
-        nodesVisibility="none"
+        layersVisibility={{}}
         hoveredFeatureId=""
         selectedFeatureId=""
       />
@@ -43,7 +43,7 @@ describe("Nodes layer", () => {
     render(
       <NodesLayer
         nodes={nodes}
-        nodesVisibility="none"
+        layersVisibility={{}}
         hoveredFeatureId=""
         selectedFeatureId=""
       />
@@ -66,7 +66,7 @@ describe("Nodes layer", () => {
     render(
       <NodesLayer
         nodes={nodes}
-        nodesVisibility="none"
+        layersVisibility={{}}
         hoveredFeatureId=""
         selectedFeatureId=""
       />
@@ -86,7 +86,7 @@ describe("Nodes layer", () => {
     render(
       <NodesLayer
         nodes={nodes}
-        nodesVisibility="none"
+        layersVisibility={{}}
         hoveredFeatureId=""
         selectedFeatureId=""
       />
@@ -109,7 +109,7 @@ describe("Nodes layer", () => {
     render(
       <NodesLayer
         nodes={nodes}
-        nodesVisibility="none"
+        layersVisibility={{}}
         hoveredFeatureId={nodeId}
         selectedFeatureId=""
       />
@@ -129,7 +129,7 @@ describe("Nodes layer", () => {
     render(
       <NodesLayer
         nodes={nodes}
-        nodesVisibility="none"
+        layersVisibility={{}}
         hoveredFeatureId=""
         selectedFeatureId=""
       />
@@ -154,7 +154,7 @@ describe("Nodes layer", () => {
     render(
       <NodesLayer
         nodes={nodes}
-        nodesVisibility="none"
+        layersVisibility={{}}
         hoveredFeatureId=""
         selectedFeatureId={nodeId}
       />

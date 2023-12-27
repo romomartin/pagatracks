@@ -7,6 +7,7 @@ import { Layer, Source } from "react-map-gl";
 import { FeatureCollection, GeoJsonProperties, Geometry } from "geojson";
 import { Visibility } from "mapbox-gl";
 import { useState } from "react";
+import { LayerVisibility } from "..";
 
 export enum TrackLayerIds {
   SELECTED_TRACK = "selected-track",
@@ -29,13 +30,14 @@ export const TracksLayer = ({
   hoveredFeatureId,
   routeNextPossibleTrackIds,
 }: TracksLayerProps) => {
-  const [animatedVisibility, setAnimatedVisibility] =
-    useState<Visibility>("none");
+  const [animatedVisibility, setAnimatedVisibility] = useState<Visibility>(
+    LayerVisibility.NONE
+  );
 
   const animateLayer = () => {
-    animatedVisibility === "visible"
-      ? setAnimatedVisibility("none")
-      : setAnimatedVisibility("visible");
+    animatedVisibility === LayerVisibility.VISIBLE
+      ? setAnimatedVisibility(LayerVisibility.NONE)
+      : setAnimatedVisibility(LayerVisibility.VISIBLE);
   };
   setTimeout(() => animateLayer(), 500);
 

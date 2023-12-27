@@ -5,24 +5,24 @@ import {
   nodesStyle,
   selectedNodeStyle,
 } from "./nodes-layer-styles";
-import { Visibility } from "mapbox-gl";
+import { LayerVisibility, LayersVisibility } from "..";
 
 export enum NodeLayerIds {
   NODES = "nodes",
   HOVERED_NODE = "hovered-node",
-  SELECTED = "selected-node",
+  SELECTED_NODE = "selected-node",
 }
 
 type NodesLayerProps = {
   nodes: FeatureCollection;
-  nodesVisibility: Visibility;
+  layersVisibility: LayersVisibility;
   selectedFeatureId: string;
   hoveredFeatureId: string;
 };
 
 export const NodesLayer = ({
   nodes,
-  nodesVisibility,
+  layersVisibility,
   selectedFeatureId,
   hoveredFeatureId,
 }: NodesLayerProps): JSX.Element => {
@@ -30,20 +30,31 @@ export const NodesLayer = ({
     <>
       <Source id={NodeLayerIds.NODES} type="geojson" data={nodes}>
         <Layer
-          id={NodeLayerIds.SELECTED}
+          id={NodeLayerIds.SELECTED_NODE}
           {...selectedNodeStyle}
-          layout={{ visibility: nodesVisibility }}
+          layout={{
+            visibility:
+              layersVisibility[NodeLayerIds.SELECTED_NODE] ||
+              LayerVisibility.NONE,
+          }}
           filter={["in", "id", selectedFeatureId]}
         />
         <Layer
           id={NodeLayerIds.NODES}
           {...nodesStyle}
-          layout={{ visibility: nodesVisibility }}
+          layout={{
+            visibility:
+              layersVisibility[NodeLayerIds.NODES] || LayerVisibility.NONE,
+          }}
         />
         <Layer
           id={NodeLayerIds.HOVERED_NODE}
           {...highlightedNodeStyle}
-          layout={{ visibility: nodesVisibility }}
+          layout={{
+            visibility:
+              layersVisibility[NodeLayerIds.HOVERED_NODE] ||
+              LayerVisibility.NONE,
+          }}
           filter={["in", "id", hoveredFeatureId]}
         />
       </Source>

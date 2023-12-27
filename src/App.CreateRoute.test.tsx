@@ -142,6 +142,24 @@ describe("create new route", () => {
     expect(createRoutePanel).toHaveTextContent(/Select route's next track/i);
   });
 
+  it("hides other nodes on routes starting point selected", async () => {
+    const selectedNodeId = "node0";
+    const nodesLayerId = "nodes";
+    render(<App />);
+    await forDataToBeFetched(screen);
+
+    const createNewRouteButton = screen.getByText("Create new route");
+    fireEvent.click(createNewRouteButton);
+    selectFeatureOnMap(selectedNodeId, nodesLayerId);
+    const nodesLayer = await screen.findByText(/layer-id: nodes/i);
+    const selectedNodeLayer = await screen.findByText(
+      /layer-id: selected-node/i
+    );
+
+    expect(nodesLayer).toHaveTextContent(/visibility: none/i);
+    expect(selectedNodeLayer).toHaveTextContent(/visibility: visible/i);
+  });
+
   it("allows selecting next track when starting point has been selected", async () => {
     const selectedNodeId = "node0";
     const nodesLayerId = "nodes";
