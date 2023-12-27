@@ -160,6 +160,68 @@ describe("create new route", () => {
     expect(selectedNodeLayer).toHaveTextContent(/visibility: visible/i);
   });
 
+  it("animates next track options from selected start point", async () => {
+    const track1StartNodeId = "node0";
+    const nodesLayerId = "nodes";
+    const someConnectedTracks = aFeatureCollectionWith([
+      aTrackFeature({ id: "1", name: "track1" }, [
+        [
+          [1, 1],
+          [2, 2],
+        ],
+      ]),
+      aTrackFeature({ id: "2", name: "track2" }, [
+        [
+          [2, 2],
+          [3, 3],
+        ],
+      ]),
+    ]);
+    setFetchGlobalMock(someConnectedTracks);
+    render(<App />);
+    await forDataToBeFetched(screen, someConnectedTracks);
+
+    const createNewRouteButton = screen.getByText("Create new route");
+    fireEvent.click(createNewRouteButton);
+    selectFeatureOnMap(track1StartNodeId, nodesLayerId);
+    const animatedTracksLayer = await screen.findByText(
+      /layer-id: animated-tracks/i
+    );
+
+    expect(animatedTracksLayer).toHaveTextContent(/filter: in,id,1/i);
+  });
+
+  it("animates next track options from selected start point when two tracks share start and end node", async () => {
+    const track1StartNodeId = "node0";
+    const nodesLayerId = "nodes";
+    const someConnectedTracks = aFeatureCollectionWith([
+      aTrackFeature({ id: "1", name: "track1" }, [
+        [
+          [1, 1],
+          [2, 2],
+        ],
+      ]),
+      aTrackFeature({ id: "2", name: "track2" }, [
+        [
+          [1, 1],
+          [2, 2],
+        ],
+      ]),
+    ]);
+    setFetchGlobalMock(someConnectedTracks);
+    render(<App />);
+    await forDataToBeFetched(screen, someConnectedTracks);
+
+    const createNewRouteButton = screen.getByText("Create new route");
+    fireEvent.click(createNewRouteButton);
+    selectFeatureOnMap(track1StartNodeId, nodesLayerId);
+    const animatedTracksLayer = await screen.findByText(
+      /layer-id: animated-tracks/i
+    );
+
+    expect(animatedTracksLayer).toHaveTextContent(/filter: in,id,1,2/i);
+  });
+
   it("allows selecting next track when starting point has been selected", async () => {
     const selectedNodeId = "node0";
     const nodesLayerId = "nodes";

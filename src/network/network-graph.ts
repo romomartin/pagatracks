@@ -1,19 +1,19 @@
 import { Graph } from "@dagrejs/graphlib";
-import { Connections } from "./build-connections";
+import { ConnectionIndex } from "./build-connections";
 
 export class NetworkGraph {
   private graph: Graph;
 
-  constructor(connections: Connections) {
-    this.graph = new Graph({ directed: false });
-    Object.entries(connections.connectionIndex).forEach(([track, nodes]) => {
-      this.graph.setEdge(nodes.nodeAId, nodes.nodeBId, track);
+  constructor(connectionIndex: ConnectionIndex) {
+    this.graph = new Graph({ directed: false, multigraph: true });
+    Object.entries(connectionIndex).forEach(([track, nodes]) => {
+      this.graph.setEdge(nodes.nodeAId, nodes.nodeBId, track, track);
     });
   }
 
   nodeEdges(nodeId: string) {
     const edges = this.graph.nodeEdges(nodeId);
     if (!edges) return;
-    return edges.map((edge) => this.graph.edge(edge.v, edge.w));
+    return edges.map((edge) => this.graph.edge(edge.v, edge.w, edge.name));
   }
 }

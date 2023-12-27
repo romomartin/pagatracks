@@ -15,23 +15,29 @@ export const aFeatureCollectionWith = (
   };
 };
 
-export const aTrackFeature = (properties?: TrackFeatureProps): Feature => {
+export const aTrackFeature = (
+  properties?: TrackFeatureProps,
+  coordinates?: number[][][]
+): Feature => {
   const trackProperties: TrackFeatureProps = {
     id: "aTrackId",
     name: "aTrackName",
     path_type: "paved",
     ...properties,
   };
+
+  const defaultCoordinates = [
+    [
+      [1, 2, 10],
+      [3, 4, 12],
+    ],
+  ];
+
   return {
     type: "Feature",
     geometry: {
       type: "MultiLineString",
-      coordinates: [
-        [
-          [1, 2, 10],
-          [3, 4, 12],
-        ],
-      ],
+      coordinates: coordinates || defaultCoordinates,
     },
     properties: trackProperties,
   };

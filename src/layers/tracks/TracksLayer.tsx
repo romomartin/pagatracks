@@ -21,14 +21,14 @@ type TracksLayerProps = {
   tracks: FeatureCollection<Geometry, GeoJsonProperties>;
   selectedFeatureId: string;
   hoveredFeatureId: string;
-  routeNextPossibleTrackIds: string[];
+  animatedTracksIds: string[];
 };
 
 export const TracksLayer = ({
   tracks,
   selectedFeatureId,
   hoveredFeatureId,
-  routeNextPossibleTrackIds,
+  animatedTracksIds,
 }: TracksLayerProps) => {
   const [animatedVisibility, setAnimatedVisibility] = useState<Visibility>(
     LayerVisibility.NONE
@@ -62,7 +62,7 @@ export const TracksLayer = ({
           id={TrackLayerIds.ANIMATED_TRACKS}
           {...highlightedTrackStyle}
           layout={{ visibility: animatedVisibility }}
-          filter={animatedTracksFilter(routeNextPossibleTrackIds)}
+          filter={animatedTracksFilter(animatedTracksIds)}
         />
         <Layer
           id={TrackLayerIds.SELECTABLE_TRACKS}

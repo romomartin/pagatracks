@@ -6,7 +6,7 @@ export type Connections = {
   nodes: ConnectionNode[];
 };
 
-type ConnectionIndex = {
+export type ConnectionIndex = {
   [trackName: string]: { nodeAId: string; nodeBId: string };
 };
 
