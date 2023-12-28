@@ -15,4 +15,17 @@ describe("network graph", () => {
 
     expect(nodeEdges).toEqual(["Track1", "Track2", "Track3"]);
   });
+
+  it("gets edges connnected to given node when they share start and end node", () => {
+    const nodeId = "nodeId";
+    const connectionIndex: ConnectionIndex = {
+      Track1: { nodeAId: "node1", nodeBId: nodeId },
+      Track2: { nodeAId: "node1", nodeBId: nodeId },
+    };
+    const networkGraph = new NetworkGraph(connectionIndex);
+
+    const nodeEdges = networkGraph.nodeEdges(nodeId);
+
+    expect(nodeEdges).toEqual(["Track1", "Track2"]);
+  });
 });
