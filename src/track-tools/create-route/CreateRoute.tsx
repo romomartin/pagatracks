@@ -4,7 +4,7 @@ import { CreateRouteIcon } from "./CreateRouteIcon";
 import { CreateRouteButton } from "./button/CreateRouteButton";
 import { CreateRoutePanel } from "./panel/CreateRoutePanel";
 import { TrackTool } from "..";
-import { LayerIds, LayerVisibility } from "../../layers";
+import { LayerIds, LayerVisibility, LayersVisibility } from "../../layers";
 import { NodeLayerIds } from "../../layers/nodes/NodesLayer";
 import { TrackLayerIds } from "../../layers/tracks/TracksLayer";
 import { ConnectionIndex } from "../../network/build-connections";
@@ -18,10 +18,7 @@ export const CreateRoute = ({
   connectionIndex,
   animateTracks,
 }: {
-  changeLayersVisibility: (
-    layerIds: LayerIds[],
-    visibility: LayerVisibility
-  ) => void;
+  changeLayersVisibility: (layersVisibility: LayersVisibility) => void;
   changeInteractiveLayers: (ids: LayerIds[]) => void;
   changeSelectedFeatureId: (selectedFeatureId: string | undefined) => void;
   selectedNodeId: string | undefined;
@@ -37,28 +34,22 @@ export const CreateRoute = ({
   };
 
   const createNewRoute = (): void => {
-    changeLayersVisibility(
-      [
-        NodeLayerIds.HOVERED_NODE,
-        NodeLayerIds.NODES,
-        NodeLayerIds.SELECTED_NODE,
-      ],
-      LayerVisibility.VISIBLE
-    );
+    changeLayersVisibility({
+      [NodeLayerIds.HOVERED_NODE]: LayerVisibility.VISIBLE,
+      [NodeLayerIds.NODES]: LayerVisibility.VISIBLE,
+      [NodeLayerIds.SELECTED_NODE]: LayerVisibility.VISIBLE,
+    });
     changeInteractiveLayers([NodeLayerIds.NODES]);
     changeSelectedFeatureId(undefined);
     setIsCreatingRoute(true);
   };
 
   const onStartNodeId = () => {
-    changeLayersVisibility(
-      [NodeLayerIds.HOVERED_NODE, NodeLayerIds.NODES],
-      LayerVisibility.NONE
-    );
-    changeLayersVisibility(
-      [NodeLayerIds.SELECTED_NODE],
-      LayerVisibility.VISIBLE
-    );
+    changeLayersVisibility({
+      [NodeLayerIds.HOVERED_NODE]: LayerVisibility.NONE,
+      [NodeLayerIds.NODES]: LayerVisibility.NONE,
+      [NodeLayerIds.SELECTED_NODE]: LayerVisibility.VISIBLE,
+    });
     changeInteractiveLayers([TrackLayerIds.SELECTABLE_TRACKS]);
 
     const networkGraph = new NetworkGraph(connectionIndex);

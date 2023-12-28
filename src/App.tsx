@@ -15,7 +15,7 @@ import {
   nullConnections,
 } from "./network/build-connections";
 import { nodesToFeatureCollection } from "./network/nodes-to-feature-collection";
-import { LayerIds, LayerVisibility, LayersVisibility } from "./layers";
+import { LayerIds, LayersVisibility } from "./layers";
 import { TrackLayerIds } from "./layers/tracks/TracksLayer";
 import { CreateRoute } from "./track-tools";
 
@@ -65,12 +65,11 @@ function App() {
     {}
   );
 
-  const changeLayersVisibility = (
-    layerIds: LayerIds[],
-    visibility: LayerVisibility
-  ) => {
-    layerIds.forEach((id) => (layersVisibility[id] = visibility));
-    setLayersVisibility(layersVisibility);
+  const changeLayersVisibility = (layersVisibility: LayersVisibility) => {
+    setLayersVisibility((prevVisibility) => ({
+      ...prevVisibility,
+      ...layersVisibility,
+    }));
   };
 
   const [interactiveLayers, setInteractiveLayers] = useState<LayerIds[]>([
