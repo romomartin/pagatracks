@@ -275,4 +275,35 @@ describe("create new route", () => {
 
     expect(interactiveLayers).toHaveTextContent(/selectable-tracks/i);
   });
+
+  it("only next possible tracks are selectable when starting point has been selected", async () => {
+    const track1StartNodeId = "node0";
+    const nodesLayerId = "nodes";
+    const someConnectedTracks = aFeatureCollectionWith([
+      aTrackFeature({ id: "1", name: "track1" }, [
+        [
+          [1, 1],
+          [2, 2],
+        ],
+      ]),
+      aTrackFeature({ id: "2", name: "track2" }, [
+        [
+          [2, 2],
+          [3, 3],
+        ],
+      ]),
+    ]);
+    setFetchGlobalMock(someConnectedTracks);
+    render(<App />);
+    await forDataToBeFetched(screen, someConnectedTracks);
+
+    const createNewRouteButton = screen.getByText("Create new route");
+    fireEvent.click(createNewRouteButton);
+    selectFeatureOnMap(track1StartNodeId, nodesLayerId);
+    const selectableTracksLayer = await screen.findByText(
+      /layer-id: selectable-tracks/i
+    );
+
+    expect(selectableTracksLayer).toHaveTextContent(/filter: in,id,1/i);
+  });
 });

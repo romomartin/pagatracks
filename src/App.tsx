@@ -95,6 +95,7 @@ function App() {
     changeLayersVisibility,
     changeInteractiveLayers,
     changeSelectedFeatureId,
+    changeSelectableTracks,
     selectedNodeId: selectedFeatureId,
     connectionIndex: connections.connectionIndex,
     animateTracks,
