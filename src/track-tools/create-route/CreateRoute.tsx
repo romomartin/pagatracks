@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { texts } from "../../texts";
 import { CreateRouteIcon } from "./CreateRouteIcon";
 import { CreateRouteButton } from "./button/CreateRouteButton";
@@ -41,10 +41,11 @@ export const CreateRoute = ({
     });
     changeInteractiveLayers([NodeLayerIds.NODES]);
     changeSelectedFeatureId(undefined);
+    animateTracks([]);
     setIsCreatingRoute(true);
   };
 
-  const onStartNodeId = () => {
+  const onStartNodeId = (startNodeId: string) => {
     changeLayersVisibility({
       [NodeLayerIds.HOVERED_NODE]: LayerVisibility.NONE,
       [NodeLayerIds.NODES]: LayerVisibility.NONE,
@@ -61,11 +62,8 @@ export const CreateRoute = ({
 
   if (isCreatingRoute && selectedNodeId !== startNodeId) {
     setStartNodeId(selectedNodeId);
+    selectedNodeId ? onStartNodeId(selectedNodeId) : createNewRoute();
   }
-
-  useEffect(() => {
-    if (isCreatingRoute) startNodeId ? onStartNodeId() : createNewRoute();
-  }, [startNodeId]);
 
   const button = CreateRouteButton({
     icon: CreateRouteIcon(),
