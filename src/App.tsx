@@ -84,6 +84,13 @@ function App() {
     setAnimatedTracksIds(tracksIds);
   };
 
+  const [selectableTracksIds, setSelectableTracksIds] = useState<
+    string[] | undefined
+  >(undefined);
+  const changeSelectableTracks = (tracksIds: string[] | undefined) => {
+    setSelectableTracksIds(tracksIds);
+  };
+
   const createRoute = CreateRoute({
     changeLayersVisibility,
     changeInteractiveLayers,
@@ -105,6 +112,7 @@ function App() {
         selectedFeatureId={selectedFeatureId || ""}
         hoveredFeatureId={hoveredFeatureId || ""}
         animatedTracksIds={animatedTracksIds}
+        selectableTracksIds={selectableTracksIds}
       ></MapCanvas>
       {selectedFeatureId && tracks[selectedFeatureId] && (
         <ElevationChart

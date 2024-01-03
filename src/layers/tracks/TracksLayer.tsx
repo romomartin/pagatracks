@@ -22,6 +22,7 @@ type TracksLayerProps = {
   selectedFeatureId: string;
   hoveredFeatureId: string;
   animatedTracksIds: string[];
+  selectableTracksIds: string[] | undefined;
 };
 
 export const TracksLayer = ({
@@ -29,6 +30,7 @@ export const TracksLayer = ({
   selectedFeatureId,
   hoveredFeatureId,
   animatedTracksIds,
+  selectableTracksIds,
 }: TracksLayerProps) => {
   const [animatedVisibility, setAnimatedVisibility] = useState<Visibility>(
     LayerVisibility.NONE
@@ -62,11 +64,14 @@ export const TracksLayer = ({
           id={TrackLayerIds.ANIMATED_TRACKS}
           {...highlightedTrackStyle}
           layout={{ visibility: animatedVisibility }}
-          filter={animatedTracksFilter(animatedTracksIds)}
+          filter={filterTracksById(animatedTracksIds)}
         />
         <Layer
           id={TrackLayerIds.SELECTABLE_TRACKS}
           {...selectableTracksStyle}
+          {...(selectableTracksIds
+            ? { filter: filterTracksById(selectableTracksIds) }
+            : {})}
         />
         <Layer id={TrackLayerIds.TRACKS} {...tracksStyle} />
       </Source>
@@ -74,7 +79,7 @@ export const TracksLayer = ({
   );
 };
 
-const animatedTracksFilter = (trackIds: string[]): string[] => {
+const filterTracksById = (trackIds: string[]): string[] => {
   let filter = ["in", "id"];
 
   return filter.concat(trackIds);

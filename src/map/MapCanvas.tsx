@@ -14,6 +14,7 @@ type MapProps = {
   selectedFeatureId: string;
   hoveredFeatureId: string;
   animatedTracksIds: string[];
+  selectableTracksIds: string[] | undefined;
 };
 
 export const MapCanvas = ({
@@ -26,6 +27,7 @@ export const MapCanvas = ({
   selectedFeatureId,
   hoveredFeatureId,
   animatedTracksIds,
+  selectableTracksIds,
 }: MapProps) => {
   const handleMapClick = (event: MapLayerMouseEvent) => {
     const selectedFeature = event.features?.length
@@ -69,6 +71,7 @@ export const MapCanvas = ({
         selectedFeatureId={selectedFeatureId}
         hoveredFeatureId={hoveredFeatureId}
         animatedTracksIds={animatedTracksIds}
+        selectableTracksIds={selectableTracksIds}
       ></TracksLayer>
       <NodesLayer
         nodes={nodes}

@@ -27,6 +27,7 @@ describe("Tracks layer", () => {
         selectedFeatureId={""}
         hoveredFeatureId={""}
         animatedTracksIds={[]}
+        selectableTracksIds={[]}
       />
     );
     const source = await screen.findByText(/source-id: tracks/i);
@@ -50,6 +51,7 @@ describe("Tracks layer", () => {
         selectedFeatureId={""}
         hoveredFeatureId={""}
         animatedTracksIds={[]}
+        selectableTracksIds={[]}
       />
     );
     const tracksLayer = await screen.findByText(/layer-id: tracks/i);
@@ -72,6 +74,7 @@ describe("Tracks layer", () => {
         selectedFeatureId={""}
         hoveredFeatureId={""}
         animatedTracksIds={[]}
+        selectableTracksIds={[]}
       />
     );
     const selectedTrackLayer = await screen.findByText(
@@ -96,6 +99,7 @@ describe("Tracks layer", () => {
         selectedFeatureId={""}
         hoveredFeatureId={""}
         animatedTracksIds={[]}
+        selectableTracksIds={[]}
       />
     );
     const hoveredTrackLayer = await screen.findByText(
@@ -120,6 +124,7 @@ describe("Tracks layer", () => {
         selectedFeatureId={""}
         hoveredFeatureId={""}
         animatedTracksIds={[]}
+        selectableTracksIds={[]}
       />
     );
     const selectableTrackLayer = await screen.findByText(
@@ -145,6 +150,7 @@ describe("Tracks layer", () => {
         selectedFeatureId={"track_134"}
         hoveredFeatureId={""}
         animatedTracksIds={[]}
+        selectableTracksIds={[]}
       />
     );
     const selectedTrackLayer = await screen.findByText(
@@ -167,6 +173,7 @@ describe("Tracks layer", () => {
         selectedFeatureId={""}
         hoveredFeatureId={"track_134"}
         animatedTracksIds={[]}
+        selectableTracksIds={[]}
       />
     );
     const hoveredTrackLayer = await screen.findByText(
@@ -189,6 +196,7 @@ describe("Tracks layer", () => {
         selectedFeatureId={trackId}
         hoveredFeatureId={trackId}
         animatedTracksIds={[]}
+        selectableTracksIds={[]}
       />
     );
     const hoveredTrackLayer = await screen.findByText(
@@ -215,6 +223,7 @@ describe("Tracks layer", () => {
         selectedFeatureId={""}
         hoveredFeatureId={""}
         animatedTracksIds={[aTrackId]}
+        selectableTracksIds={[]}
       />
     );
     let visibleAnimatedTracksLayer = await screen.findByText(
@@ -253,6 +262,7 @@ describe("Tracks layer", () => {
         selectedFeatureId={""}
         hoveredFeatureId={""}
         animatedTracksIds={[aTrackId, otherTrackId]}
+        selectableTracksIds={[]}
       />
     );
     const animatedTracksLayer = await screen.findByText(
@@ -262,5 +272,61 @@ describe("Tracks layer", () => {
     expect(animatedTracksLayer).toHaveTextContent(
       /filter: in,id,track_1,track_2/i
     );
+  });
+
+  it("allows to filter selectable tracks", async () => {
+    const aTrackId = "track_1";
+    const otherTrackId = "track_2";
+    const tracks = {
+      type: "FeatureCollection",
+      features: [
+        aTrackFeature({ id: aTrackId }),
+        aTrackFeature({ id: otherTrackId }),
+      ],
+    } as FeatureCollection;
+
+    render(
+      <TracksLayer
+        tracks={tracks}
+        selectedFeatureId={""}
+        hoveredFeatureId={""}
+        animatedTracksIds={[]}
+        selectableTracksIds={[aTrackId, otherTrackId]}
+      />
+    );
+    const selectableTracksLayer = await screen.findByText(
+      /layer-id: selectable-tracks/i
+    );
+
+    expect(selectableTracksLayer).toHaveTextContent(
+      /filter: in,id,track_1,track_2/i
+    );
+  });
+
+  it("does not filter selectable tracks if no selectable tracks are provided", async () => {
+    const aTrackId = "track_1";
+    const otherTrackId = "track_2";
+    const tracks = {
+      type: "FeatureCollection",
+      features: [
+        aTrackFeature({ id: aTrackId }),
+        aTrackFeature({ id: otherTrackId }),
+      ],
+    } as FeatureCollection;
+
+    render(
+      <TracksLayer
+        tracks={tracks}
+        selectedFeatureId={""}
+        hoveredFeatureId={""}
+        animatedTracksIds={[]}
+        selectableTracksIds={undefined}
+      />
+    );
+    const selectableTracksLayer = await screen.findByText(
+      /layer-id: selectable-tracks/i
+    );
+
+    expect(selectableTracksLayer).toHaveTextContent(/filter: undefined/i);
   });
 });
