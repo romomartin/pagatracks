@@ -145,15 +145,6 @@ export const selectFeatureOnMap = (
   fireEvent.click(mapClick);
 };
 
-export const unSelectFeatureOnMap = () => {
-  jest
-    .spyOn(mockSelectedFeature, "mockSelectedFeature")
-    .mockReturnValue({} as MapboxGeoJSONFeature);
-
-  const mapClick = screen.getByRole("button", { name: /mapclick/i });
-  fireEvent.click(mapClick);
-};
-
 export const hoverFeatureOnMap = (
   id: string,
   layerId: string,

@@ -18,6 +18,7 @@ import { nodesToFeatureCollection } from "./network/nodes-to-feature-collection"
 import { LayerIds, LayersVisibility } from "./layers";
 import { TrackLayerIds } from "./layers/tracks/TracksLayer";
 import { CreateRoute } from "./track-tools";
+import { Route, nullRoute } from "./track-tools/create-route/CreateRoute";
 
 function App() {
   const [tracks, setTracks] = useState<TracksById>({});
@@ -77,17 +78,24 @@ function App() {
     setInteractiveLayers(layerIds);
   };
 
-  const [animatedTracksIds, setAnimatedTracksIds] = useState<string[]>([]);
-  const animateTracks = (tracksIds: string[]) => {
-    setAnimatedTracksIds(tracksIds);
-  };
-
   const [selectableTracksIds, setSelectableTracksIds] = useState<string[]>([]);
   const changeSelectableTracks = (tracksIds: string[]) => {
     setSelectableTracksIds(tracksIds);
   };
 
+  const [animatedTracksIds, setAnimatedTracksIds] = useState<string[]>([]);
+  const animateTracks = (tracksIds: string[]) => {
+    setAnimatedTracksIds(tracksIds);
+  };
+
+  const [currentRoute, setCurrentRoute] = useState<Route>(nullRoute);
+  const updateCurrentRoute = (route: Route) => {
+    setCurrentRoute({ ...currentRoute, ...route });
+  };
+
   const createRoute = CreateRoute({
+    currentRoute,
+    updateCurrentRoute,
     changeLayersVisibility,
     changeInteractiveLayers,
     changeSelectedFeatureId,

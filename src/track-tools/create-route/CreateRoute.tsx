@@ -10,7 +10,21 @@ import { TrackLayerIds } from "../../layers/tracks/TracksLayer";
 import { ConnectionIndex } from "../../network/build-connections";
 import { NetworkGraph } from "../../network/network-graph";
 
+export type Route = {
+  startPoint: string;
+  tracks: string[];
+  nextPossibleTracks: string[];
+};
+
+export const nullRoute: Route = {
+  startPoint: "",
+  tracks: [],
+  nextPossibleTracks: [],
+};
+
 export const CreateRoute = ({
+  currentRoute,
+  updateCurrentRoute,
   changeLayersVisibility,
   changeInteractiveLayers,
   changeSelectedFeatureId,
@@ -19,6 +33,8 @@ export const CreateRoute = ({
   connectionIndex,
   animateTracks,
 }: {
+  currentRoute: Route;
+  updateCurrentRoute: (route: Route) => void;
   changeLayersVisibility: (layersVisibility: LayersVisibility) => void;
   changeInteractiveLayers: (ids: LayerIds[]) => void;
   changeSelectedFeatureId: (selectedFeatureId: string | undefined) => void;
@@ -29,7 +45,6 @@ export const CreateRoute = ({
 }): TrackTool => {
   const [panelVisibility, setPanelVisibility] = useState<boolean>(false);
   const [isCreatingRoute, setIsCreatingRoute] = useState<boolean>(false);
-  const [startNodeId, setStartNodeId] = useState<string | undefined>(undefined);
 
   const togglePanelVisibility = (): void => {
     setPanelVisibility(!panelVisibility);
@@ -60,12 +75,20 @@ export const CreateRoute = ({
       const nextTrackIds = networkGraph.nodeEdges(startNodeId);
       animateTracks(nextTrackIds || []);
       changeSelectableTracks(nextTrackIds || []);
+      updateCurrentRoute({
+        startPoint: startNodeId,
+        tracks: [],
+        nextPossibleTracks: nextTrackIds || [],
+      });
     }
   };
 
-  if (isCreatingRoute && selectedNodeId !== startNodeId) {
-    setStartNodeId(selectedNodeId);
-    selectedNodeId ? onStartNodeId(selectedNodeId) : createNewRoute();
+  if (
+    isCreatingRoute &&
+    selectedNodeId !== currentRoute.startPoint &&
+    selectedNodeId
+  ) {
+    onStartNodeId(selectedNodeId);
   }
 
   const button = CreateRouteButton({
@@ -78,7 +101,7 @@ export const CreateRoute = ({
     isVisible: panelVisibility,
     isCreatingRoute,
     createNewRoute,
-    startNodeId,
+    route: currentRoute,
   });
 
   return { button, panel };

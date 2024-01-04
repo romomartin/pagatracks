@@ -1,18 +1,19 @@
 import { texts } from "../../../texts";
+import { Route } from "../CreateRoute";
 import style from "./styles.module.css";
 
 type CreateRoutePanelProps = {
   isVisible: boolean;
   isCreatingRoute: boolean;
   createNewRoute: () => void;
-  startNodeId: string | undefined;
+  route: Route;
 };
 
 export const CreateRoutePanel = ({
   isVisible,
   isCreatingRoute,
   createNewRoute,
-  startNodeId,
+  route,
 }: CreateRoutePanelProps) => {
   const handleClick = () => {
     createNewRoute();
@@ -27,8 +28,8 @@ export const CreateRoutePanel = ({
       {!isCreatingRoute && (
         <button onClick={handleClick}>{texts.createNewRoute}</button>
       )}
-      {isCreatingRoute && !startNodeId && texts.selectStartingPoint}
-      {isCreatingRoute && startNodeId && texts.selectNextTrack}
+      {isCreatingRoute && !route.startPoint && texts.selectStartingPoint}
+      {isCreatingRoute && route.startPoint && texts.selectNextTrack}
     </div>
   );
 };
