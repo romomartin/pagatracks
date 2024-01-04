@@ -22,7 +22,7 @@ describe("Nodes layer", () => {
         nodes={nodes}
         layersVisibility={{}}
         hoveredFeatureId=""
-        selectedFeatureId=""
+        routeStartNode=""
       />
     );
     const source = await screen.findByText(/source-id: nodes/i);
@@ -45,7 +45,7 @@ describe("Nodes layer", () => {
         nodes={nodes}
         layersVisibility={{}}
         hoveredFeatureId=""
-        selectedFeatureId=""
+        routeStartNode=""
       />
     );
     const nodesLayer = await screen.findByText(/layer-id: nodes/i);
@@ -68,7 +68,7 @@ describe("Nodes layer", () => {
         nodes={nodes}
         layersVisibility={{}}
         hoveredFeatureId=""
-        selectedFeatureId=""
+        routeStartNode=""
       />
     );
     const nodesLayer = await screen.findByText(/layer-id: nodes/i);
@@ -88,7 +88,7 @@ describe("Nodes layer", () => {
         nodes={nodes}
         layersVisibility={{}}
         hoveredFeatureId=""
-        selectedFeatureId=""
+        routeStartNode=""
       />
     );
     const hoveredNodeLayer = await screen.findByText(/layer-id: hovered-node/i);
@@ -111,7 +111,7 @@ describe("Nodes layer", () => {
         nodes={nodes}
         layersVisibility={{}}
         hoveredFeatureId={nodeId}
-        selectedFeatureId=""
+        routeStartNode=""
       />
     );
     const hoveredNodeLayer = await screen.findByText(/layer-id: hovered-node/i);
@@ -131,15 +131,15 @@ describe("Nodes layer", () => {
         nodes={nodes}
         layersVisibility={{}}
         hoveredFeatureId=""
-        selectedFeatureId=""
+        routeStartNode=""
       />
     );
-    const selectedNodeLayer = await screen.findByText(
-      /layer-id: selected-node/i
+    const routeStartNodeLayer = await screen.findByText(
+      /layer-id: route-start-node/i
     );
 
-    expect(selectedNodeLayer).toHaveTextContent(/type: circle/i);
-    expect(selectedNodeLayer).toHaveTextContent(
+    expect(routeStartNodeLayer).toHaveTextContent(/type: circle/i);
+    expect(routeStartNodeLayer).toHaveTextContent(
       `paint: ${JSON.stringify(selectedNodeStyle.paint)}`
     );
   });
@@ -156,13 +156,13 @@ describe("Nodes layer", () => {
         nodes={nodes}
         layersVisibility={{}}
         hoveredFeatureId=""
-        selectedFeatureId={nodeId}
+        routeStartNode={nodeId}
       />
     );
-    const selectedNodeLayer = await screen.findByText(
-      /layer-id: selected-node/i
+    const routeStartNodeLayer = await screen.findByText(
+      /layer-id: route-start-node/i
     );
 
-    expect(selectedNodeLayer).toHaveTextContent(/filter: in,id,node3/i);
+    expect(routeStartNodeLayer).toHaveTextContent(/filter: in,id,node3/i);
   });
 });

@@ -3,6 +3,7 @@ import { TracksLayer } from "../layers/tracks/TracksLayer";
 import { FeatureCollection } from "geojson";
 import { NodesLayer } from "../layers/nodes/NodesLayer";
 import { LayerIds, LayersVisibility } from "../layers";
+import { Route } from "../track-tools/create-route/CreateRoute";
 
 type MapProps = {
   tracks: FeatureCollection;
@@ -15,6 +16,7 @@ type MapProps = {
   hoveredFeatureId: string;
   animatedTracksIds: string[];
   selectableTracksIds: string[];
+  currentRoute: Route;
 };
 
 export const MapCanvas = ({
@@ -28,6 +30,7 @@ export const MapCanvas = ({
   hoveredFeatureId,
   animatedTracksIds,
   selectableTracksIds,
+  currentRoute,
 }: MapProps) => {
   const handleMapClick = (event: MapLayerMouseEvent) => {
     const selectedFeature = event.features?.length
@@ -76,8 +79,8 @@ export const MapCanvas = ({
       <NodesLayer
         nodes={nodes}
         layersVisibility={layersVisibility}
-        selectedFeatureId={selectedFeatureId}
         hoveredFeatureId={hoveredFeatureId}
+        routeStartNode={currentRoute.startPoint}
       ></NodesLayer>
     </Map>
   );

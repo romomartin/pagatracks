@@ -54,7 +54,7 @@ export const CreateRoute = ({
     changeLayersVisibility({
       [NodeLayerIds.HOVERED_NODE]: LayerVisibility.VISIBLE,
       [NodeLayerIds.NODES]: LayerVisibility.VISIBLE,
-      [NodeLayerIds.SELECTED_NODE]: LayerVisibility.VISIBLE,
+      [NodeLayerIds.ROUTE_START_NODE]: LayerVisibility.VISIBLE,
     });
     changeInteractiveLayers([NodeLayerIds.NODES]);
     changeSelectedFeatureId(undefined);
@@ -66,7 +66,7 @@ export const CreateRoute = ({
     changeLayersVisibility({
       [NodeLayerIds.HOVERED_NODE]: LayerVisibility.NONE,
       [NodeLayerIds.NODES]: LayerVisibility.NONE,
-      [NodeLayerIds.SELECTED_NODE]: LayerVisibility.VISIBLE,
+      [NodeLayerIds.ROUTE_START_NODE]: LayerVisibility.VISIBLE,
     });
     changeInteractiveLayers([TrackLayerIds.SELECTABLE_TRACKS]);
 

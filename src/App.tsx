@@ -118,6 +118,7 @@ function App() {
         hoveredFeatureId={hoveredFeatureId || ""}
         animatedTracksIds={animatedTracksIds}
         selectableTracksIds={selectableTracksIds}
+        currentRoute={currentRoute}
       ></MapCanvas>
       {selectedFeatureId && tracks[selectedFeatureId] && (
         <ElevationChart

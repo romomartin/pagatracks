@@ -10,34 +10,34 @@ import { LayerVisibility, LayersVisibility } from "..";
 export enum NodeLayerIds {
   NODES = "nodes",
   HOVERED_NODE = "hovered-node",
-  SELECTED_NODE = "selected-node",
+  ROUTE_START_NODE = "route-start-node",
 }
 
 type NodesLayerProps = {
   nodes: FeatureCollection;
   layersVisibility: LayersVisibility;
-  selectedFeatureId: string;
   hoveredFeatureId: string;
+  routeStartNode: string;
 };
 
 export const NodesLayer = ({
   nodes,
   layersVisibility,
-  selectedFeatureId,
   hoveredFeatureId,
+  routeStartNode,
 }: NodesLayerProps): JSX.Element => {
   return (
     <>
       <Source id={NodeLayerIds.NODES} type="geojson" data={nodes}>
         <Layer
-          id={NodeLayerIds.SELECTED_NODE}
+          id={NodeLayerIds.ROUTE_START_NODE}
           {...selectedNodeStyle}
           layout={{
             visibility:
-              layersVisibility[NodeLayerIds.SELECTED_NODE] ||
+              layersVisibility[NodeLayerIds.ROUTE_START_NODE] ||
               LayerVisibility.NONE,
           }}
-          filter={["in", "id", selectedFeatureId]}
+          filter={["in", "id", routeStartNode]}
         />
         <Layer
           id={NodeLayerIds.NODES}

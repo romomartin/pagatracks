@@ -118,11 +118,11 @@ describe("create new route", () => {
     const createNewRouteButton = screen.getByText("Create new route");
     fireEvent.click(createNewRouteButton);
     selectFeatureOnMap(selectedNodeId, nodesLayerId);
-    const selectedNodeLayer = await screen.findByText(
-      /layer-id: selected-node/i
+    const routeStartNodeLayer = await screen.findByText(
+      /layer-id: route-start-node/i
     );
 
-    expect(selectedNodeLayer).toHaveTextContent(/filter: in,id,node0/i);
+    expect(routeStartNodeLayer).toHaveTextContent(/filter: in,id,node0/i);
   });
 
   it("sets selected node as starting point", async () => {
@@ -152,12 +152,12 @@ describe("create new route", () => {
     fireEvent.click(createNewRouteButton);
     selectFeatureOnMap(selectedNodeId, nodesLayerId);
     const nodesLayer = await screen.findByText(/layer-id: nodes/i);
-    const selectedNodeLayer = await screen.findByText(
-      /layer-id: selected-node/i
+    const routeStartNodeLayer = await screen.findByText(
+      /layer-id: route-start-node/i
     );
 
     expect(nodesLayer).toHaveTextContent(/visibility: none/i);
-    expect(selectedNodeLayer).toHaveTextContent(/visibility: visible/i);
+    expect(routeStartNodeLayer).toHaveTextContent(/visibility: visible/i);
   });
 
   it("animates next track options from selected start point", async () => {
