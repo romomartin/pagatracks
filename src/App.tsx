@@ -49,14 +49,13 @@ function App() {
   const [selectedFeatureId, setSelectedFeatureId] = useState<
     string | undefined
   >(undefined);
-  const [hoveredFeatureId, setHoveredFeatureId] = useState<string | undefined>(
-    undefined
-  );
-
   const changeSelectedFeatureId = (selectedFeatureId: string | undefined) => {
     setSelectedFeatureId(selectedFeatureId);
   };
 
+  const [hoveredFeatureId, setHoveredFeatureId] = useState<string | undefined>(
+    undefined
+  );
   const handleHoveredFeatureId = (hoveredFeatureId: string | undefined) => {
     setHoveredFeatureId(hoveredFeatureId);
   };
@@ -64,7 +63,6 @@ function App() {
   const [layersVisibility, setLayersVisibility] = useState<LayersVisibility>(
     {}
   );
-
   const changeLayersVisibility = (layersVisibility: LayersVisibility) => {
     setLayersVisibility((prevVisibility) => ({
       ...prevVisibility,
@@ -84,10 +82,8 @@ function App() {
     setAnimatedTracksIds(tracksIds);
   };
 
-  const [selectableTracksIds, setSelectableTracksIds] = useState<
-    string[] | undefined
-  >(undefined);
-  const changeSelectableTracks = (tracksIds: string[] | undefined) => {
+  const [selectableTracksIds, setSelectableTracksIds] = useState<string[]>([]);
+  const changeSelectableTracks = (tracksIds: string[]) => {
     setSelectableTracksIds(tracksIds);
   };
 

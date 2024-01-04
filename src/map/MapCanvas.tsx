@@ -14,7 +14,7 @@ type MapProps = {
   selectedFeatureId: string;
   hoveredFeatureId: string;
   animatedTracksIds: string[];
-  selectableTracksIds: string[] | undefined;
+  selectableTracksIds: string[];
 };
 
 export const MapCanvas = ({

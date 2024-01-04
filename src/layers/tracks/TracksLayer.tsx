@@ -22,7 +22,7 @@ type TracksLayerProps = {
   selectedFeatureId: string;
   hoveredFeatureId: string;
   animatedTracksIds: string[];
-  selectableTracksIds: string[] | undefined;
+  selectableTracksIds: string[];
 };
 
 export const TracksLayer = ({
@@ -69,7 +69,7 @@ export const TracksLayer = ({
         <Layer
           id={TrackLayerIds.SELECTABLE_TRACKS}
           {...selectableTracksStyle}
-          {...(selectableTracksIds
+          {...(selectableTracksIds.length > 0
             ? { filter: filterTracksById(selectableTracksIds) }
             : {})}
         />

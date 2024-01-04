@@ -22,7 +22,7 @@ export const CreateRoute = ({
   changeLayersVisibility: (layersVisibility: LayersVisibility) => void;
   changeInteractiveLayers: (ids: LayerIds[]) => void;
   changeSelectedFeatureId: (selectedFeatureId: string | undefined) => void;
-  changeSelectableTracks: (selectableTracksIds: string[] | undefined) => void;
+  changeSelectableTracks: (selectableTracksIds: string[]) => void;
   selectedNodeId: string | undefined;
   connectionIndex: ConnectionIndex;
   animateTracks: (tracksIds: string[]) => void;
@@ -59,7 +59,7 @@ export const CreateRoute = ({
     if (startNodeId) {
       const nextTrackIds = networkGraph.nodeEdges(startNodeId);
       animateTracks(nextTrackIds || []);
-      changeSelectableTracks(nextTrackIds);
+      changeSelectableTracks(nextTrackIds || []);
     }
   };
 

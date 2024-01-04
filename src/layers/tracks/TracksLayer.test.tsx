@@ -320,7 +320,7 @@ describe("Tracks layer", () => {
         selectedFeatureId={""}
         hoveredFeatureId={""}
         animatedTracksIds={[]}
-        selectableTracksIds={undefined}
+        selectableTracksIds={[]}
       />
     );
     const selectableTracksLayer = await screen.findByText(
