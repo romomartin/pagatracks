@@ -4,6 +4,7 @@ import { FeatureCollection } from "geojson";
 import { NodesLayer } from "../layers/nodes/NodesLayer";
 import { LayerIds, LayersVisibility } from "../layers";
 import { Route } from "../track-tools/create-route/CreateRoute";
+import { useState } from "react";
 
 type MapProps = {
   tracks: FeatureCollection;
@@ -11,9 +12,7 @@ type MapProps = {
   layersVisibility: LayersVisibility;
   interactiveLayers: LayerIds[];
   onSelectedFeature: (selectedFeatureId: string) => void;
-  onHoveredFeature: (hoveredFeatureId: string) => void;
   selectedFeatureId: string;
-  hoveredFeatureId: string;
   currentRoute: Route;
 };
 
@@ -23,11 +22,11 @@ export const MapCanvas = ({
   layersVisibility,
   interactiveLayers,
   onSelectedFeature,
-  onHoveredFeature,
   selectedFeatureId,
-  hoveredFeatureId,
   currentRoute,
 }: MapProps) => {
+  const [hoveredFeatureId, setHoveredFeatureId] = useState<string>("");
+
   const handleMapClick = (event: MapLayerMouseEvent) => {
     const selectedFeature = event.features?.length
       ? event.features[0]
@@ -41,7 +40,7 @@ export const MapCanvas = ({
       ? event.features[0]
       : undefined;
 
-    onHoveredFeature(hoveredFeature?.properties?.id);
+    setHoveredFeatureId(hoveredFeature?.properties?.id || "");
   };
 
   return (

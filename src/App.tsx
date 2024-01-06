@@ -51,13 +51,6 @@ function App() {
     setSelectedFeatureId(selectedFeatureId);
   };
 
-  const [hoveredFeatureId, setHoveredFeatureId] = useState<string | undefined>(
-    undefined
-  );
-  const changeHoveredFeatureId = (hoveredFeatureId: string | undefined) => {
-    setHoveredFeatureId(hoveredFeatureId);
-  };
-
   const [layersVisibility, setLayersVisibility] = useState<LayersVisibility>(
     {}
   );
@@ -98,9 +91,7 @@ function App() {
         layersVisibility={layersVisibility}
         interactiveLayers={interactiveLayers}
         onSelectedFeature={changeSelectedFeatureId}
-        onHoveredFeature={changeHoveredFeatureId}
         selectedFeatureId={selectedFeatureId || ""}
-        hoveredFeatureId={hoveredFeatureId || ""}
         currentRoute={currentRoute}
       ></MapCanvas>
       {selectedFeatureId && tracks[selectedFeatureId] && (
