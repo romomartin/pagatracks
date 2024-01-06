@@ -83,11 +83,7 @@ export const CreateRoute = ({
     }
   };
 
-  if (
-    isCreatingRoute &&
-    selectedFeatureId !== currentRoute.startPoint &&
-    selectedFeatureId
-  ) {
+  if (isCreatingRoute && selectedFeatureId && currentRoute.startPoint === "") {
     onStartNodeId(selectedFeatureId);
   }
 

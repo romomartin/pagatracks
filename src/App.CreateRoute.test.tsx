@@ -140,6 +140,7 @@ describe("create new route", () => {
       /Select your route's starting point/i
     );
     expect(createRoutePanel).toHaveTextContent(/Select route's next track/i);
+    expect(createRoutePanel).toHaveTextContent(/Start point: node0/i);
   });
 
   it("hides other nodes on routes starting point selected", async () => {
@@ -152,12 +153,59 @@ describe("create new route", () => {
     fireEvent.click(createNewRouteButton);
     selectFeatureOnMap(selectedNodeId, nodesLayerId);
     const nodesLayer = await screen.findByText(/layer-id: nodes/i);
+
+    expect(nodesLayer).toHaveTextContent(/visibility: none/i);
+  });
+
+  it("displays start node on routes starting point selected", async () => {
+    const selectedNodeId = "node0";
+    const nodesLayerId = "nodes";
+    render(<App />);
+    await forDataToBeFetched(screen);
+
+    const createNewRouteButton = screen.getByText("Create new route");
+    fireEvent.click(createNewRouteButton);
+    selectFeatureOnMap(selectedNodeId, nodesLayerId);
     const routeStartNodeLayer = await screen.findByText(
       /layer-id: route-start-node/i
     );
 
-    expect(nodesLayer).toHaveTextContent(/visibility: none/i);
     expect(routeStartNodeLayer).toHaveTextContent(/visibility: visible/i);
+  });
+
+  it("disables node selection on routes starting point selected", async () => {
+    const selectedNodeId = "node0";
+    const nodesLayerId = "nodes";
+    render(<App />);
+    await forDataToBeFetched(screen);
+
+    const createNewRouteButton = screen.getByText("Create new route");
+    fireEvent.click(createNewRouteButton);
+    let map = await screen.findByTestId("MockMap");
+
+    expect(map).toHaveTextContent(/interactiveLayerIds:nodes/i);
+
+    selectFeatureOnMap(selectedNodeId, nodesLayerId);
+    map = await screen.findByTestId("MockMap");
+
+    expect(map).not.toHaveTextContent(/interactiveLayerIds:nodes/i);
+  });
+
+  it("does not override start node when already selected", async () => {
+    const selectedNodeId = "node0";
+    const nodesLayerId = "nodes";
+    const aTrackId = "track3";
+    const selectableTracksLayerId = "selectable-tracks";
+    render(<App />);
+    await forDataToBeFetched(screen);
+
+    const createNewRouteButton = screen.getByText("Create new route");
+    fireEvent.click(createNewRouteButton);
+    selectFeatureOnMap(selectedNodeId, nodesLayerId);
+    selectFeatureOnMap(aTrackId, selectableTracksLayerId);
+    const createRoutePanel = screen.getByLabelText("createRoutePanel");
+
+    expect(createRoutePanel).toHaveTextContent(/Start point: node0/i);
   });
 
   it("animates next track options from selected start point", async () => {
