@@ -1,4 +1,4 @@
-import { Graph } from "@dagrejs/graphlib";
+import { Edge, Graph } from "@dagrejs/graphlib";
 import { ConnectionIndex } from "./build-connections";
 
 export class NetworkGraph {
@@ -15,5 +15,10 @@ export class NetworkGraph {
     const edges = this.graph.nodeEdges(nodeId);
     if (!edges) return;
     return edges.map((edge) => this.graph.edge(edge.v, edge.w, edge.name));
+  }
+
+  getEdge(edgeName: string): Edge | undefined {
+    const edges = this.graph.edges();
+    return edges.find((edge) => edge.name === edgeName);
   }
 }
