@@ -100,7 +100,7 @@ function App() {
     changeInteractiveLayers,
     changeSelectedFeatureId,
     changeSelectableTracks,
-    selectedNodeId: selectedFeatureId,
+    selectedFeatureId,
     connectionIndex: connections.connectionIndex,
     animateTracks,
   });

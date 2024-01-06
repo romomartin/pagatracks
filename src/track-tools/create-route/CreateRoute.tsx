@@ -29,7 +29,7 @@ export const CreateRoute = ({
   changeInteractiveLayers,
   changeSelectedFeatureId,
   changeSelectableTracks,
-  selectedNodeId,
+  selectedFeatureId,
   connectionIndex,
   animateTracks,
 }: {
@@ -39,7 +39,7 @@ export const CreateRoute = ({
   changeInteractiveLayers: (ids: LayerIds[]) => void;
   changeSelectedFeatureId: (selectedFeatureId: string | undefined) => void;
   changeSelectableTracks: (selectableTracksIds: string[]) => void;
-  selectedNodeId: string | undefined;
+  selectedFeatureId: string | undefined;
   connectionIndex: ConnectionIndex;
   animateTracks: (tracksIds: string[]) => void;
 }): TrackTool => {
@@ -85,10 +85,10 @@ export const CreateRoute = ({
 
   if (
     isCreatingRoute &&
-    selectedNodeId !== currentRoute.startPoint &&
-    selectedNodeId
+    selectedFeatureId !== currentRoute.startPoint &&
+    selectedFeatureId
   ) {
-    onStartNodeId(selectedNodeId);
+    onStartNodeId(selectedFeatureId);
   }
 
   const button = CreateRouteButton({
