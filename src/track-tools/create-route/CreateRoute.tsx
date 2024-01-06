@@ -28,20 +28,16 @@ export const CreateRoute = ({
   changeLayersVisibility,
   changeInteractiveLayers,
   changeSelectedFeatureId,
-  changeSelectableTracks,
   selectedFeatureId,
   connectionIndex,
-  animateTracks,
 }: {
   currentRoute: Route;
   updateCurrentRoute: (route: Route) => void;
   changeLayersVisibility: (layersVisibility: LayersVisibility) => void;
   changeInteractiveLayers: (ids: LayerIds[]) => void;
   changeSelectedFeatureId: (selectedFeatureId: string | undefined) => void;
-  changeSelectableTracks: (selectableTracksIds: string[]) => void;
   selectedFeatureId: string | undefined;
   connectionIndex: ConnectionIndex;
-  animateTracks: (tracksIds: string[]) => void;
 }): TrackTool => {
   const [panelVisibility, setPanelVisibility] = useState<boolean>(false);
   const [isCreatingRoute, setIsCreatingRoute] = useState<boolean>(false);
@@ -58,7 +54,6 @@ export const CreateRoute = ({
     });
     changeInteractiveLayers([NodeLayerIds.NODES]);
     changeSelectedFeatureId(undefined);
-    animateTracks([]);
     setIsCreatingRoute(true);
   };
 
@@ -71,17 +66,48 @@ export const CreateRoute = ({
     changeInteractiveLayers([TrackLayerIds.SELECTABLE_TRACKS]);
 
     const networkGraph = new NetworkGraph(connectionIndex);
-    if (startNodeId) {
-      const nextTrackIds = networkGraph.nodeEdges(startNodeId);
-      animateTracks(nextTrackIds || []);
-      changeSelectableTracks(nextTrackIds || []);
-      updateCurrentRoute({
-        startPoint: startNodeId,
-        tracks: [],
-        nextPossibleTracks: nextTrackIds || [],
-      });
-    }
+    const nextTrackIds = networkGraph.nodeEdges(startNodeId);
+    updateCurrentRoute({
+      startPoint: startNodeId,
+      tracks: [],
+      nextPossibleTracks: nextTrackIds || [],
+    });
   };
+
+  const onNextTrack = (nextTrackId: string) => {
+    currentRoute.tracks.push(nextTrackId);
+    const networkGraph = new NetworkGraph(connectionIndex);
+    let endNodeId: string | undefined = undefined;
+
+    const prevTrackId = currentRoute.tracks[currentRoute.tracks.length - 1];
+    if (!prevTrackId) {
+      endNodeId =
+        currentRoute.startPoint === networkGraph.getEdge(nextTrackId)?.v
+          ? networkGraph.getEdge(nextTrackId)?.w
+          : networkGraph.getEdge(nextTrackId)?.v;
+    } else {
+      endNodeId = getEndNodeId(networkGraph, prevTrackId, nextTrackId);
+    }
+
+    if (!endNodeId) return;
+
+    const nextTrackIds = networkGraph
+      .nodeEdges(endNodeId)
+      ?.filter((edge) => edge !== prevTrackId && edge !== nextTrackId);
+
+    currentRoute.nextPossibleTracks = nextTrackIds || [];
+    updateCurrentRoute(currentRoute);
+  };
+
+  if (
+    isCreatingRoute &&
+    selectedFeatureId &&
+    currentRoute.startPoint !== "" &&
+    !currentRoute.tracks.includes(selectedFeatureId) &&
+    currentRoute.startPoint !== selectedFeatureId
+  ) {
+    onNextTrack(selectedFeatureId);
+  }
 
   if (isCreatingRoute && selectedFeatureId && currentRoute.startPoint === "") {
     onStartNodeId(selectedFeatureId);
@@ -101,4 +127,24 @@ export const CreateRoute = ({
   });
 
   return { button, panel };
+};
+
+const getEndNodeId = (
+  networkGraph: NetworkGraph,
+  prevTrackId: string,
+  nextTrackId: string
+): string | undefined => {
+  const prevEdge = networkGraph.getEdge(prevTrackId);
+  const nextEdge = networkGraph.getEdge(nextTrackId);
+
+  const endNodeId =
+    prevEdge?.v === nextEdge?.v
+      ? nextEdge?.w
+      : prevEdge?.v === nextEdge?.w
+      ? nextEdge?.v
+      : prevEdge?.w === nextEdge?.v
+      ? nextEdge?.w
+      : nextEdge?.v;
+
+  return endNodeId;
 };

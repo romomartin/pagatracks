@@ -75,16 +75,6 @@ function App() {
     setInteractiveLayers(layerIds);
   };
 
-  const [selectableTracksIds, setSelectableTracksIds] = useState<string[]>([]);
-  const changeSelectableTracks = (tracksIds: string[]) => {
-    setSelectableTracksIds(tracksIds);
-  };
-
-  const [animatedTracksIds, setAnimatedTracksIds] = useState<string[]>([]);
-  const animateTracks = (tracksIds: string[]) => {
-    setAnimatedTracksIds(tracksIds);
-  };
-
   const [currentRoute, setCurrentRoute] = useState<Route>(nullRoute);
   const updateCurrentRoute = (route: Route) => {
     setCurrentRoute({ ...currentRoute, ...route });
@@ -96,10 +86,8 @@ function App() {
     changeLayersVisibility,
     changeInteractiveLayers,
     changeSelectedFeatureId,
-    changeSelectableTracks,
     selectedFeatureId,
     connectionIndex: connections.connectionIndex,
-    animateTracks,
   });
 
   return (
@@ -113,8 +101,6 @@ function App() {
         onHoveredFeature={changeHoveredFeatureId}
         selectedFeatureId={selectedFeatureId || ""}
         hoveredFeatureId={hoveredFeatureId || ""}
-        animatedTracksIds={animatedTracksIds}
-        selectableTracksIds={selectableTracksIds}
         currentRoute={currentRoute}
       ></MapCanvas>
       {selectedFeatureId && tracks[selectedFeatureId] && (

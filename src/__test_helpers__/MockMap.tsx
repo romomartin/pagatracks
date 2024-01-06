@@ -21,7 +21,7 @@ export const MockMap = ({
 }): JSX.Element => {
   return (
     <>
-      <div data-testId="MockMap">
+      <div data-testid="MockMap">
         mapstyle:{mapStyle}
         cursor:{cursor}
         initialViewState:

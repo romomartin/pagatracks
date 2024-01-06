@@ -314,4 +314,57 @@ describe("create new route", () => {
 
     expect(selectableTracksLayer).toHaveTextContent(/filter: in,id,1/i);
   });
+
+  it("adds next track to route when selected", async () => {
+    const track1StartNodeId = "node0";
+    const nodesLayerId = "nodes";
+    const track1Id = "track1";
+    const selectableTracksId = "selectable-tracks";
+    setFetchGlobalMock();
+    render(<App />);
+    await forDataToBeFetched(screen);
+
+    const createNewRouteButton = screen.getByText("Create new route");
+    fireEvent.click(createNewRouteButton);
+    selectFeatureOnMap(track1StartNodeId, nodesLayerId);
+    selectFeatureOnMap(track1Id, selectableTracksId);
+    const createRoutePanel = screen.getByLabelText("createRoutePanel");
+
+    expect(createRoutePanel).toHaveTextContent(/start point: node0/i);
+    expect(createRoutePanel).toHaveTextContent(/track1/i);
+  });
+
+  it("updates next track options when next track is selected", async () => {
+    const track1StartNodeId = "node0";
+    const nodesLayerId = "nodes";
+    const track1Id = "track1";
+    const selectableTracksId = "selectable-tracks";
+    const someConnectedTracks = aFeatureCollectionWith([
+      aTrackFeature({ id: "track1" }, [
+        [
+          [1, 1],
+          [2, 2],
+        ],
+      ]),
+      aTrackFeature({ id: "track2" }, [
+        [
+          [2, 2],
+          [3, 3],
+        ],
+      ]),
+    ]);
+    setFetchGlobalMock(someConnectedTracks);
+    render(<App />);
+    await forDataToBeFetched(screen, someConnectedTracks);
+
+    const createNewRouteButton = screen.getByText("Create new route");
+    fireEvent.click(createNewRouteButton);
+    selectFeatureOnMap(track1StartNodeId, nodesLayerId);
+    selectFeatureOnMap(track1Id, selectableTracksId);
+    const selectableTracksLayer = await screen.findByText(
+      /layer-id: selectable-tracks/i
+    );
+
+    expect(selectableTracksLayer).toHaveTextContent(/filter: in,id,track2/i);
+  });
 });

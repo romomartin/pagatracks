@@ -37,10 +37,17 @@ export const CreateRoutePanel = ({
 
 const routeDetails = (route: Route) => {
   return (
-    <>
-      <table>
-        <tr>{`start point: ${route.startPoint}`}</tr>
-      </table>
-    </>
+    <table>
+      <tbody>
+        <tr>
+          <td>{`start point: ${route.startPoint}`}</td>
+        </tr>
+        {route.tracks.map((track, index) => (
+          <tr key={index}>
+            <td>{track}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 };
