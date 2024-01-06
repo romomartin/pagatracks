@@ -30,6 +30,17 @@ export const CreateRoutePanel = ({
       )}
       {isCreatingRoute && !route.startPoint && texts.selectStartingPoint}
       {isCreatingRoute && route.startPoint && texts.selectNextTrack}
+      {isCreatingRoute && route.startPoint && routeDetails(route)}
     </div>
+  );
+};
+
+const routeDetails = (route: Route) => {
+  return (
+    <>
+      <table>
+        <tr>{`start point: ${route.startPoint}`}</tr>
+      </table>
+    </>
   );
 };
