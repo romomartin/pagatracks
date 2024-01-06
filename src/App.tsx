@@ -25,14 +25,10 @@ function App() {
   const [connections, setConnections] = useState<Connections>(nullConnections);
 
   useEffect(() => {
-    setTracksFromFetch();
+    setupInitialData();
   }, []);
 
-  useEffect(() => {
-    setConnections(buildConnectionsFromTracks(tracks));
-  }, [tracks]);
-
-  const setTracksFromFetch = async () => {
+  const setupInitialData = async () => {
     const rawTracks = await getTracks();
 
     const tracks = rawTracks.features.reduce((acc, rawTrack: Feature) => {
@@ -42,6 +38,7 @@ function App() {
     }, {} as TracksById);
 
     setTracks(tracks);
+    setConnections(buildConnectionsFromTracks(tracks));
   };
 
   const trackFeatures = tracksToFeatureCollection(Object.values(tracks));
@@ -57,7 +54,7 @@ function App() {
   const [hoveredFeatureId, setHoveredFeatureId] = useState<string | undefined>(
     undefined
   );
-  const handleHoveredFeatureId = (hoveredFeatureId: string | undefined) => {
+  const changeHoveredFeatureId = (hoveredFeatureId: string | undefined) => {
     setHoveredFeatureId(hoveredFeatureId);
   };
 
@@ -113,7 +110,7 @@ function App() {
         layersVisibility={layersVisibility}
         interactiveLayers={interactiveLayers}
         onSelectedFeature={changeSelectedFeatureId}
-        onHoveredFeature={handleHoveredFeatureId}
+        onHoveredFeature={changeHoveredFeatureId}
         selectedFeatureId={selectedFeatureId || ""}
         hoveredFeatureId={hoveredFeatureId || ""}
         animatedTracksIds={animatedTracksIds}
