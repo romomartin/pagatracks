@@ -69,9 +69,7 @@ export const TracksLayer = ({
         <Layer
           id={TrackLayerIds.SELECTABLE_TRACKS}
           {...selectableTracksStyle}
-          {...(selectableTracksIds.length > 0
-            ? { filter: filterTracksById(selectableTracksIds) }
-            : {})}
+          filter={filterTracksById(selectableTracksIds)}
         />
         <Layer id={TrackLayerIds.TRACKS} {...tracksStyle} />
       </Source>

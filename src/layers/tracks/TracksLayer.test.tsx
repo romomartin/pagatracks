@@ -302,31 +302,4 @@ describe("Tracks layer", () => {
       /filter: in,id,track_1,track_2/i
     );
   });
-
-  it("does not filter selectable tracks if no selectable tracks are provided", async () => {
-    const aTrackId = "track_1";
-    const otherTrackId = "track_2";
-    const tracks = {
-      type: "FeatureCollection",
-      features: [
-        aTrackFeature({ id: aTrackId }),
-        aTrackFeature({ id: otherTrackId }),
-      ],
-    } as FeatureCollection;
-
-    render(
-      <TracksLayer
-        tracks={tracks}
-        selectedFeatureId={""}
-        hoveredFeatureId={""}
-        animatedTracksIds={[]}
-        selectableTracksIds={[]}
-      />
-    );
-    const selectableTracksLayer = await screen.findByText(
-      /layer-id: selectable-tracks/i
-    );
-
-    expect(selectableTracksLayer).toHaveTextContent(/filter: undefined/i);
-  });
 });
