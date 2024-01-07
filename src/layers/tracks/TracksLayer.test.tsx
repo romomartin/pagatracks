@@ -4,9 +4,11 @@ import { FeatureCollection } from "geojson";
 import {
   selectableTracksStyle,
   highlightedTrackStyle,
+  routeTracksStyle,
   tracksStyle,
 } from "./tracks-layer-styles";
 import { aTrackFeature } from "../../__test_helpers__/geoJSON";
+import { nullRoute } from "../../track-tools/create-route/CreateRoute";
 
 describe("Tracks layer", () => {
   const featureName = "aFeatureName";
@@ -26,8 +28,7 @@ describe("Tracks layer", () => {
         tracks={tracks}
         selectedFeatureId={""}
         hoveredFeatureId={""}
-        animatedTracksIds={[]}
-        selectableTracksIds={[]}
+        currentRoute={nullRoute}
       />
     );
     const source = await screen.findByText(/source-id: tracks/i);
@@ -50,8 +51,7 @@ describe("Tracks layer", () => {
         tracks={tracks}
         selectedFeatureId={""}
         hoveredFeatureId={""}
-        animatedTracksIds={[]}
-        selectableTracksIds={[]}
+        currentRoute={nullRoute}
       />
     );
     const tracksLayer = await screen.findByText(/layer-id: tracks/i);
@@ -73,8 +73,7 @@ describe("Tracks layer", () => {
         tracks={tracks}
         selectedFeatureId={""}
         hoveredFeatureId={""}
-        animatedTracksIds={[]}
-        selectableTracksIds={[]}
+        currentRoute={nullRoute}
       />
     );
     const selectedTrackLayer = await screen.findByText(
@@ -98,8 +97,7 @@ describe("Tracks layer", () => {
         tracks={tracks}
         selectedFeatureId={""}
         hoveredFeatureId={""}
-        animatedTracksIds={[]}
-        selectableTracksIds={[]}
+        currentRoute={nullRoute}
       />
     );
     const hoveredTrackLayer = await screen.findByText(
@@ -123,17 +121,38 @@ describe("Tracks layer", () => {
         tracks={tracks}
         selectedFeatureId={""}
         hoveredFeatureId={""}
-        animatedTracksIds={[]}
-        selectableTracksIds={[]}
+        currentRoute={nullRoute}
       />
     );
-    const selectableTrackLayer = await screen.findByText(
+    const selectableTracksLayer = await screen.findByText(
       /layer-id: selectable-tracks/i
     );
 
-    expect(selectableTrackLayer).toHaveTextContent(/type: line/i);
-    expect(selectableTrackLayer).toHaveTextContent(
+    expect(selectableTracksLayer).toHaveTextContent(/type: line/i);
+    expect(selectableTracksLayer).toHaveTextContent(
       `paint: ${JSON.stringify(selectableTracksStyle.paint)}`
+    );
+  });
+
+  it("applies route track layer style", async () => {
+    const tracks = {
+      type: "FeatureCollection",
+      features: [aTrackFeature({ name: featureName })],
+    } as FeatureCollection;
+
+    render(
+      <TracksLayer
+        tracks={tracks}
+        selectedFeatureId={""}
+        hoveredFeatureId={""}
+        currentRoute={nullRoute}
+      />
+    );
+    const routeTracksLayer = await screen.findByText(/layer-id: route-tracks/i);
+
+    expect(routeTracksLayer).toHaveTextContent(/type: line/i);
+    expect(routeTracksLayer).toHaveTextContent(
+      `paint: ${JSON.stringify(routeTracksStyle.paint)}`
     );
   });
 
@@ -149,8 +168,7 @@ describe("Tracks layer", () => {
         tracks={tracks}
         selectedFeatureId={"track_134"}
         hoveredFeatureId={""}
-        animatedTracksIds={[]}
-        selectableTracksIds={[]}
+        currentRoute={nullRoute}
       />
     );
     const selectedTrackLayer = await screen.findByText(
@@ -172,8 +190,7 @@ describe("Tracks layer", () => {
         tracks={tracks}
         selectedFeatureId={""}
         hoveredFeatureId={"track_134"}
-        animatedTracksIds={[]}
-        selectableTracksIds={[]}
+        currentRoute={nullRoute}
       />
     );
     const hoveredTrackLayer = await screen.findByText(
@@ -195,8 +212,7 @@ describe("Tracks layer", () => {
         tracks={tracks}
         selectedFeatureId={trackId}
         hoveredFeatureId={trackId}
-        animatedTracksIds={[]}
-        selectableTracksIds={[]}
+        currentRoute={nullRoute}
       />
     );
     const hoveredTrackLayer = await screen.findByText(
@@ -222,8 +238,11 @@ describe("Tracks layer", () => {
         tracks={tracks}
         selectedFeatureId={""}
         hoveredFeatureId={""}
-        animatedTracksIds={[aTrackId]}
-        selectableTracksIds={[]}
+        currentRoute={{
+          startPoint: "node0",
+          tracks: [],
+          nextPossibleTracks: [aTrackId],
+        }}
       />
     );
     let visibleAnimatedTracksLayer = await screen.findByText(
@@ -261,8 +280,11 @@ describe("Tracks layer", () => {
         tracks={tracks}
         selectedFeatureId={""}
         hoveredFeatureId={""}
-        animatedTracksIds={[aTrackId, otherTrackId]}
-        selectableTracksIds={[]}
+        currentRoute={{
+          startPoint: "node0",
+          tracks: [],
+          nextPossibleTracks: [aTrackId, otherTrackId],
+        }}
       />
     );
     const animatedTracksLayer = await screen.findByText(
@@ -290,8 +312,11 @@ describe("Tracks layer", () => {
         tracks={tracks}
         selectedFeatureId={""}
         hoveredFeatureId={""}
-        animatedTracksIds={[]}
-        selectableTracksIds={[aTrackId, otherTrackId]}
+        currentRoute={{
+          startPoint: "node0",
+          tracks: [],
+          nextPossibleTracks: [aTrackId, otherTrackId],
+        }}
       />
     );
     const selectableTracksLayer = await screen.findByText(

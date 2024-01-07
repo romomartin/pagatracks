@@ -2,12 +2,14 @@ import {
   tracksStyle,
   highlightedTrackStyle,
   selectableTracksStyle,
+  routeTracksStyle,
 } from "./tracks-layer-styles";
 import { Layer, Source } from "react-map-gl";
 import { FeatureCollection, GeoJsonProperties, Geometry } from "geojson";
 import { Visibility } from "mapbox-gl";
 import { useState } from "react";
 import { LayerVisibility } from "..";
+import { Route } from "../../track-tools/create-route/CreateRoute";
 
 export enum TrackLayerIds {
   SELECTED_TRACK = "selected-track",
@@ -15,22 +17,21 @@ export enum TrackLayerIds {
   SELECTABLE_TRACKS = "selectable-tracks",
   TRACKS = "tracks",
   ANIMATED_TRACKS = "animated-tracks",
+  ROUTE_TRACKS = "route-tracks",
 }
 
 type TracksLayerProps = {
   tracks: FeatureCollection<Geometry, GeoJsonProperties>;
   selectedFeatureId: string;
   hoveredFeatureId: string;
-  animatedTracksIds: string[];
-  selectableTracksIds: string[];
+  currentRoute: Route;
 };
 
 export const TracksLayer = ({
   tracks,
   selectedFeatureId,
   hoveredFeatureId,
-  animatedTracksIds,
-  selectableTracksIds,
+  currentRoute,
 }: TracksLayerProps) => {
   const [animatedVisibility, setAnimatedVisibility] = useState<Visibility>(
     LayerVisibility.NONE
@@ -61,15 +62,20 @@ export const TracksLayer = ({
           ]}
         />
         <Layer
+          id={TrackLayerIds.ROUTE_TRACKS}
+          {...routeTracksStyle}
+          filter={filterTracksById(currentRoute.tracks)}
+        />
+        <Layer
           id={TrackLayerIds.ANIMATED_TRACKS}
           {...highlightedTrackStyle}
           layout={{ visibility: animatedVisibility }}
-          filter={filterTracksById(animatedTracksIds)}
+          filter={filterTracksById(currentRoute.nextPossibleTracks)}
         />
         <Layer
           id={TrackLayerIds.SELECTABLE_TRACKS}
           {...selectableTracksStyle}
-          filter={filterTracksById(selectableTracksIds)}
+          filter={filterTracksById(currentRoute.nextPossibleTracks)}
         />
         <Layer id={TrackLayerIds.TRACKS} {...tracksStyle} />
       </Source>
@@ -79,6 +85,8 @@ export const TracksLayer = ({
 
 const filterTracksById = (trackIds: string[]): string[] => {
   let filter = ["in", "id"];
+
+  //console.log(filter.concat(trackIds));
 
   return filter.concat(trackIds);
 };

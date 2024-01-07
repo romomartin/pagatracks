@@ -68,8 +68,7 @@ export const MapCanvas = ({
         tracks={tracks}
         selectedFeatureId={selectedFeatureId}
         hoveredFeatureId={hoveredFeatureId}
-        animatedTracksIds={currentRoute.nextPossibleTracks}
-        selectableTracksIds={currentRoute.nextPossibleTracks}
+        currentRoute={currentRoute}
       ></TracksLayer>
       <NodesLayer
         nodes={nodes}

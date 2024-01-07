@@ -55,3 +55,15 @@ export const highlightedTrackStyle: Omit<LineLayer, "id"> = {
     "line-cap": "round",
   },
 };
+
+export const routeTracksStyle: Omit<LineLayer, "id"> = {
+  type: "line",
+  paint: {
+    "line-color": "yellow",
+    "line-width": 13,
+    "line-opacity": 1,
+  },
+  layout: {
+    "line-cap": "round",
+  },
+};
