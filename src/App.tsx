@@ -1,5 +1,5 @@
 import { MapCanvas } from "./map/MapCanvas";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ElevationChart } from "./elevation-chart/ElevationChart";
 import {
   TracksById,
@@ -41,8 +41,14 @@ function App() {
     setConnections(buildConnectionsFromTracks(tracks));
   };
 
-  const trackFeatures = tracksToFeatureCollection(Object.values(tracks));
-  const nodeFeatures = nodesToFeatureCollection(connections.nodes);
+  const trackFeatures = useMemo(
+    () => tracksToFeatureCollection(Object.values(tracks)),
+    [tracks]
+  );
+  const nodeFeatures = useMemo(
+    () => nodesToFeatureCollection(connections.nodes),
+    [connections]
+  );
 
   const [selectedFeatureId, setSelectedFeatureId] = useState<
     string | undefined
