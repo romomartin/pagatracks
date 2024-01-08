@@ -11,15 +11,15 @@ import { ConnectionIndex } from "../../network/build-connections";
 import { NetworkGraph } from "../../network/network-graph";
 
 export type Route = {
-  startPoint: string;
-  tracks: string[];
-  nextPossibleTracks: string[];
+  startPointId: string;
+  trackIds: string[];
+  nextPossibleTrackIds: string[];
 };
 
 export const nullRoute: Route = {
-  startPoint: "",
-  tracks: [],
-  nextPossibleTracks: [],
+  startPointId: "",
+  trackIds: [],
+  nextPossibleTrackIds: [],
 };
 
 export const CreateRoute = ({
@@ -68,21 +68,21 @@ export const CreateRoute = ({
     const networkGraph = new NetworkGraph(connectionIndex);
     const nextTrackIds = networkGraph.nodeEdges(startNodeId);
     updateCurrentRoute({
-      startPoint: startNodeId,
-      tracks: [],
-      nextPossibleTracks: nextTrackIds || [],
+      startPointId: startNodeId,
+      trackIds: [],
+      nextPossibleTrackIds: nextTrackIds || [],
     });
   };
 
   const onNextTrack = (nextTrackId: string) => {
-    currentRoute.tracks.push(nextTrackId);
+    currentRoute.trackIds.push(nextTrackId);
     const networkGraph = new NetworkGraph(connectionIndex);
     let endNodeId: string | undefined = undefined;
 
-    const prevTrackId = currentRoute.tracks[currentRoute.tracks.length - 1];
+    const prevTrackId = currentRoute.trackIds[currentRoute.trackIds.length - 1];
     if (!prevTrackId) {
       endNodeId =
-        currentRoute.startPoint === networkGraph.getEdge(nextTrackId)?.v
+        currentRoute.startPointId === networkGraph.getEdge(nextTrackId)?.v
           ? networkGraph.getEdge(nextTrackId)?.w
           : networkGraph.getEdge(nextTrackId)?.v;
     } else {
@@ -95,21 +95,25 @@ export const CreateRoute = ({
       .nodeEdges(endNodeId)
       ?.filter((edge) => edge !== prevTrackId && edge !== nextTrackId);
 
-    currentRoute.nextPossibleTracks = nextTrackIds || [];
+    currentRoute.nextPossibleTrackIds = nextTrackIds || [];
     updateCurrentRoute(currentRoute);
   };
 
   if (
     isCreatingRoute &&
     selectedFeatureId &&
-    currentRoute.startPoint !== "" &&
-    !currentRoute.tracks.includes(selectedFeatureId) &&
-    currentRoute.startPoint !== selectedFeatureId
+    currentRoute.startPointId !== "" &&
+    !currentRoute.trackIds.includes(selectedFeatureId) &&
+    currentRoute.startPointId !== selectedFeatureId
   ) {
     onNextTrack(selectedFeatureId);
   }
 
-  if (isCreatingRoute && selectedFeatureId && currentRoute.startPoint === "") {
+  if (
+    isCreatingRoute &&
+    selectedFeatureId &&
+    currentRoute.startPointId === ""
+  ) {
     onStartNodeId(selectedFeatureId);
   }
 

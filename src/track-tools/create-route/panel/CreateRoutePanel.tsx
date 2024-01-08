@@ -28,9 +28,9 @@ export const CreateRoutePanel = ({
       {!isCreatingRoute && (
         <button onClick={handleClick}>{texts.createNewRoute}</button>
       )}
-      {isCreatingRoute && !route.startPoint && texts.selectStartingPoint}
-      {isCreatingRoute && route.startPoint && texts.selectNextTrack}
-      {isCreatingRoute && route.startPoint && routeDetails(route)}
+      {isCreatingRoute && !route.startPointId && texts.selectStartingPoint}
+      {isCreatingRoute && route.startPointId && texts.selectNextTrack}
+      {isCreatingRoute && route.startPointId && routeDetails(route)}
     </div>
   );
 };
@@ -40,9 +40,9 @@ const routeDetails = (route: Route) => {
     <table>
       <tbody>
         <tr>
-          <td>{`start point: ${route.startPoint}`}</td>
+          <td>{`start point: ${route.startPointId}`}</td>
         </tr>
-        {route.tracks.map((track, index) => (
+        {route.trackIds.map((track, index) => (
           <tr key={index}>
             <td>{track}</td>
           </tr>

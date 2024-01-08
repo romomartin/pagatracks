@@ -6,7 +6,7 @@ describe("create route panel", () => {
   it("displays route's start point when selected", () => {
     const route: Route = {
       ...nullRoute,
-      startPoint: "startPointId",
+      startPointId: "startPointId",
     };
     const panel = CreateRoutePanel({
       isVisible: true,

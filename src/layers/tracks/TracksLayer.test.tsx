@@ -239,9 +239,9 @@ describe("Tracks layer", () => {
         selectedFeatureId={""}
         hoveredFeatureId={""}
         currentRoute={{
-          startPoint: "node0",
-          tracks: [],
-          nextPossibleTracks: [aTrackId],
+          startPointId: "node0",
+          trackIds: [],
+          nextPossibleTrackIds: [aTrackId],
         }}
       />
     );
@@ -281,9 +281,9 @@ describe("Tracks layer", () => {
         selectedFeatureId={""}
         hoveredFeatureId={""}
         currentRoute={{
-          startPoint: "node0",
-          tracks: [],
-          nextPossibleTracks: [aTrackId, otherTrackId],
+          startPointId: "node0",
+          trackIds: [],
+          nextPossibleTrackIds: [aTrackId, otherTrackId],
         }}
       />
     );
@@ -313,9 +313,9 @@ describe("Tracks layer", () => {
         selectedFeatureId={""}
         hoveredFeatureId={""}
         currentRoute={{
-          startPoint: "node0",
-          tracks: [],
-          nextPossibleTracks: [aTrackId, otherTrackId],
+          startPointId: "node0",
+          trackIds: [],
+          nextPossibleTrackIds: [aTrackId, otherTrackId],
         }}
       />
     );
@@ -328,7 +328,7 @@ describe("Tracks layer", () => {
     );
   });
 
-  it.only("does not filter selectable tracks when there is no active route", async () => {
+  it("does not filter selectable tracks when there is no active route", async () => {
     const aTrackId = "track_1";
     const otherTrackId = "track_2";
     const tracks = {

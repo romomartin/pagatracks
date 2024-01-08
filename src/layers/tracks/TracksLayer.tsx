@@ -64,19 +64,19 @@ export const TracksLayer = ({
         <Layer
           id={TrackLayerIds.ROUTE_TRACKS}
           {...routeTracksStyle}
-          filter={filterTracksById(currentRoute.tracks)}
+          filter={filterTracksById(currentRoute.trackIds)}
         />
         <Layer
           id={TrackLayerIds.ANIMATED_TRACKS}
           {...highlightedTrackStyle}
           layout={{ visibility: animatedVisibility }}
-          filter={filterTracksById(currentRoute.nextPossibleTracks)}
+          filter={filterTracksById(currentRoute.nextPossibleTrackIds)}
         />
         <Layer
           id={TrackLayerIds.SELECTABLE_TRACKS}
           {...selectableTracksStyle}
           {...(currentRoute !== nullRoute
-            ? { filter: filterTracksById(currentRoute.nextPossibleTracks) }
+            ? { filter: filterTracksById(currentRoute.nextPossibleTrackIds) }
             : {})}
         />
         <Layer id={TrackLayerIds.TRACKS} {...tracksStyle} />
