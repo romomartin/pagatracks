@@ -327,4 +327,30 @@ describe("Tracks layer", () => {
       /filter: in,id,track_1,track_2/i
     );
   });
+
+  it.only("does not filter selectable tracks when there is no active route", async () => {
+    const aTrackId = "track_1";
+    const otherTrackId = "track_2";
+    const tracks = {
+      type: "FeatureCollection",
+      features: [
+        aTrackFeature({ id: aTrackId }),
+        aTrackFeature({ id: otherTrackId }),
+      ],
+    } as FeatureCollection;
+
+    render(
+      <TracksLayer
+        tracks={tracks}
+        selectedFeatureId={""}
+        hoveredFeatureId={""}
+        currentRoute={nullRoute}
+      />
+    );
+    const selectableTracksLayer = await screen.findByText(
+      /layer-id: selectable-tracks/i
+    );
+
+    expect(selectableTracksLayer).toHaveTextContent(/filter: undefined/i);
+  });
 });

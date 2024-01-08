@@ -9,7 +9,7 @@ import { FeatureCollection, GeoJsonProperties, Geometry } from "geojson";
 import { Visibility } from "mapbox-gl";
 import { useState } from "react";
 import { LayerVisibility } from "..";
-import { Route } from "../../track-tools/create-route/CreateRoute";
+import { Route, nullRoute } from "../../track-tools/create-route/CreateRoute";
 
 export enum TrackLayerIds {
   SELECTED_TRACK = "selected-track",
@@ -75,7 +75,9 @@ export const TracksLayer = ({
         <Layer
           id={TrackLayerIds.SELECTABLE_TRACKS}
           {...selectableTracksStyle}
-          filter={filterTracksById(currentRoute.nextPossibleTracks)}
+          {...(currentRoute !== nullRoute
+            ? { filter: filterTracksById(currentRoute.nextPossibleTracks) }
+            : {})}
         />
         <Layer id={TrackLayerIds.TRACKS} {...tracksStyle} />
       </Source>
@@ -85,8 +87,6 @@ export const TracksLayer = ({
 
 const filterTracksById = (trackIds: string[]): string[] => {
   let filter = ["in", "id"];
-
-  //console.log(filter.concat(trackIds));
 
   return filter.concat(trackIds);
 };
