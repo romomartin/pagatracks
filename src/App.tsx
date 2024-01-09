@@ -25,21 +25,22 @@ function App() {
   const [connections, setConnections] = useState<Connections>(nullConnections);
 
   useEffect(() => {
+    const setupInitialData = async () => {
+      const rawTracks = await getTracks();
+  
+      const tracks = rawTracks.features.reduce((acc, rawTrack: Feature) => {
+        const track = trackFromGeoJSON(rawTrack);
+        acc[track.id] = track;
+        return acc;
+      }, {} as TracksById);
+  
+      setTracks(tracks);
+      setConnections(buildConnectionsFromTracks(tracks));
+    };
+    
     setupInitialData();
   }, []);
 
-  const setupInitialData = async () => {
-    const rawTracks = await getTracks();
-
-    const tracks = rawTracks.features.reduce((acc, rawTrack: Feature) => {
-      const track = trackFromGeoJSON(rawTrack);
-      acc[track.id] = track;
-      return acc;
-    }, {} as TracksById);
-
-    setTracks(tracks);
-    setConnections(buildConnectionsFromTracks(tracks));
-  };
 
   const trackFeatures = useMemo(
     () => tracksToFeatureCollection(Object.values(tracks)),
