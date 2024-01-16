@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { texts } from "../../texts";
 import { CreateRouteIcon } from "./CreateRouteIcon";
 import { CreateRouteButton } from "./button/CreateRouteButton";
@@ -42,6 +42,11 @@ export const CreateRoute = ({
   const [panelVisibility, setPanelVisibility] = useState<boolean>(false);
   const [isCreatingRoute, setIsCreatingRoute] = useState<boolean>(false);
 
+  const networkGraph = useMemo(
+    () => new NetworkGraph(connectionIndex),
+    [connectionIndex]
+  );
+
   const togglePanelVisibility = (): void => {
     setPanelVisibility(!panelVisibility);
   };
@@ -65,7 +70,6 @@ export const CreateRoute = ({
     });
     changeInteractiveLayers([TrackLayerIds.SELECTABLE_TRACKS]);
 
-    const networkGraph = new NetworkGraph(connectionIndex);
     const nextTrackIds = networkGraph.nodeEdges(startNodeId);
     updateCurrentRoute({
       startPointId: startNodeId,
@@ -76,7 +80,6 @@ export const CreateRoute = ({
 
   const onNextTrack = (nextTrackId: string) => {
     currentRoute.trackIds.push(nextTrackId);
-    const networkGraph = new NetworkGraph(connectionIndex);
     let endNodeId: string | undefined = undefined;
 
     const prevTrackId = currentRoute.trackIds[currentRoute.trackIds.length - 1];
