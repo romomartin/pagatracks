@@ -1,53 +1,46 @@
 import { texts } from "../../../texts";
 import { Route } from "../CreateRoute";
 import style from "./styles.module.css";
+import { ReactComponent as TrashCanLogo } from "../trash-can-icon.svg";
+import { ReactComponent as UndoLogo } from "../undo-icon.svg";
+import { ReactComponent as DownloadLogo } from "../download-icon.svg";
 
 type CreateRoutePanelProps = {
   isVisible: boolean;
-  isCreatingRoute: boolean;
-  createNewRoute: () => void;
   route: Route;
 };
 
 export const CreateRoutePanel = ({
   isVisible,
-  isCreatingRoute,
-  createNewRoute,
   route,
 }: CreateRoutePanelProps) => {
-  const handleClick = () => {
-    createNewRoute();
-  };
-
   return (
     <div
       key="createRoute"
       className={isVisible ? style.panel : style.hidden}
       aria-label="createRoutePanel"
     >
-      {!isCreatingRoute && (
-        <button onClick={handleClick}>{texts.createNewRoute}</button>
-      )}
-      {isCreatingRoute && !route.startPointId && texts.selectStartingPoint}
-      {isCreatingRoute && route.startPointId && texts.selectNextTrack}
-      {isCreatingRoute && route.startPointId && routeDetails(route)}
+      <h2>
+        Your route <span className={style.text1}>100km +1000m</span>
+      </h2>
+      <div className={style.buttons}>
+        <button>
+          <DownloadLogo />
+        </button>
+        <button>
+          <UndoLogo />
+        </button>
+        <button>
+          <TrashCanLogo />
+        </button>
+      </div>
+      <p className={style.hint}>{showHint(route)}</p>
     </div>
   );
 };
 
-const routeDetails = (route: Route) => {
-  return (
-    <table>
-      <tbody>
-        <tr>
-          <td>{`start point: ${route.startPointId}`}</td>
-        </tr>
-        {route.trackIds.map((track, index) => (
-          <tr key={index}>
-            <td>{track}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
+const showHint = (route: Route) => {
+  return route.startPointId === ""
+    ? texts.selectStartingPoint
+    : texts.selectNextTrack;
 };

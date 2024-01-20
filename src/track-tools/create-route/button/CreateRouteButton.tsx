@@ -5,24 +5,27 @@ type CreateRouteButtonProps = {
   icon: JSX.Element;
   name: string;
   togglePanelVisibility: () => void;
+  createNewRoute: () => void;
 };
 
 export const CreateRouteButton = ({
   icon,
   name,
   togglePanelVisibility,
+  createNewRoute,
 }: CreateRouteButtonProps) => {
   const [isToggled, setIstoggled] = useState<boolean>(false);
 
   const onClick = () => {
     togglePanelVisibility();
     setIstoggled(!isToggled);
+    createNewRoute();
   };
   return (
     <button
       key="createRoute"
       className={isToggled ? style.toggled : style.unToggled}
-      aria-label="toolButton"
+      aria-label="createRouteToolButton"
       onClick={onClick}
     >
       {icon}

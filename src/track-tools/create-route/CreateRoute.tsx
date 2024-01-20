@@ -123,13 +123,12 @@ export const CreateRoute = ({
   const button = CreateRouteButton({
     icon: CreateRouteIcon(),
     name: texts.designRoute,
-    togglePanelVisibility: togglePanelVisibility,
+    togglePanelVisibility,
+    createNewRoute,
   });
 
   const panel = CreateRoutePanel({
     isVisible: panelVisibility,
-    isCreatingRoute,
-    createNewRoute,
     route: currentRoute,
   });
 

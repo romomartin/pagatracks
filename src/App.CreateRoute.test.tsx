@@ -19,7 +19,7 @@ describe("create new route", () => {
     render(<App />);
     await forDataToBeFetched(screen);
 
-    const createNewRouteButton = screen.getByText("Create new route");
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
     fireEvent.click(createNewRouteButton);
     const nodesLayer = await screen.findByText(/layer-id: nodes/i);
 
@@ -30,13 +30,11 @@ describe("create new route", () => {
     render(<App />);
     await forDataToBeFetched(screen);
 
-    const createNewRouteButton = screen.getByText("Create new route");
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
     fireEvent.click(createNewRouteButton);
     const createRoutePanel = screen.getByLabelText("createRoutePanel");
 
-    expect(createRoutePanel).toHaveTextContent(
-      /Select your route's starting point/i
-    );
+    expect(createRoutePanel).toHaveTextContent(/Select starting point/i);
   });
 
   it("disables track selection and hovering when starting new route", async () => {
@@ -45,7 +43,7 @@ describe("create new route", () => {
     render(<App />);
     await forDataToBeFetched(screen, tracksData);
 
-    const createNewRouteButton = screen.getByText("Create new route");
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
     fireEvent.click(createNewRouteButton);
     const mockMap = screen.getByText(/mapstyle:mapbox/i);
 
@@ -69,7 +67,7 @@ describe("create new route", () => {
 
     expect(selectedTrackLayer).toHaveTextContent(/filter: in,id,track_234/i);
 
-    const createNewRouteButton = screen.getByText("Create new route");
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
     fireEvent.click(createNewRouteButton);
     selectedTrackLayer = await screen.findByText(/layer-id: selected-track/i);
 
@@ -84,7 +82,7 @@ describe("create new route", () => {
     render(<App />);
     await forDataToBeFetched(screen, tracksData);
 
-    const createNewRouteButton = screen.getByText("Create new route");
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
     fireEvent.click(createNewRouteButton);
     const mockMap = screen.getByText(/mapstyle:mapbox/i);
 
@@ -99,7 +97,7 @@ describe("create new route", () => {
     render(<App />);
     await forDataToBeFetched(screen, tracksData);
 
-    const createNewRouteButton = screen.getByText("Create new route");
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
     fireEvent.click(createNewRouteButton);
     hoverFeatureOnMap(hoveredNodeId, nodesLayerId);
     const hoveredNodeLayer = await screen.findByText(/layer-id: hovered-node/i);
@@ -115,7 +113,7 @@ describe("create new route", () => {
     render(<App />);
     await forDataToBeFetched(screen, tracksData);
 
-    const createNewRouteButton = screen.getByText("Create new route");
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
     fireEvent.click(createNewRouteButton);
     selectFeatureOnMap(selectedNodeId, nodesLayerId);
     const routeStartNodeLayer = await screen.findByText(
@@ -125,31 +123,13 @@ describe("create new route", () => {
     expect(routeStartNodeLayer).toHaveTextContent(/filter: in,id,node0/i);
   });
 
-  it("sets selected node as starting point", async () => {
-    const selectedNodeId = "node0";
-    const nodesLayerId = "nodes";
-    render(<App />);
-    await forDataToBeFetched(screen);
-
-    const createNewRouteButton = screen.getByText("Create new route");
-    fireEvent.click(createNewRouteButton);
-    selectFeatureOnMap(selectedNodeId, nodesLayerId);
-    const createRoutePanel = screen.getByLabelText("createRoutePanel");
-
-    expect(createRoutePanel).not.toHaveTextContent(
-      /Select your route's starting point/i
-    );
-    expect(createRoutePanel).toHaveTextContent(/Select route's next track/i);
-    expect(createRoutePanel).toHaveTextContent(/Start point: node0/i);
-  });
-
   it("hides other nodes on routes starting point selected", async () => {
     const selectedNodeId = "node0";
     const nodesLayerId = "nodes";
     render(<App />);
     await forDataToBeFetched(screen);
 
-    const createNewRouteButton = screen.getByText("Create new route");
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
     fireEvent.click(createNewRouteButton);
     selectFeatureOnMap(selectedNodeId, nodesLayerId);
     const nodesLayer = await screen.findByText(/layer-id: nodes/i);
@@ -163,7 +143,7 @@ describe("create new route", () => {
     render(<App />);
     await forDataToBeFetched(screen);
 
-    const createNewRouteButton = screen.getByText("Create new route");
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
     fireEvent.click(createNewRouteButton);
     selectFeatureOnMap(selectedNodeId, nodesLayerId);
     const routeStartNodeLayer = await screen.findByText(
@@ -179,7 +159,7 @@ describe("create new route", () => {
     render(<App />);
     await forDataToBeFetched(screen);
 
-    const createNewRouteButton = screen.getByText("Create new route");
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
     fireEvent.click(createNewRouteButton);
     let map = await screen.findByTestId("MockMap");
 
@@ -189,23 +169,6 @@ describe("create new route", () => {
     map = await screen.findByTestId("MockMap");
 
     expect(map).not.toHaveTextContent(/interactiveLayerIds:nodes/i);
-  });
-
-  it("does not override start node when already selected", async () => {
-    const selectedNodeId = "node0";
-    const nodesLayerId = "nodes";
-    const aTrackId = "track3";
-    const selectableTracksLayerId = "selectable-tracks";
-    render(<App />);
-    await forDataToBeFetched(screen);
-
-    const createNewRouteButton = screen.getByText("Create new route");
-    fireEvent.click(createNewRouteButton);
-    selectFeatureOnMap(selectedNodeId, nodesLayerId);
-    selectFeatureOnMap(aTrackId, selectableTracksLayerId);
-    const createRoutePanel = screen.getByLabelText("createRoutePanel");
-
-    expect(createRoutePanel).toHaveTextContent(/Start point: node0/i);
   });
 
   it("animates next track options from selected start point", async () => {
@@ -229,7 +192,7 @@ describe("create new route", () => {
     render(<App />);
     await forDataToBeFetched(screen, someConnectedTracks);
 
-    const createNewRouteButton = screen.getByText("Create new route");
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
     fireEvent.click(createNewRouteButton);
     selectFeatureOnMap(track1StartNodeId, nodesLayerId);
     const animatedTracksLayer = await screen.findByText(
@@ -260,7 +223,7 @@ describe("create new route", () => {
     render(<App />);
     await forDataToBeFetched(screen, someConnectedTracks);
 
-    const createNewRouteButton = screen.getByText("Create new route");
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
     fireEvent.click(createNewRouteButton);
     selectFeatureOnMap(track1StartNodeId, nodesLayerId);
     const animatedTracksLayer = await screen.findByText(
@@ -276,7 +239,7 @@ describe("create new route", () => {
     render(<App />);
     await forDataToBeFetched(screen);
 
-    const createNewRouteButton = screen.getByText("Create new route");
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
     fireEvent.click(createNewRouteButton);
     selectFeatureOnMap(selectedNodeId, nodesLayerId);
     const interactiveLayers = screen.getByText(/interactiveLayerIds/i);
@@ -305,7 +268,7 @@ describe("create new route", () => {
     render(<App />);
     await forDataToBeFetched(screen, someConnectedTracks);
 
-    const createNewRouteButton = screen.getByText("Create new route");
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
     fireEvent.click(createNewRouteButton);
     selectFeatureOnMap(track1StartNodeId, nodesLayerId);
     const selectableTracksLayer = await screen.findByText(
@@ -313,25 +276,6 @@ describe("create new route", () => {
     );
 
     expect(selectableTracksLayer).toHaveTextContent(/filter: in,id,1/i);
-  });
-
-  it("adds next track to route when selected", async () => {
-    const track1StartNodeId = "node0";
-    const nodesLayerId = "nodes";
-    const track1Id = "track1";
-    const selectableTracksId = "selectable-tracks";
-    setFetchGlobalMock();
-    render(<App />);
-    await forDataToBeFetched(screen);
-
-    const createNewRouteButton = screen.getByText("Create new route");
-    fireEvent.click(createNewRouteButton);
-    selectFeatureOnMap(track1StartNodeId, nodesLayerId);
-    selectFeatureOnMap(track1Id, selectableTracksId);
-    const createRoutePanel = screen.getByLabelText("createRoutePanel");
-
-    expect(createRoutePanel).toHaveTextContent(/start point: node0/i);
-    expect(createRoutePanel).toHaveTextContent(/track1/i);
   });
 
   it("updates next track options when next track is selected", async () => {
@@ -357,7 +301,7 @@ describe("create new route", () => {
     render(<App />);
     await forDataToBeFetched(screen, someConnectedTracks);
 
-    const createNewRouteButton = screen.getByText("Create new route");
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
     fireEvent.click(createNewRouteButton);
     selectFeatureOnMap(track1StartNodeId, nodesLayerId);
     selectFeatureOnMap(track1Id, selectableTracksId);
