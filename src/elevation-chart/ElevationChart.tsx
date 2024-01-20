@@ -32,6 +32,7 @@ export const ElevationChart: FunctionComponent<Props> = ({
     ],
     chart: {
       height: "180px",
+      backgroundColor: "transparent",
     },
     legend: {
       enabled: false,
