@@ -1,9 +1,9 @@
 import { LineLayer } from "mapbox-gl";
 import { PathTypes } from "../../tracks/track";
 
-const UNPAVED_COLOR = "#368E91";
-const PAVED_COLOR = "#6D6784";
-const SINGLETRACK_COLOR = "#B0597E";
+const UNPAVED_COLOR = "#C70039";
+const PAVED_COLOR = "#6930C3";
+const SINGLETRACK_COLOR = "#175920";
 
 const NULL_OPACITY = 0.00000000001;
 
@@ -59,9 +59,9 @@ export const highlightedTrackStyle: Omit<LineLayer, "id"> = {
 export const routeTracksStyle: Omit<LineLayer, "id"> = {
   type: "line",
   paint: {
-    "line-color": "yellow",
-    "line-width": 13,
-    "line-opacity": 1,
+    "line-color": "#FCE22A",
+    "line-width": 4,
+    "line-dasharray": [1, 3, 1],
   },
   layout: {
     "line-cap": "round",

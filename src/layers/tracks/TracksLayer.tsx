@@ -62,11 +62,6 @@ export const TracksLayer = ({
           ]}
         />
         <Layer
-          id={TrackLayerIds.ROUTE_TRACKS}
-          {...routeTracksStyle}
-          filter={filterTracksById(currentRoute.trackIds)}
-        />
-        <Layer
           id={TrackLayerIds.ANIMATED_TRACKS}
           {...highlightedTrackStyle}
           layout={{ visibility: animatedVisibility }}
@@ -80,6 +75,11 @@ export const TracksLayer = ({
             : {})}
         />
         <Layer id={TrackLayerIds.TRACKS} {...tracksStyle} />
+        <Layer
+          id={TrackLayerIds.ROUTE_TRACKS}
+          {...routeTracksStyle}
+          filter={filterTracksById(currentRoute.trackIds)}
+        />
       </Source>
     </>
   );
