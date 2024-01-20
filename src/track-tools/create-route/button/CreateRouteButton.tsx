@@ -6,6 +6,7 @@ type CreateRouteButtonProps = {
   name: string;
   togglePanelVisibility: () => void;
   createNewRoute: () => void;
+  hideRoute: () => void;
 };
 
 export const CreateRouteButton = ({
@@ -13,14 +14,16 @@ export const CreateRouteButton = ({
   name,
   togglePanelVisibility,
   createNewRoute,
+  hideRoute,
 }: CreateRouteButtonProps) => {
   const [isToggled, setIstoggled] = useState<boolean>(false);
 
   const onClick = () => {
     togglePanelVisibility();
+    isToggled ? hideRoute() : createNewRoute();
     setIstoggled(!isToggled);
-    createNewRoute();
   };
+
   return (
     <button
       key="createRoute"

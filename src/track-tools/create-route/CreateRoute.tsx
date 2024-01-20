@@ -62,6 +62,17 @@ export const CreateRoute = ({
     setIsCreatingRoute(true);
   };
 
+  const hideRoute = (): void => {
+    changeLayersVisibility({
+      [NodeLayerIds.HOVERED_NODE]: LayerVisibility.NONE,
+      [NodeLayerIds.NODES]: LayerVisibility.NONE,
+      [NodeLayerIds.ROUTE_START_NODE]: LayerVisibility.NONE,
+    });
+    changeInteractiveLayers([TrackLayerIds.SELECTABLE_TRACKS]);
+    changeSelectedFeatureId(undefined);
+    updateCurrentRoute(nullRoute);
+  };
+
   const onStartNodeId = (startNodeId: string) => {
     changeLayersVisibility({
       [NodeLayerIds.HOVERED_NODE]: LayerVisibility.NONE,
@@ -125,6 +136,7 @@ export const CreateRoute = ({
     name: texts.designRoute,
     togglePanelVisibility,
     createNewRoute,
+    hideRoute,
   });
 
   const panel = CreateRoutePanel({

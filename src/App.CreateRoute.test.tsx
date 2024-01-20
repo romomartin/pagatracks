@@ -26,6 +26,19 @@ describe("create new route", () => {
     expect(nodesLayer).toHaveTextContent(/visibility: visible/i);
   });
 
+  it("hides connection nodes when closing create new route", async () => {
+    render(<App />);
+    await forDataToBeFetched(screen);
+
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
+    fireEvent.click(createNewRouteButton);
+    let nodesLayer = await screen.findByText(/layer-id: nodes/i);
+    fireEvent.click(createNewRouteButton);
+    nodesLayer = await screen.findByText(/layer-id: nodes/i);
+
+    expect(nodesLayer).toHaveTextContent(/visibility: none/i);
+  });
+
   it("shows hint when starting create new route", async () => {
     render(<App />);
     await forDataToBeFetched(screen);
@@ -48,6 +61,20 @@ describe("create new route", () => {
     const mockMap = screen.getByText(/mapstyle:mapbox/i);
 
     expect(mockMap).not.toHaveTextContent(/interactiveLayerIds:.*tracks/i);
+  });
+
+  it("enables track selection and hovering when closing create route tool", async () => {
+    const tracksData = aFeatureCollectionWith([aTrackFeature()]);
+    setFetchGlobalMock(tracksData);
+    render(<App />);
+    await forDataToBeFetched(screen, tracksData);
+
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
+    fireEvent.click(createNewRouteButton);
+    fireEvent.click(createNewRouteButton);
+    const mockMap = screen.getByText(/mapstyle:mapbox/i);
+
+    expect(mockMap).toHaveTextContent(/interactiveLayerIds:selectable-tracks/i);
   });
 
   it("clears selected track when starting new route", async () => {
@@ -76,6 +103,33 @@ describe("create new route", () => {
     );
   });
 
+  it("clears selected track when closing create route tool", async () => {
+    const selectedTrackId = "track_234";
+    const tracksLayerId = "selectable-tracks";
+    const tracksData = aFeatureCollectionWith([
+      aTrackFeature({ id: selectedTrackId }),
+    ]);
+    setFetchGlobalMock(tracksData);
+
+    render(<App />);
+    await forDataToBeFetched(screen, tracksData);
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
+    fireEvent.click(createNewRouteButton);
+    selectFeatureOnMap(selectedTrackId, tracksLayerId);
+    let selectedTrackLayer = await screen.findByText(
+      /layer-id: selected-track/i
+    );
+
+    expect(selectedTrackLayer).toHaveTextContent(/filter: in,id,track_234/i);
+
+    fireEvent.click(createNewRouteButton);
+    selectedTrackLayer = await screen.findByText(/layer-id: selected-track/i);
+
+    expect(selectedTrackLayer).not.toHaveTextContent(
+      /filter: in,id,track_234/i
+    );
+  });
+
   it("enables nodes selection and hovering when starting new route", async () => {
     const tracksData = aFeatureCollectionWith([aTrackFeature()]);
     setFetchGlobalMock(tracksData);
@@ -87,6 +141,23 @@ describe("create new route", () => {
     const mockMap = screen.getByText(/mapstyle:mapbox/i);
 
     expect(mockMap).toHaveTextContent(/interactiveLayerIds:.*nodes/i);
+  });
+
+  it("disables nodes selection and hovering when closing create route tool", async () => {
+    const tracksData = aFeatureCollectionWith([aTrackFeature()]);
+    setFetchGlobalMock(tracksData);
+    render(<App />);
+    await forDataToBeFetched(screen, tracksData);
+
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
+    fireEvent.click(createNewRouteButton);
+    const mockMap = screen.getByText(/mapstyle:mapbox/i);
+
+    expect(mockMap).toHaveTextContent(/interactiveLayerIds:.*nodes/i);
+
+    fireEvent.click(createNewRouteButton);
+
+    expect(mockMap).not.toHaveTextContent(/interactiveLayerIds:.*nodes/i);
   });
 
   it("allows nodes hovering when starting new route", async () => {
@@ -202,6 +273,38 @@ describe("create new route", () => {
     expect(animatedTracksLayer).toHaveTextContent(/filter: in,id,1/i);
   });
 
+  it("hides animated next track options when closing create route tool", async () => {
+    const track1StartNodeId = "node0";
+    const nodesLayerId = "nodes";
+    const someConnectedTracks = aFeatureCollectionWith([
+      aTrackFeature({ id: "1", name: "track1" }, [
+        [
+          [1, 1],
+          [2, 2],
+        ],
+      ]),
+      aTrackFeature({ id: "2", name: "track2" }, [
+        [
+          [2, 2],
+          [3, 3],
+        ],
+      ]),
+    ]);
+    setFetchGlobalMock(someConnectedTracks);
+    render(<App />);
+    await forDataToBeFetched(screen, someConnectedTracks);
+
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
+    fireEvent.click(createNewRouteButton);
+    selectFeatureOnMap(track1StartNodeId, nodesLayerId);
+    fireEvent.click(createNewRouteButton);
+    const animatedTracksLayer = await screen.findByText(
+      /layer-id: animated-tracks/i
+    );
+
+    expect(animatedTracksLayer).not.toHaveTextContent(/filter: in,id,1/i);
+  });
+
   it("animates next track options from selected start point when two tracks share start and end node", async () => {
     const track1StartNodeId = "node0";
     const nodesLayerId = "nodes";
@@ -276,6 +379,38 @@ describe("create new route", () => {
     );
 
     expect(selectableTracksLayer).toHaveTextContent(/filter: in,id,1/i);
+  });
+
+  it("all tracks are selectable when closing create route tool", async () => {
+    const track1StartNodeId = "node0";
+    const nodesLayerId = "nodes";
+    const someConnectedTracks = aFeatureCollectionWith([
+      aTrackFeature({ id: "1", name: "track1" }, [
+        [
+          [1, 1],
+          [2, 2],
+        ],
+      ]),
+      aTrackFeature({ id: "2", name: "track2" }, [
+        [
+          [2, 2],
+          [3, 3],
+        ],
+      ]),
+    ]);
+    setFetchGlobalMock(someConnectedTracks);
+    render(<App />);
+    await forDataToBeFetched(screen, someConnectedTracks);
+
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
+    fireEvent.click(createNewRouteButton);
+    selectFeatureOnMap(track1StartNodeId, nodesLayerId);
+    fireEvent.click(createNewRouteButton);
+    const selectableTracksLayer = await screen.findByText(
+      /layer-id: selectable-tracks/i
+    );
+
+    expect(selectableTracksLayer).not.toHaveTextContent(/filter: in,id,1/i);
   });
 
   it("updates next track options when next track is selected", async () => {
