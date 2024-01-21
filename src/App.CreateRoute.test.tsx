@@ -446,4 +446,140 @@ describe("create new route", () => {
 
     expect(selectableTracksLayer).toHaveTextContent(/filter: in,id,track2/i);
   });
+
+  it("displays route tracks on map", async () => {
+    const track1StartNodeId = "node0";
+    const nodesLayerId = "nodes";
+    const track1Id = "track1";
+    const selectableTracksId = "selectable-tracks";
+    const someConnectedTracks = aFeatureCollectionWith([
+      aTrackFeature({ id: "track1" }, [
+        [
+          [1, 1],
+          [2, 2],
+        ],
+      ]),
+      aTrackFeature({ id: "track2" }, [
+        [
+          [2, 2],
+          [3, 3],
+        ],
+      ]),
+    ]);
+    setFetchGlobalMock(someConnectedTracks);
+    render(<App />);
+    await forDataToBeFetched(screen, someConnectedTracks);
+
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
+    fireEvent.click(createNewRouteButton);
+    selectFeatureOnMap(track1StartNodeId, nodesLayerId);
+    selectFeatureOnMap(track1Id, selectableTracksId);
+    const routeTracksLayer = await screen.findByText(/layer-id: route-tracks/i);
+
+    expect(routeTracksLayer).toHaveTextContent(/filter: in,id,track1/i);
+  });
+
+  it("deletes current route's painted tracks on delete route button", async () => {
+    const track1StartNodeId = "node0";
+    const nodesLayerId = "nodes";
+    const track1Id = "track1";
+    const selectableTracksId = "selectable-tracks";
+    const someConnectedTracks = aFeatureCollectionWith([
+      aTrackFeature({ id: "track1" }, [
+        [
+          [1, 1],
+          [2, 2],
+        ],
+      ]),
+      aTrackFeature({ id: "track2" }, [
+        [
+          [2, 2],
+          [3, 3],
+        ],
+      ]),
+    ]);
+    setFetchGlobalMock(someConnectedTracks);
+    render(<App />);
+    await forDataToBeFetched(screen, someConnectedTracks);
+
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
+    fireEvent.click(createNewRouteButton);
+    selectFeatureOnMap(track1StartNodeId, nodesLayerId);
+    selectFeatureOnMap(track1Id, selectableTracksId);
+    const deleteRouteButton = screen.getByLabelText("deleteRoute");
+    fireEvent.click(deleteRouteButton);
+    const routeTracksLayer = await screen.findByText(/layer-id: route-tracks/i);
+
+    expect(routeTracksLayer).not.toHaveTextContent(/filter: in,id,track1/i);
+  });
+
+  it("deletes selected track on delete route button", async () => {
+    const track1StartNodeId = "node0";
+    const nodesLayerId = "nodes";
+    const track1Id = "track1";
+    const selectableTracksId = "selectable-tracks";
+    const someConnectedTracks = aFeatureCollectionWith([
+      aTrackFeature({ id: "track1" }, [
+        [
+          [1, 1],
+          [2, 2],
+        ],
+      ]),
+      aTrackFeature({ id: "track2" }, [
+        [
+          [2, 2],
+          [3, 3],
+        ],
+      ]),
+    ]);
+    setFetchGlobalMock(someConnectedTracks);
+    render(<App />);
+    await forDataToBeFetched(screen, someConnectedTracks);
+
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
+    fireEvent.click(createNewRouteButton);
+    selectFeatureOnMap(track1StartNodeId, nodesLayerId);
+    selectFeatureOnMap(track1Id, selectableTracksId);
+    const deleteRouteButton = screen.getByLabelText("deleteRoute");
+    fireEvent.click(deleteRouteButton);
+    const selectedTrackLayer = await screen.findByText(
+      /layer-id: selected-track/i
+    );
+
+    expect(selectedTrackLayer).not.toHaveTextContent(/filter: in,id,track1/i);
+  });
+
+  it("allows starting new route on delete route button", async () => {
+    const routeStartNodeId = "node0";
+    const nodesLayerId = "nodes";
+    const track1Id = "track1";
+    const selectableTracksId = "selectable-tracks";
+    const someConnectedTracks = aFeatureCollectionWith([
+      aTrackFeature({ id: "track1" }, [
+        [
+          [1, 1],
+          [2, 2],
+        ],
+      ]),
+      aTrackFeature({ id: "track2" }, [
+        [
+          [2, 2],
+          [3, 3],
+        ],
+      ]),
+    ]);
+    setFetchGlobalMock(someConnectedTracks);
+    render(<App />);
+    await forDataToBeFetched(screen, someConnectedTracks);
+
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
+    fireEvent.click(createNewRouteButton);
+    selectFeatureOnMap(routeStartNodeId, nodesLayerId);
+    selectFeatureOnMap(track1Id, selectableTracksId);
+    const deleteRouteButton = screen.getByLabelText("deleteRoute");
+    fireEvent.click(deleteRouteButton);
+    const mockMap = screen.getByText(/mapstyle:mapbox/i);
+
+    expect(mockMap).toHaveTextContent(/interactiveLayerIds:.*nodes/i);
+  });
 });

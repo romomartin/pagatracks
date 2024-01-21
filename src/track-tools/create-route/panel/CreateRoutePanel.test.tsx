@@ -8,6 +8,7 @@ describe("create route panel", () => {
     const panel = CreateRoutePanel({
       isVisible: true,
       route,
+      deleteRoute: () => {},
     });
     render(panel);
     const renderedPanel = screen.getByLabelText("createRoutePanel");
@@ -19,6 +20,7 @@ describe("create route panel", () => {
     const panel = CreateRoutePanel({
       isVisible: true,
       route,
+      deleteRoute: () => {},
     });
     render(panel);
     const renderedPanel = screen.getByLabelText("createRoutePanel");

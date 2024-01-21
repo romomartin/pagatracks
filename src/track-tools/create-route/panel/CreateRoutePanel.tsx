@@ -8,11 +8,13 @@ import { ReactComponent as DownloadLogo } from "../download-icon.svg";
 type CreateRoutePanelProps = {
   isVisible: boolean;
   route: Route;
+  deleteRoute: () => void;
 };
 
 export const CreateRoutePanel = ({
   isVisible,
   route,
+  deleteRoute,
 }: CreateRoutePanelProps) => {
   return (
     <div
@@ -24,13 +26,13 @@ export const CreateRoutePanel = ({
         Your route <span className={style.text1}>100km +1000m</span>
       </h2>
       <div className={style.buttons}>
-        <button>
+        <button aria-label="downloadRoute">
           <DownloadLogo />
         </button>
-        <button>
+        <button aria-label="undoRoute">
           <UndoLogo />
         </button>
-        <button>
+        <button aria-label="deleteRoute" onClick={deleteRoute}>
           <TrashCanLogo />
         </button>
       </div>

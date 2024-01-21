@@ -73,6 +73,12 @@ export const CreateRoute = ({
     updateCurrentRoute(nullRoute);
   };
 
+  const deleteRoute = (): void => {
+    changeSelectedFeatureId(undefined);
+    updateCurrentRoute(nullRoute);
+    createNewRoute();
+  };
+
   const onStartNodeId = (startNodeId: string) => {
     changeLayersVisibility({
       [NodeLayerIds.HOVERED_NODE]: LayerVisibility.NONE,
@@ -93,7 +99,7 @@ export const CreateRoute = ({
     currentRoute.trackIds.push(nextTrackId);
     let endNodeId: string | undefined = undefined;
 
-    const prevTrackId = currentRoute.trackIds[currentRoute.trackIds.length - 1];
+    const prevTrackId = currentRoute.trackIds[currentRoute.trackIds.length - 2];
     if (!prevTrackId) {
       endNodeId =
         currentRoute.startPointId === networkGraph.getEdge(nextTrackId)?.v
@@ -142,6 +148,7 @@ export const CreateRoute = ({
   const panel = CreateRoutePanel({
     isVisible: panelVisibility,
     route: currentRoute,
+    deleteRoute,
   });
 
   return { button, panel };
