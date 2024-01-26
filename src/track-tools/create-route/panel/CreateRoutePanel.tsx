@@ -4,6 +4,7 @@ import style from "./styles.module.css";
 import { ReactComponent as TrashCanLogo } from "../trash-can-icon.svg";
 import { ReactComponent as UndoLogo } from "../undo-icon.svg";
 import { ReactComponent as DownloadLogo } from "../download-icon.svg";
+import { useEffect, useState } from "react";
 
 type CreateRoutePanelProps = {
   isVisible: boolean;
@@ -16,6 +17,11 @@ export const CreateRoutePanel = ({
   route,
   deleteRoute,
 }: CreateRoutePanelProps) => {
+  const [hint, setHint] = useState<string>(getBasicHint(route));
+  useEffect(() => {
+    setHint(getBasicHint(route));
+  }, [route]);
+
   return (
     <div
       key="createRoute"
@@ -26,22 +32,35 @@ export const CreateRoutePanel = ({
         Your route <span className={style.text1}>100km +1000m</span>
       </h2>
       <div className={style.buttons}>
-        <button aria-label="downloadRoute">
+        <button
+          aria-label="downloadRoute"
+          onMouseEnter={() => setHint(texts.downloadRouteHint)}
+          onMouseLeave={() => setHint(getBasicHint(route))}
+        >
           <DownloadLogo />
         </button>
-        <button aria-label="undoRoute">
+        <button
+          aria-label="undoRoute"
+          onMouseEnter={() => setHint(texts.undoRouteHint)}
+          onMouseLeave={() => setHint(getBasicHint(route))}
+        >
           <UndoLogo />
         </button>
-        <button aria-label="deleteRoute" onClick={deleteRoute}>
+        <button
+          aria-label="deleteRoute"
+          onClick={deleteRoute}
+          onMouseEnter={() => setHint(texts.deleteRouteHint)}
+          onMouseLeave={() => setHint(getBasicHint(route))}
+        >
           <TrashCanLogo />
         </button>
       </div>
-      <p className={style.hint}>{showHint(route)}</p>
+      <p className={style.hint}>{hint}</p>
     </div>
   );
 };
 
-const showHint = (route: Route) => {
+const getBasicHint = (route: Route) => {
   return route.startPointId === ""
     ? texts.selectStartingPoint
     : texts.selectNextTrack;
