@@ -9,20 +9,31 @@ import { NodeLayerIds } from "../../layers/nodes/NodesLayer";
 import { TrackLayerIds } from "../../layers/tracks/TracksLayer";
 import { ConnectionIndex } from "../../network/build-connections";
 import { NetworkGraph } from "../../network/network-graph";
+import { TracksById } from "../../tracks/track";
+import { MultiLineString, Position } from "geojson";
+import { GeolibInputCoordinates } from "geolib/es/types";
+import { getDistance } from "geolib";
 
 export type Route = {
   startPointId: string;
   trackIds: string[];
   nextPossibleTrackIds: string[];
+  routeStats: RouteStats;
+};
+
+type RouteStats = {
+  length: number;
 };
 
 export const nullRoute: Route = {
   startPointId: "",
   trackIds: [],
   nextPossibleTrackIds: [],
+  routeStats: { length: 0 },
 };
 
 export const CreateRoute = ({
+  tracks,
   currentRoute,
   updateCurrentRoute,
   changeLayersVisibility,
@@ -31,6 +42,7 @@ export const CreateRoute = ({
   selectedFeatureId,
   connectionIndex,
 }: {
+  tracks: TracksById;
   currentRoute: Route;
   updateCurrentRoute: (route: Route) => void;
   changeLayersVisibility: (layersVisibility: LayersVisibility) => void;
@@ -92,6 +104,7 @@ export const CreateRoute = ({
       startPointId: startNodeId,
       trackIds: [],
       nextPossibleTrackIds: nextTrackIds || [],
+      routeStats: { length: 0 },
     });
   };
 
@@ -116,6 +129,7 @@ export const CreateRoute = ({
       ?.filter((edge) => edge !== prevTrackId && edge !== nextTrackId);
 
     currentRoute.nextPossibleTrackIds = nextTrackIds || [];
+    currentRoute.routeStats.length = getLength(currentRoute, tracks);
     updateCurrentRoute(currentRoute);
   };
 
@@ -172,4 +186,47 @@ const getEndNodeId = (
       : nextEdge?.v;
 
   return endNodeId;
+};
+
+const getLength = (route: Route, tracks: TracksById): number => {
+  return route.trackIds.reduce((length, trackId) => {
+    length += getTrackLength(trackId, tracks);
+    return length;
+  }, 0);
+};
+
+const getTrackLength = (trackId: string, tracks: TracksById): number => {
+  const track = tracks[trackId];
+  const trackGeometry = track.geometry as MultiLineString;
+
+  const firstPosition = trackGeometry.coordinates[0][0];
+  let previousPosition = firstPosition;
+
+  const length = trackGeometry.coordinates[0].reduce(
+    (totalLength, position) => {
+      totalLength += getDistance(
+        positionToGeolibInputCoordinates(previousPosition),
+        positionToGeolibInputCoordinates(position)
+      );
+      previousPosition = position;
+
+      return totalLength;
+    },
+    0
+  );
+
+  return metersToKm(length);
+};
+
+const positionToGeolibInputCoordinates = (
+  position: Position
+): GeolibInputCoordinates => {
+  return {
+    longitude: position[0],
+    latitude: position[1],
+  } as GeolibInputCoordinates;
+};
+
+const metersToKm = (meters: number): number => {
+  return meters / 1000;
 };

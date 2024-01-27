@@ -27,20 +27,19 @@ function App() {
   useEffect(() => {
     const setupInitialData = async () => {
       const rawTracks = await getTracks();
-  
+
       const tracks = rawTracks.features.reduce((acc, rawTrack: Feature) => {
         const track = trackFromGeoJSON(rawTrack);
         acc[track.id] = track;
         return acc;
       }, {} as TracksById);
-  
+
       setTracks(tracks);
       setConnections(buildConnectionsFromTracks(tracks));
     };
-    
+
     setupInitialData();
   }, []);
-
 
   const trackFeatures = useMemo(
     () => tracksToFeatureCollection(Object.values(tracks)),
@@ -81,6 +80,7 @@ function App() {
   };
 
   const createRoute = CreateRoute({
+    tracks,
     currentRoute,
     updateCurrentRoute,
     changeLayersVisibility,

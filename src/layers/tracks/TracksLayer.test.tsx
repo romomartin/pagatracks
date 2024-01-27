@@ -242,6 +242,7 @@ describe("Tracks layer", () => {
           startPointId: "node0",
           trackIds: [],
           nextPossibleTrackIds: [aTrackId],
+          routeStats: { length: 0 },
         }}
       />
     );
@@ -284,6 +285,7 @@ describe("Tracks layer", () => {
           startPointId: "node0",
           trackIds: [],
           nextPossibleTrackIds: [aTrackId, otherTrackId],
+          routeStats: { length: 0 },
         }}
       />
     );
@@ -316,6 +318,7 @@ describe("Tracks layer", () => {
           startPointId: "node0",
           trackIds: [],
           nextPossibleTrackIds: [aTrackId, otherTrackId],
+          routeStats: { length: 0 },
         }}
       />
     );
