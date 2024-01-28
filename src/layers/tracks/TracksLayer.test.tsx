@@ -253,7 +253,7 @@ describe("Tracks layer", () => {
     expect(visibleAnimatedTracksLayer).toBeInTheDocument();
 
     const hidenAnimatedTracksLayer = await screen.findByText(
-      /layer-id: animated-tracks.*visibility: visible/i
+      /layer-id: animated-tracks.*visibility: none/i
     );
 
     expect(hidenAnimatedTracksLayer).toBeInTheDocument();
