@@ -10,12 +10,14 @@ type CreateRoutePanelProps = {
   isVisible: boolean;
   route: Route;
   deleteRoute: () => void;
+  undoRoute: () => void;
 };
 
 export const CreateRoutePanel = ({
   isVisible,
   route,
   deleteRoute,
+  undoRoute,
 }: CreateRoutePanelProps) => {
   const [hint, setHint] = useState<string>(getBasicHint(route));
   useEffect(() => {
@@ -44,6 +46,7 @@ export const CreateRoutePanel = ({
         </button>
         <button
           aria-label="undoRoute"
+          onClick={undoRoute}
           onMouseEnter={() => setHint(texts.undoRouteHint)}
           onMouseLeave={() => setHint(getBasicHint(route))}
         >

@@ -619,4 +619,87 @@ describe("create new route", () => {
 
     expect(createRoutePanel).toHaveTextContent(/314.8km/i);
   });
+
+  it("removes last selected track from route on undo last selected track", async () => {
+    const routeStartNodeId = "node0";
+    const nodesLayerId = "nodes";
+    const track1Id = "track1";
+    const track2Id = "track2";
+    const selectableTracksId = "selectable-tracks";
+    const someConnectedTracks = aFeatureCollectionWith([
+      aTrackFeature({ id: "track1" }, [
+        [
+          [1, 1],
+          [2, 2],
+        ],
+      ]),
+      aTrackFeature({ id: "track2" }, [
+        [
+          [2, 2],
+          [3, 3],
+        ],
+      ]),
+    ]);
+    setFetchGlobalMock(someConnectedTracks);
+    render(<App />);
+    await forDataToBeFetched(screen, someConnectedTracks);
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
+    fireEvent.click(createNewRouteButton);
+    selectFeatureOnMap(routeStartNodeId, nodesLayerId);
+    selectFeatureOnMap(track1Id, selectableTracksId);
+    selectFeatureOnMap(track2Id, selectableTracksId);
+    const routeTracksLayer = await screen.findByText(/layer-id: route-tracks/i);
+
+    expect(routeTracksLayer).toHaveTextContent(/filter: in,id,track1,track2/i);
+
+    const undoRouteButton = screen.getByLabelText("undoRoute");
+    fireEvent.click(undoRouteButton);
+
+    expect(routeTracksLayer).toHaveTextContent(/filter: in,id,track1/i);
+  });
+
+  it("updates next track options from route on undo last selected track", async () => {
+    const routeStartNodeId = "node0";
+    const nodesLayerId = "nodes";
+    const track1Id = "track1";
+    const track2Id = "track2";
+    const selectableTracksId = "selectable-tracks";
+    const someConnectedTracks = aFeatureCollectionWith([
+      aTrackFeature({ id: "track1" }, [
+        [
+          [1, 1],
+          [2, 2],
+        ],
+      ]),
+      aTrackFeature({ id: "track2" }, [
+        [
+          [2, 2],
+          [3, 3],
+        ],
+      ]),
+    ]);
+    setFetchGlobalMock(someConnectedTracks);
+    render(<App />);
+    await forDataToBeFetched(screen, someConnectedTracks);
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
+    fireEvent.click(createNewRouteButton);
+    selectFeatureOnMap(routeStartNodeId, nodesLayerId);
+    selectFeatureOnMap(track1Id, selectableTracksId);
+    selectFeatureOnMap(track2Id, selectableTracksId);
+    const selectableTracksLayer = await screen.findByText(
+      /layer-id: selectable-tracks/i
+    );
+    const animatedTracksLayer = await screen.findByText(
+      /layer-id: animated-tracks/i
+    );
+
+    expect(selectableTracksLayer).toHaveTextContent(/filter: in,idvisibility/i);
+    expect(animatedTracksLayer).toHaveTextContent(/filter: in,idvisibility/i);
+
+    const undoRouteButton = screen.getByLabelText("undoRoute");
+    fireEvent.click(undoRouteButton);
+
+    expect(selectableTracksLayer).toHaveTextContent(/filter: in,id,track2/i);
+    expect(animatedTracksLayer).toHaveTextContent(/filter: in,id,track2/i);
+  });
 });

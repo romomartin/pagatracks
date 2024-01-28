@@ -7,7 +7,12 @@ describe("create route panel", () => {
   it("shows hint when starting create new route", () => {
     const route: Route = nullRoute;
     render(
-      <CreateRoutePanel isVisible={true} route={route} deleteRoute={() => {}} />
+      <CreateRoutePanel
+        isVisible={true}
+        route={route}
+        deleteRoute={() => {}}
+        undoRoute={() => {}}
+      />
     );
 
     const renderedPanel = screen.getByLabelText("createRoutePanel");
@@ -18,7 +23,12 @@ describe("create route panel", () => {
   it("shows hint when start point is selected", () => {
     const route: Route = { ...nullRoute, startPointId: "aPointId" };
     render(
-      <CreateRoutePanel isVisible={true} route={route} deleteRoute={() => {}} />
+      <CreateRoutePanel
+        isVisible={true}
+        route={route}
+        deleteRoute={() => {}}
+        undoRoute={() => {}}
+      />
     );
 
     const renderedPanel = screen.getByLabelText("createRoutePanel");
@@ -29,7 +39,12 @@ describe("create route panel", () => {
   it("shows hint when delete button is hovered", async () => {
     const route: Route = { ...nullRoute, startPointId: "aPointId" };
     render(
-      <CreateRoutePanel isVisible={true} route={route} deleteRoute={() => {}} />
+      <CreateRoutePanel
+        isVisible={true}
+        route={route}
+        deleteRoute={() => {}}
+        undoRoute={() => {}}
+      />
     );
     const deleteButton = screen.getByLabelText("deleteRoute");
 
@@ -42,7 +57,12 @@ describe("create route panel", () => {
   it("shows hint when undo button is hovered", async () => {
     const route: Route = { ...nullRoute, startPointId: "aPointId" };
     render(
-      <CreateRoutePanel isVisible={true} route={route} deleteRoute={() => {}} />
+      <CreateRoutePanel
+        isVisible={true}
+        route={route}
+        deleteRoute={() => {}}
+        undoRoute={() => {}}
+      />
     );
     const deleteButton = screen.getByLabelText("undoRoute");
 
@@ -55,7 +75,12 @@ describe("create route panel", () => {
   it("shows hint when download button is hovered", async () => {
     const route: Route = { ...nullRoute, startPointId: "aPointId" };
     render(
-      <CreateRoutePanel isVisible={true} route={route} deleteRoute={() => {}} />
+      <CreateRoutePanel
+        isVisible={true}
+        route={route}
+        deleteRoute={() => {}}
+        undoRoute={() => {}}
+      />
     );
     const deleteButton = screen.getByLabelText("downloadRoute");
 

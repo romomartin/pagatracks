@@ -91,6 +91,23 @@ export const CreateRoute = ({
     createNewRoute();
   };
 
+  const undoRoute = (): void => {
+    changeSelectedFeatureId(undefined);
+    if (currentRoute.trackIds.length === 0) {
+      deleteRoute();
+      return;
+    }
+
+    currentRoute.trackIds.splice(-1, 1);
+
+    currentRoute.nextPossibleTrackIds =
+      currentRoute.trackIds.length === 0
+        ? networkGraph.nodeEdges(currentRoute.startPointId) || []
+        : getNextPossibleTracksIds(currentRoute, networkGraph);
+    currentRoute.routeStats.length = getLength(currentRoute, tracks);
+    updateCurrentRoute(currentRoute);
+  };
+
   const onStartNodeId = (startNodeId: string) => {
     changeLayersVisibility({
       [NodeLayerIds.HOVERED_NODE]: LayerVisibility.NONE,
@@ -110,25 +127,11 @@ export const CreateRoute = ({
 
   const onNextTrack = (nextTrackId: string) => {
     currentRoute.trackIds.push(nextTrackId);
-    let endNodeId: string | undefined = undefined;
 
-    const prevTrackId = currentRoute.trackIds[currentRoute.trackIds.length - 2];
-    if (!prevTrackId) {
-      endNodeId =
-        currentRoute.startPointId === networkGraph.getEdge(nextTrackId)?.v
-          ? networkGraph.getEdge(nextTrackId)?.w
-          : networkGraph.getEdge(nextTrackId)?.v;
-    } else {
-      endNodeId = getEndNodeId(networkGraph, prevTrackId, nextTrackId);
-    }
-
-    if (!endNodeId) return;
-
-    const nextTrackIds = networkGraph
-      .nodeEdges(endNodeId)
-      ?.filter((edge) => edge !== prevTrackId && edge !== nextTrackId);
-
-    currentRoute.nextPossibleTrackIds = nextTrackIds || [];
+    currentRoute.nextPossibleTrackIds = getNextPossibleTracksIds(
+      currentRoute,
+      networkGraph
+    );
     currentRoute.routeStats.length = getLength(currentRoute, tracks);
     updateCurrentRoute(currentRoute);
   };
@@ -163,9 +166,36 @@ export const CreateRoute = ({
     isVisible: panelVisibility,
     route: currentRoute,
     deleteRoute,
+    undoRoute,
   });
 
   return { button, panel };
+};
+
+const getNextPossibleTracksIds = (
+  route: Route,
+  networkGraph: NetworkGraph
+): string[] => {
+  let endNodeId: string | undefined = undefined;
+  const lastTrackId = route.trackIds[route.trackIds.length - 1];
+
+  const prevTrackId = route.trackIds[route.trackIds.length - 2];
+  if (!prevTrackId) {
+    endNodeId =
+      route.startPointId === networkGraph.getEdge(lastTrackId)?.v
+        ? networkGraph.getEdge(lastTrackId)?.w
+        : networkGraph.getEdge(lastTrackId)?.v;
+  } else {
+    endNodeId = getEndNodeId(networkGraph, prevTrackId, lastTrackId);
+  }
+
+  if (!endNodeId) return [];
+
+  const nextTrackIds = networkGraph
+    .nodeEdges(endNodeId)
+    ?.filter((edge) => edge !== prevTrackId && edge !== lastTrackId);
+
+  return nextTrackIds || [];
 };
 
 const getEndNodeId = (
