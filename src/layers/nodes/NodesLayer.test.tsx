@@ -23,6 +23,7 @@ describe("Nodes layer", () => {
         layersVisibility={{}}
         hoveredFeatureId=""
         routeStartNode=""
+        routeEndNode=""
       />
     );
     const source = await screen.findByText(/source-id: nodes/i);
@@ -46,6 +47,7 @@ describe("Nodes layer", () => {
         layersVisibility={{}}
         hoveredFeatureId=""
         routeStartNode=""
+        routeEndNode=""
       />
     );
     const nodesLayer = await screen.findByText(/layer-id: nodes/i);
@@ -69,6 +71,7 @@ describe("Nodes layer", () => {
         layersVisibility={{}}
         hoveredFeatureId=""
         routeStartNode=""
+        routeEndNode=""
       />
     );
     const nodesLayer = await screen.findByText(/layer-id: nodes/i);
@@ -89,6 +92,7 @@ describe("Nodes layer", () => {
         layersVisibility={{}}
         hoveredFeatureId=""
         routeStartNode=""
+        routeEndNode=""
       />
     );
     const hoveredNodeLayer = await screen.findByText(/layer-id: hovered-node/i);
@@ -112,6 +116,7 @@ describe("Nodes layer", () => {
         layersVisibility={{}}
         hoveredFeatureId={nodeId}
         routeStartNode=""
+        routeEndNode=""
       />
     );
     const hoveredNodeLayer = await screen.findByText(/layer-id: hovered-node/i);
@@ -132,6 +137,7 @@ describe("Nodes layer", () => {
         layersVisibility={{}}
         hoveredFeatureId=""
         routeStartNode=""
+        routeEndNode=""
       />
     );
     const routeStartNodeLayer = await screen.findByText(
@@ -144,7 +150,7 @@ describe("Nodes layer", () => {
     );
   });
 
-  it("applies selected node filter to selected node layer when provided", async () => {
+  it("applies node filter to route start node layer when provided", async () => {
     const nodeId = "node3";
     const nodes = {
       type: "FeatureCollection",
@@ -157,6 +163,7 @@ describe("Nodes layer", () => {
         layersVisibility={{}}
         hoveredFeatureId=""
         routeStartNode={nodeId}
+        routeEndNode=""
       />
     );
     const routeStartNodeLayer = await screen.findByText(
@@ -164,5 +171,29 @@ describe("Nodes layer", () => {
     );
 
     expect(routeStartNodeLayer).toHaveTextContent(/filter: in,id,node3/i);
+  });
+
+  it("applies node filter to route end node layer when provided", async () => {
+    const startNodeId = "node3";
+    const endNodeId = "node2";
+    const nodes = {
+      type: "FeatureCollection",
+      features: [aPointFeature(startNodeId), aPointFeature(endNodeId)],
+    } as FeatureCollection;
+
+    render(
+      <NodesLayer
+        nodes={nodes}
+        layersVisibility={{}}
+        hoveredFeatureId=""
+        routeStartNode={startNodeId}
+        routeEndNode={endNodeId}
+      />
+    );
+    const routeEndNodeLayer = await screen.findByText(
+      /layer-id: route-end-node/i
+    );
+
+    expect(routeEndNodeLayer).toHaveTextContent(/filter: in,id,node2/i);
   });
 });

@@ -208,7 +208,7 @@ describe("create new route", () => {
     expect(nodesLayer).toHaveTextContent(/visibility: none/i);
   });
 
-  it("displays start node on routes starting point selected", async () => {
+  it("shows start node on routes starting point selected", async () => {
     const selectedNodeId = "node0";
     const nodesLayerId = "nodes";
     render(<App />);
@@ -222,6 +222,7 @@ describe("create new route", () => {
     );
 
     expect(routeStartNodeLayer).toHaveTextContent(/visibility: visible/i);
+    expect(routeStartNodeLayer).toHaveTextContent(/filter: in,id,node0/i);
   });
 
   it("disables node selection on routes starting point selected", async () => {
@@ -477,6 +478,72 @@ describe("create new route", () => {
     const routeTracksLayer = await screen.findByText(/layer-id: route-tracks/i);
 
     expect(routeTracksLayer).toHaveTextContent(/filter: in,id,track1/i);
+  });
+
+  it("displays route end node on map", async () => {
+    const track1StartNodeId = "node0";
+    const nodesLayerId = "nodes";
+    const track1Id = "track1";
+    const selectableTracksId = "selectable-tracks";
+    const someTracks = aFeatureCollectionWith([
+      aTrackFeature({ id: "track1" }, [
+        [
+          [1, 1],
+          [2, 2],
+        ],
+      ]),
+    ]);
+    setFetchGlobalMock(someTracks);
+    render(<App />);
+    await forDataToBeFetched(screen, someTracks);
+
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
+    fireEvent.click(createNewRouteButton);
+    selectFeatureOnMap(track1StartNodeId, nodesLayerId);
+    selectFeatureOnMap(track1Id, selectableTracksId);
+    const routeEndNodeLayer = await screen.findByText(
+      /layer-id: route-end-node/i
+    );
+
+    expect(routeEndNodeLayer).toHaveTextContent(/visibility: visible/i);
+    expect(routeEndNodeLayer).toHaveTextContent(/filter: in,id,node1/i);
+  });
+
+  it("displays route end node on map when prev track and last track share start and end points", async () => {
+    const track1StartNodeId = "node0";
+    const nodesLayerId = "nodes";
+    const track1Id = "track1";
+    const track2Id = "track2";
+    const selectableTracksId = "selectable-tracks";
+    const someConnectedTracks = aFeatureCollectionWith([
+      aTrackFeature({ id: "track1", name: "track1" }, [
+        [
+          [1, 1],
+          [2, 2],
+        ],
+      ]),
+      aTrackFeature({ id: "track2", name: "track2" }, [
+        [
+          [1, 1],
+          [2, 2],
+        ],
+      ]),
+    ]);
+    setFetchGlobalMock(someConnectedTracks);
+    render(<App />);
+    await forDataToBeFetched(screen, someConnectedTracks);
+
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
+    fireEvent.click(createNewRouteButton);
+    selectFeatureOnMap(track1StartNodeId, nodesLayerId);
+    selectFeatureOnMap(track1Id, selectableTracksId);
+    selectFeatureOnMap(track2Id, selectableTracksId);
+    const routeEndNodeLayer = await screen.findByText(
+      /layer-id: route-end-node/i
+    );
+
+    expect(routeEndNodeLayer).toHaveTextContent(/visibility: visible/i);
+    expect(routeEndNodeLayer).toHaveTextContent(/filter: in,id,node0/i);
   });
 
   it("deletes current route's painted tracks on delete route button", async () => {

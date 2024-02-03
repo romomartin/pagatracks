@@ -11,6 +11,7 @@ export enum NodeLayerIds {
   NODES = "nodes",
   HOVERED_NODE = "hovered-node",
   ROUTE_START_NODE = "route-start-node",
+  ROUTE_END_NODE = "route-end-node",
 }
 
 type NodesLayerProps = {
@@ -18,6 +19,7 @@ type NodesLayerProps = {
   layersVisibility: LayersVisibility;
   hoveredFeatureId: string;
   routeStartNode: string;
+  routeEndNode: string;
 };
 
 export const NodesLayer = ({
@@ -25,6 +27,7 @@ export const NodesLayer = ({
   layersVisibility,
   hoveredFeatureId,
   routeStartNode,
+  routeEndNode,
 }: NodesLayerProps): JSX.Element => {
   return (
     <>
@@ -38,6 +41,16 @@ export const NodesLayer = ({
               LayerVisibility.NONE,
           }}
           filter={["in", "id", routeStartNode]}
+        />
+        <Layer
+          id={NodeLayerIds.ROUTE_END_NODE}
+          {...selectedNodeStyle}
+          layout={{
+            visibility:
+              layersVisibility[NodeLayerIds.ROUTE_END_NODE] ||
+              LayerVisibility.NONE,
+          }}
+          filter={["in", "id", routeEndNode]}
         />
         <Layer
           id={NodeLayerIds.NODES}

@@ -240,6 +240,7 @@ describe("Tracks layer", () => {
         hoveredFeatureId={""}
         currentRoute={{
           startPointId: "node0",
+          endPointId: "",
           trackIds: [],
           nextPossibleTrackIds: [aTrackId],
           routeStats: { length: 0 },
@@ -283,6 +284,7 @@ describe("Tracks layer", () => {
         hoveredFeatureId={""}
         currentRoute={{
           startPointId: "node0",
+          endPointId: "",
           trackIds: [],
           nextPossibleTrackIds: [aTrackId, otherTrackId],
           routeStats: { length: 0 },
@@ -316,6 +318,7 @@ describe("Tracks layer", () => {
         hoveredFeatureId={""}
         currentRoute={{
           startPointId: "node0",
+          endPointId: "",
           trackIds: [],
           nextPossibleTrackIds: [aTrackId, otherTrackId],
           routeStats: { length: 0 },

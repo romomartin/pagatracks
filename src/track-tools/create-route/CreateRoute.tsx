@@ -16,6 +16,7 @@ import { getDistance } from "geolib";
 
 export type Route = {
   startPointId: string;
+  endPointId: string;
   trackIds: string[];
   nextPossibleTrackIds: string[];
   routeStats: RouteStats;
@@ -27,6 +28,7 @@ type RouteStats = {
 
 export const nullRoute: Route = {
   startPointId: "",
+  endPointId: "",
   trackIds: [],
   nextPossibleTrackIds: [],
   routeStats: { length: 0 },
@@ -113,12 +115,14 @@ export const CreateRoute = ({
       [NodeLayerIds.HOVERED_NODE]: LayerVisibility.NONE,
       [NodeLayerIds.NODES]: LayerVisibility.NONE,
       [NodeLayerIds.ROUTE_START_NODE]: LayerVisibility.VISIBLE,
+      [NodeLayerIds.ROUTE_END_NODE]: LayerVisibility.VISIBLE,
     });
     changeInteractiveLayers([TrackLayerIds.SELECTABLE_TRACKS]);
 
     const nextTrackIds = networkGraph.nodeEdges(startNodeId);
     updateCurrentRoute({
       startPointId: startNodeId,
+      endPointId: "",
       trackIds: [],
       nextPossibleTrackIds: nextTrackIds || [],
       routeStats: { length: 0 },
@@ -128,6 +132,7 @@ export const CreateRoute = ({
   const onNextTrack = (nextTrackId: string) => {
     currentRoute.trackIds.push(nextTrackId);
 
+    currentRoute.endPointId = getEndNodeId(currentRoute, networkGraph) ?? "";
     currentRoute.nextPossibleTrackIds = getNextPossibleTracksIds(
       currentRoute,
       networkGraph
@@ -176,20 +181,12 @@ const getNextPossibleTracksIds = (
   route: Route,
   networkGraph: NetworkGraph
 ): string[] => {
-  let endNodeId: string | undefined = undefined;
-  const lastTrackId = route.trackIds[route.trackIds.length - 1];
-
-  const prevTrackId = route.trackIds[route.trackIds.length - 2];
-  if (!prevTrackId) {
-    endNodeId =
-      route.startPointId === networkGraph.getEdge(lastTrackId)?.v
-        ? networkGraph.getEdge(lastTrackId)?.w
-        : networkGraph.getEdge(lastTrackId)?.v;
-  } else {
-    endNodeId = getEndNodeId(networkGraph, prevTrackId, lastTrackId);
-  }
+  const endNodeId = getEndNodeId(route, networkGraph);
 
   if (!endNodeId) return [];
+
+  const lastTrackId = route.trackIds[route.trackIds.length - 1];
+  const prevTrackId = route.trackIds[route.trackIds.length - 2];
 
   const nextTrackIds = networkGraph
     .nodeEdges(endNodeId)
@@ -199,21 +196,35 @@ const getNextPossibleTracksIds = (
 };
 
 const getEndNodeId = (
-  networkGraph: NetworkGraph,
-  prevTrackId: string,
-  nextTrackId: string
+  route: Route,
+  networkGraph: NetworkGraph
 ): string | undefined => {
-  const prevEdge = networkGraph.getEdge(prevTrackId);
-  const nextEdge = networkGraph.getEdge(nextTrackId);
+  const lastTrackId = route.trackIds[route.trackIds.length - 1];
+  const prevTrackId = route.trackIds[route.trackIds.length - 2];
+  let endNodeId = undefined;
 
-  const endNodeId =
+  if (!prevTrackId) {
+    endNodeId =
+      route.startPointId === networkGraph.getEdge(lastTrackId)?.v
+        ? networkGraph.getEdge(lastTrackId)?.w
+        : networkGraph.getEdge(lastTrackId)?.v;
+
+    return endNodeId;
+  }
+
+  const prevEdge = networkGraph.getEdge(prevTrackId);
+  const nextEdge = networkGraph.getEdge(lastTrackId);
+
+  endNodeId =
     prevEdge?.v === nextEdge?.v
-      ? nextEdge?.w
-      : prevEdge?.v === nextEdge?.w
-      ? nextEdge?.v
-      : prevEdge?.w === nextEdge?.v
-      ? nextEdge?.w
-      : nextEdge?.v;
+      ? prevEdge?.w === nextEdge?.w
+        ? nextEdge?.v
+        : prevEdge?.v === nextEdge?.w
+        ? nextEdge?.v
+        : prevEdge?.w === nextEdge?.v
+        ? nextEdge?.w
+        : nextEdge?.v
+      : nextEdge?.w;
 
   return endNodeId;
 };

@@ -75,6 +75,7 @@ export const MapCanvas = ({
         layersVisibility={layersVisibility}
         hoveredFeatureId={hoveredFeatureId}
         routeStartNode={currentRoute.startPointId}
+        routeEndNode={currentRoute.endPointId}
       ></NodesLayer>
     </Map>
   );
