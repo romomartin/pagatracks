@@ -39,6 +39,35 @@ describe("Elevation chart", () => {
     expect(additionalData).toHaveTextContent("47.2km");
   });
 
+  it("shows elevation gain of track", () => {
+    render(
+      <ElevationChart
+        selectedTrack={aTrack({ name: "selectedTrack" })}
+      ></ElevationChart>
+    );
+
+    const additionalData = screen.getByLabelText("additionalData");
+
+    expect(additionalData).toHaveTextContent("+27m");
+  });
+
+  it("shows elevation gain of track when reversing series", () => {
+    render(
+      <ElevationChart
+        selectedTrack={aTrack({ name: "selectedTrack" })}
+      ></ElevationChart>
+    );
+    const additionalData = screen.getByLabelText("additionalData");
+    const reverseButton = screen.getByLabelText("reverseChartButton");
+
+    // eslint-disable-next-line testing-library/no-unnecessary-act
+    act(() => {
+      userEvent.click(reverseButton);
+    });
+
+    expect(additionalData).toHaveTextContent("+2m");
+  });
+
   it("sets correct styles for series tooltip", () => {
     render(
       <ElevationChart

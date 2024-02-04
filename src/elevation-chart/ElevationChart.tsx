@@ -42,7 +42,9 @@ export const ElevationChart: FunctionComponent<Props> = ({
 
     setAdditionalData({
       length: metersToKm(getMultilineStringLength(chartGeometry)),
-      elevationGain: 0,
+      elevationGain: selectedTrack
+        ? getTrackElevationGain(selectedTrack, isReversed)
+        : 0,
     });
 
     setChartOptions(
@@ -60,7 +62,8 @@ export const ElevationChart: FunctionComponent<Props> = ({
   return (
     <div className={style.container} aria-label="elevation-chart">
       <div className={style.specs} aria-label="additionalData">
-        {roundToOneDecimal(additionalData.length)}km +xxxxm
+        {roundToOneDecimal(additionalData.length)}km +
+        {Math.round(additionalData.elevationGain)}m
         <button
           id={style.reverseButton}
           aria-label="reverseChartButton"
@@ -139,6 +142,31 @@ const getMultilineStringLength = (multilineString: MultiLineString): number => {
   );
 
   return length;
+};
+
+const getTrackElevationGain = (
+  track: Track,
+  isReversed: boolean = false
+): number => {
+  const copiedGeometry = copyGeometry(track.geometry as MultiLineString);
+  if (isReversed) reverseTrackGeometry(copiedGeometry);
+
+  const elevationGain = copiedGeometry.coordinates.reduce(
+    (totalElevGain, lineString) => {
+      lineString.reduce((lastPosition, position) => {
+        const elevGain = position[2] - lastPosition[2];
+
+        if (elevGain > 0) totalElevGain += elevGain;
+
+        return position;
+      }, lineString[0]);
+
+      return totalElevGain;
+    },
+    0
+  );
+
+  return elevationGain;
 };
 
 const positionToGeolibInputCoordinates = (
