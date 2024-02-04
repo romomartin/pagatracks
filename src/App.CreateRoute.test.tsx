@@ -687,6 +687,48 @@ describe("create new route", () => {
     expect(createRoutePanel).toHaveTextContent(/314.8km/i);
   });
 
+  it("updates route's length on undo last selected track", async () => {
+    const routeStartNodeId = "node0";
+    const nodesLayerId = "nodes";
+    const track1Id = "track1";
+    const track2Id = "track2";
+    const selectableTracksId = "selectable-tracks";
+    const someConnectedTracks = aFeatureCollectionWith([
+      aTrackFeature({ id: "track1" }, [
+        [
+          [1, 1],
+          [2, 2],
+        ],
+      ]),
+      aTrackFeature({ id: "track2" }, [
+        [
+          [2, 2],
+          [3, 3],
+        ],
+      ]),
+    ]);
+    setFetchGlobalMock(someConnectedTracks);
+    render(<App />);
+    await forDataToBeFetched(screen, someConnectedTracks);
+
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
+    fireEvent.click(createNewRouteButton);
+    selectFeatureOnMap(routeStartNodeId, nodesLayerId);
+    selectFeatureOnMap(track1Id, selectableTracksId);
+    const createRoutePanel = screen.getByLabelText("createRoutePanel");
+
+    expect(createRoutePanel).toHaveTextContent(/157.4km/i);
+
+    selectFeatureOnMap(track2Id, selectableTracksId);
+
+    expect(createRoutePanel).toHaveTextContent(/314.8km/i);
+
+    const undoRouteButton = screen.getByLabelText("undoRoute");
+    fireEvent.click(undoRouteButton);
+
+    expect(createRoutePanel).toHaveTextContent(/157.4km/i);
+  });
+
   it("removes last selected track from route on undo last selected track", async () => {
     const routeStartNodeId = "node0";
     const nodesLayerId = "nodes";
