@@ -6,9 +6,9 @@ describe("network graph", () => {
     it("gets edges connnected to given node", () => {
       const nodeId = "nodeId";
       const connectionIndex: ConnectionIndex = {
-        Track1: { nodeAId: "node1", nodeBId: nodeId },
-        Track2: { nodeAId: nodeId, nodeBId: "node3" },
-        Track3: { nodeAId: nodeId, nodeBId: "node4" },
+        Track1: { startNodeId: "node1", endNodeId: nodeId },
+        Track2: { startNodeId: nodeId, endNodeId: "node3" },
+        Track3: { startNodeId: nodeId, endNodeId: "node4" },
       };
       const networkGraph = new NetworkGraph(connectionIndex);
 
@@ -20,8 +20,8 @@ describe("network graph", () => {
     it("gets edges connnected to given node when they share start and end node", () => {
       const nodeId = "nodeId";
       const connectionIndex: ConnectionIndex = {
-        Track1: { nodeAId: "node1", nodeBId: nodeId },
-        Track2: { nodeAId: "node1", nodeBId: nodeId },
+        Track1: { startNodeId: "node1", endNodeId: nodeId },
+        Track2: { startNodeId: "node1", endNodeId: nodeId },
       };
       const networkGraph = new NetworkGraph(connectionIndex);
 
@@ -34,8 +34,8 @@ describe("network graph", () => {
   describe("getEdge", () => {
     it("gets edge from edge name", () => {
       const connectionIndex: ConnectionIndex = {
-        Track1: { nodeAId: "node1", nodeBId: "node2" },
-        Track2: { nodeAId: "node2", nodeBId: "node3" },
+        Track1: { startNodeId: "node1", endNodeId: "node2" },
+        Track2: { startNodeId: "node2", endNodeId: "node3" },
       };
       const networkGraph = new NetworkGraph(connectionIndex);
 

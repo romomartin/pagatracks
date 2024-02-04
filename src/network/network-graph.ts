@@ -7,7 +7,7 @@ export class NetworkGraph {
   constructor(connectionIndex: ConnectionIndex) {
     this.graph = new Graph({ directed: false, multigraph: true });
     Object.entries(connectionIndex).forEach(([track, nodes]) => {
-      this.graph.setEdge(nodes.nodeAId, nodes.nodeBId, track, track);
+      this.graph.setEdge(nodes.startNodeId, nodes.endNodeId, track, track);
     });
   }
 

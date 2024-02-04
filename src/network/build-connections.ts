@@ -7,7 +7,7 @@ export type Connections = {
 };
 
 export type ConnectionIndex = {
-  [trackName: string]: { nodeAId: string; nodeBId: string };
+  [trackName: string]: { startNodeId: string; endNodeId: string };
 };
 
 export type ConnectionNode = {
@@ -34,7 +34,10 @@ export const buildConnectionsFromTracks = (tracks: TracksById): Connections => {
       return node.id;
     });
 
-    connectionIndex[trackId] = { nodeAId: nodeIds[0], nodeBId: nodeIds[1] };
+    connectionIndex[trackId] = {
+      startNodeId: nodeIds[0],
+      endNodeId: nodeIds[1],
+    };
   });
 
   return { connectionIndex, nodes };

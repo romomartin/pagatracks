@@ -12,7 +12,7 @@ describe("Build connections from tracks", () => {
     });
 
     expect(connectionIndex).toEqual({
-      trackName: { nodeAId: "node0", nodeBId: "node1" },
+      trackName: { startNodeId: "node0", endNodeId: "node1" },
     });
     expect(nodes).toEqual([
       {
@@ -46,8 +46,8 @@ describe("Build connections from tracks", () => {
     });
 
     expect(connectionIndex).toEqual({
-      trackName: { nodeAId: "node0", nodeBId: "node1" },
-      otherTrackName: { nodeAId: "node1", nodeBId: "node2" },
+      trackName: { startNodeId: "node0", endNodeId: "node1" },
+      otherTrackName: { startNodeId: "node1", endNodeId: "node2" },
     });
     expect(nodes).toHaveLength(3);
     expect(nodes).toEqual([
