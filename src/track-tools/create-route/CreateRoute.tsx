@@ -9,7 +9,7 @@ import { NodeLayerIds } from "../../layers/nodes/NodesLayer";
 import { TrackLayerIds } from "../../layers/tracks/TracksLayer";
 import { ConnectionIndex } from "../../network/build-connections";
 import { NetworkGraph } from "../../network/network-graph";
-import { TracksById } from "../../tracks/track";
+import { Track, TracksById } from "../../tracks/track";
 import { MultiLineString, Position } from "geojson";
 import { GeolibInputCoordinates } from "geolib/es/types";
 import { getDistance } from "geolib";
@@ -108,6 +108,11 @@ export const CreateRoute = ({
         ? networkGraph.nodeEdges(currentRoute.startPointId) || []
         : getNextPossibleTracksIds(currentRoute, networkGraph);
     currentRoute.routeStats.length = getLength(currentRoute, tracks);
+    currentRoute.routeStats.elevGain = getElevationGain(
+      currentRoute,
+      tracks,
+      connectionIndex
+    );
     currentRoute.endPointId = getEndNodeId(currentRoute, networkGraph) || "";
     updateCurrentRoute(currentRoute);
   };
@@ -140,6 +145,11 @@ export const CreateRoute = ({
       networkGraph
     );
     currentRoute.routeStats.length = getLength(currentRoute, tracks);
+    currentRoute.routeStats.elevGain = getElevationGain(
+      currentRoute,
+      tracks,
+      connectionIndex
+    );
     updateCurrentRoute(currentRoute);
   };
 
@@ -223,6 +233,74 @@ const getTrackLength = (trackId: string, tracks: TracksById): number => {
   const length = getMultilineStringLength(trackGeometry);
 
   return metersToKm(length);
+};
+
+const getElevationGain = (
+  route: Route,
+  tracks: TracksById,
+  connectionIndex: ConnectionIndex
+): number => {
+  let elevationGain = 0;
+
+  route.trackIds.reduce((prevEndPointId, trackId) => {
+    const trackConnections = connectionIndex[trackId];
+
+    let isReversed = false;
+    let nextEndPointId = trackConnections.endNodeId;
+    if (trackConnections.endNodeId === prevEndPointId) {
+      isReversed = true;
+      nextEndPointId = trackConnections.startNodeId;
+    }
+
+    elevationGain += getTrackElevationGain(tracks[trackId], isReversed);
+
+    return nextEndPointId;
+  }, route.startPointId);
+
+  return elevationGain;
+};
+
+const getTrackElevationGain = (
+  track: Track,
+  isReversed: boolean = false
+): number => {
+  const copiedGeometry = copyGeometry(track.geometry as MultiLineString);
+  if (isReversed) reverseTrackGeometry(copiedGeometry);
+
+  const elevationGain = copiedGeometry.coordinates.reduce(
+    (totalElevGain, lineString) => {
+      lineString.reduce((lastPosition, position) => {
+        const elevGain = position[2] - lastPosition[2];
+
+        if (elevGain > 0) totalElevGain += elevGain;
+
+        return position;
+      }, lineString[0]);
+
+      return totalElevGain;
+    },
+    0
+  );
+
+  return elevationGain;
+};
+
+const copyGeometry = (geometry: MultiLineString): MultiLineString => {
+  const coordinates = geometry.coordinates.map((line) => {
+    return line.map((position) => {
+      return position.map((number) => number);
+    });
+  });
+
+  return { type: "MultiLineString", coordinates };
+};
+
+const reverseTrackGeometry = (geometry: MultiLineString): MultiLineString => {
+  const coordinates = geometry.coordinates.reverse().map((line) => {
+    return line.reverse();
+  });
+
+  return { type: "MultiLineString", coordinates };
 };
 
 const getMultilineStringLength = (multilineString: MultiLineString): number => {
