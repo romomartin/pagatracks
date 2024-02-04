@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { texts } from "../../texts";
 import { CreateRouteIcon } from "./CreateRouteIcon";
 import { CreateRouteButton } from "./button/CreateRouteButton";
@@ -117,59 +117,86 @@ export const CreateRoute = ({
     updateCurrentRoute(currentRoute);
   };
 
-  const onStartNodeId = (startNodeId: string) => {
-    changeLayersVisibility({
-      [NodeLayerIds.HOVERED_NODE]: LayerVisibility.NONE,
-      [NodeLayerIds.NODES]: LayerVisibility.NONE,
-      [NodeLayerIds.ROUTE_START_NODE]: LayerVisibility.VISIBLE,
-      [NodeLayerIds.ROUTE_END_NODE]: LayerVisibility.VISIBLE,
-    });
-    changeInteractiveLayers([TrackLayerIds.SELECTABLE_TRACKS]);
+  const onStartNodeId = useCallback(
+    (startNodeId: string) => {
+      changeLayersVisibility({
+        [NodeLayerIds.HOVERED_NODE]: LayerVisibility.NONE,
+        [NodeLayerIds.NODES]: LayerVisibility.NONE,
+        [NodeLayerIds.ROUTE_START_NODE]: LayerVisibility.VISIBLE,
+        [NodeLayerIds.ROUTE_END_NODE]: LayerVisibility.VISIBLE,
+      });
+      changeInteractiveLayers([TrackLayerIds.SELECTABLE_TRACKS]);
 
-    const nextTrackIds = networkGraph.nodeEdges(startNodeId);
-    updateCurrentRoute({
-      startPointId: startNodeId,
-      endPointId: "",
-      trackIds: [],
-      nextPossibleTrackIds: nextTrackIds || [],
-      routeStats: { length: 0, elevGain: 0 },
-    });
-  };
+      const nextTrackIds = networkGraph.nodeEdges(startNodeId);
 
-  const onNextTrack = (nextTrackId: string) => {
-    currentRoute.trackIds.push(nextTrackId);
+      updateCurrentRoute({
+        startPointId: startNodeId,
+        endPointId: "",
+        trackIds: [],
+        nextPossibleTrackIds: nextTrackIds || [],
+        routeStats: { length: 0, elevGain: 0 },
+      });
+    },
+    [
+      changeInteractiveLayers,
+      changeLayersVisibility,
+      networkGraph,
+      updateCurrentRoute,
+    ]
+  );
 
-    currentRoute.endPointId = getEndNodeId(currentRoute, networkGraph) ?? "";
-    currentRoute.nextPossibleTrackIds = getNextPossibleTracksIds(
+  const onNextTrack = useCallback(
+    (nextTrackId: string) => {
+      changeSelectedFeatureId(undefined);
+      currentRoute.trackIds.push(nextTrackId);
+
+      currentRoute.endPointId = getEndNodeId(currentRoute, networkGraph) ?? "";
+      currentRoute.nextPossibleTrackIds = getNextPossibleTracksIds(
+        currentRoute,
+        networkGraph
+      );
+      currentRoute.routeStats.length = getLength(currentRoute, tracks);
+      currentRoute.routeStats.elevGain = getElevationGain(
+        currentRoute,
+        tracks,
+        connectionIndex
+      );
+      updateCurrentRoute(currentRoute);
+    },
+    [
+      changeSelectedFeatureId,
+      connectionIndex,
       currentRoute,
-      networkGraph
-    );
-    currentRoute.routeStats.length = getLength(currentRoute, tracks);
-    currentRoute.routeStats.elevGain = getElevationGain(
-      currentRoute,
+      networkGraph,
       tracks,
-      connectionIndex
-    );
-    updateCurrentRoute(currentRoute);
-  };
+      updateCurrentRoute,
+    ]
+  );
 
-  if (
-    isCreatingRoute &&
-    selectedFeatureId &&
-    currentRoute.startPointId !== "" &&
-    !currentRoute.trackIds.includes(selectedFeatureId) &&
-    currentRoute.startPointId !== selectedFeatureId
-  ) {
-    onNextTrack(selectedFeatureId);
-  }
+  useEffect(() => {
+    if (
+      isCreatingRoute &&
+      selectedFeatureId &&
+      currentRoute.startPointId !== "" &&
+      currentRoute.startPointId !== selectedFeatureId
+    ) {
+      onNextTrack(selectedFeatureId);
+    }
 
-  if (
-    isCreatingRoute &&
-    selectedFeatureId &&
-    currentRoute.startPointId === ""
-  ) {
-    onStartNodeId(selectedFeatureId);
-  }
+    if (
+      isCreatingRoute &&
+      selectedFeatureId &&
+      currentRoute.startPointId === ""
+    ) {
+      onStartNodeId(selectedFeatureId);
+    }
+  }, [
+    currentRoute.startPointId,
+    isCreatingRoute,
+    onNextTrack,
+    onStartNodeId,
+    selectedFeatureId,
+  ]);
 
   const button = CreateRouteButton({
     icon: CreateRouteIcon(),
@@ -197,12 +224,7 @@ const getNextPossibleTracksIds = (
 
   if (!endNodeId) return [];
 
-  const lastTrackId = route.trackIds[route.trackIds.length - 1];
-  const prevTrackId = route.trackIds[route.trackIds.length - 2];
-
-  const nextTrackIds = networkGraph
-    .nodeEdges(endNodeId)
-    ?.filter((edge) => edge !== prevTrackId && edge !== lastTrackId);
+  const nextTrackIds = networkGraph.nodeEdges(endNodeId);
 
   return nextTrackIds || [];
 };

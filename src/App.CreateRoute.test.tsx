@@ -334,7 +334,7 @@ describe("create new route", () => {
       /layer-id: animated-tracks/i
     );
 
-    expect(animatedTracksLayer).toHaveTextContent(/filter: in,id,1,2/i);
+    expect(animatedTracksLayer).toHaveTextContent(/filter: in,id,1/i);
   });
 
   it("allows selecting next track when starting point has been selected", async () => {
@@ -414,6 +414,40 @@ describe("create new route", () => {
     expect(selectableTracksLayer).not.toHaveTextContent(/filter: in,id,1/i);
   });
 
+  it("clears selected track when next track is selected", async () => {
+    const track1StartNodeId = "node0";
+    const nodesLayerId = "nodes";
+    const track1Id = "track1";
+    const selectableTracksId = "selectable-tracks";
+    const someConnectedTracks = aFeatureCollectionWith([
+      aTrackFeature({ id: "track1" }, [
+        [
+          [1, 1],
+          [2, 2],
+        ],
+      ]),
+      aTrackFeature({ id: "track2" }, [
+        [
+          [2, 2],
+          [3, 3],
+        ],
+      ]),
+    ]);
+    setFetchGlobalMock(someConnectedTracks);
+    render(<App />);
+    await forDataToBeFetched(screen, someConnectedTracks);
+
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
+    fireEvent.click(createNewRouteButton);
+    selectFeatureOnMap(track1StartNodeId, nodesLayerId);
+    selectFeatureOnMap(track1Id, selectableTracksId);
+    const selectedTrackLayer = await screen.findByText(
+      /layer-id: selected-track/i
+    );
+
+    expect(selectedTrackLayer).not.toHaveTextContent(/filter: in,id,track1/i);
+  });
+
   it("updates next track options when next track is selected", async () => {
     const track1StartNodeId = "node0";
     const nodesLayerId = "nodes";
@@ -445,7 +479,9 @@ describe("create new route", () => {
       /layer-id: selectable-tracks/i
     );
 
-    expect(selectableTracksLayer).toHaveTextContent(/filter: in,id,track2/i);
+    expect(selectableTracksLayer).toHaveTextContent(
+      /filter: in,id,track1,track2/i
+    );
   });
 
   it("displays route tracks on map", async () => {
@@ -876,14 +912,18 @@ describe("create new route", () => {
       /layer-id: animated-tracks/i
     );
 
-    expect(selectableTracksLayer).toHaveTextContent(/filter: in,idvisibility/i);
-    expect(animatedTracksLayer).toHaveTextContent(/filter: in,idvisibility/i);
+    expect(selectableTracksLayer).toHaveTextContent(/filter: in,id,track2/i);
+    expect(animatedTracksLayer).toHaveTextContent(/filter: in,id,track2/i);
 
     const undoRouteButton = screen.getByLabelText("undoRoute");
     fireEvent.click(undoRouteButton);
 
-    expect(selectableTracksLayer).toHaveTextContent(/filter: in,id,track2/i);
-    expect(animatedTracksLayer).toHaveTextContent(/filter: in,id,track2/i);
+    expect(selectableTracksLayer).toHaveTextContent(
+      /filter: in,id,track1,track2/i
+    );
+    expect(animatedTracksLayer).toHaveTextContent(
+      /filter: in,id,track1,track2/i
+    );
   });
 
   it("updates end node from route on undo last selected track", async () => {
