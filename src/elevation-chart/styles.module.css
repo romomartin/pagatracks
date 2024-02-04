@@ -12,3 +12,15 @@
   z-index: 5;
   overflow: hidden;
 }
+
+#reverseButton{
+  z-index: 6;
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  border: none;
+  background: transparent
+}
+#reverseButton:hover{
+  fill: rgba(0,0,0,.7);
+}

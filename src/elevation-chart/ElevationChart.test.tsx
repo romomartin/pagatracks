@@ -1,6 +1,7 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import { ElevationChart } from "./ElevationChart";
 import { aTrack } from "../__test_helpers__/aTrack";
+import userEvent from "@testing-library/user-event";
 
 jest.mock("highcharts-react-official", () => ({
   ...jest.requireActual("highcharts-react-official"),
@@ -37,6 +38,63 @@ describe("Elevation chart", () => {
 
     expect(elevationChart).toHaveTextContent(
       '"tooltip":{"valueSuffix":"m","headerFormat":""}}]'
+    );
+  });
+
+  it("allows reversing elevation profile of track", () => {
+    render(
+      <ElevationChart
+        selectedTrack={aTrack({ name: "selectedTrack" })}
+      ></ElevationChart>
+    );
+
+    const elevationChart = screen.getByText(/title: "selectedTrack"/i);
+
+    expect(elevationChart).toHaveTextContent(
+      '"data":[[0,0],[15.743,10],[31.486,8],[47.229,25]]'
+    );
+
+    const reverseButton = screen.getByLabelText("reverseChartButton");
+    // eslint-disable-next-line testing-library/no-unnecessary-act
+    act(() => {
+      userEvent.click(reverseButton);
+    });
+
+    expect(elevationChart).toHaveTextContent(
+      '"data":[[0,25],[15.743,8],[31.486,10],[47.229,0]]'
+    );
+  });
+
+  it("undoes reversing elevation profile of track from reverse button", () => {
+    render(
+      <ElevationChart
+        selectedTrack={aTrack({ name: "selectedTrack" })}
+      ></ElevationChart>
+    );
+
+    const elevationChart = screen.getByText(/title: "selectedTrack"/i);
+
+    expect(elevationChart).toHaveTextContent(
+      '"data":[[0,0],[15.743,10],[31.486,8],[47.229,25]]'
+    );
+
+    const reverseButton = screen.getByLabelText("reverseChartButton");
+    // eslint-disable-next-line testing-library/no-unnecessary-act
+    act(() => {
+      userEvent.click(reverseButton);
+    });
+
+    expect(elevationChart).toHaveTextContent(
+      '"data":[[0,25],[15.743,8],[31.486,10],[47.229,0]]'
+    );
+
+    // eslint-disable-next-line testing-library/no-unnecessary-act
+    act(() => {
+      userEvent.click(reverseButton);
+    });
+
+    expect(elevationChart).toHaveTextContent(
+      '"data":[[0,0],[15.743,10],[31.486,8],[47.229,25]]'
     );
   });
 });
