@@ -13,10 +13,22 @@ type Props = {
   selectedTrack: Track | undefined;
 };
 
+type AdditionalData = {
+  length: number;
+  elevationGain: number;
+};
+
+const nullAdditionalData = {
+  length: 0,
+  elevationGain: 0,
+};
+
 export const ElevationChart: FunctionComponent<Props> = ({
   selectedTrack,
 }: Props) => {
   const [chartOptions, setChartOptions] = useState<Highcharts.Options>({});
+  const [additionalData, setAdditionalData] =
+    useState<AdditionalData>(nullAdditionalData);
   const [isReversed, setIsReversed] = useState<boolean>(false);
 
   useEffect(() => {
@@ -27,6 +39,11 @@ export const ElevationChart: FunctionComponent<Props> = ({
     const chartGeometry = isReversed
       ? reverseTrackGeometry(copiedGeometry)
       : copiedGeometry;
+
+    setAdditionalData({
+      length: metersToKm(getMultilineStringLength(chartGeometry)),
+      elevationGain: 0,
+    });
 
     setChartOptions(
       buildChartOptions(
@@ -42,13 +59,16 @@ export const ElevationChart: FunctionComponent<Props> = ({
 
   return (
     <div className={style.container} aria-label="elevation-chart">
-      <button
-        id={style.reverseButton}
-        aria-label="reverseChartButton"
-        onClick={() => reverseChart()}
-      >
-        <ReverseLogo></ReverseLogo>
-      </button>
+      <div className={style.specs} aria-label="additionalData">
+        {roundToOneDecimal(additionalData.length)}km +xxxxm
+        <button
+          id={style.reverseButton}
+          aria-label="reverseChartButton"
+          onClick={() => reverseChart()}
+        >
+          <ReverseLogo></ReverseLogo>
+        </button>
+      </div>
       <HighchartsReact
         updateArgs={[true, true, true]}
         allowChartUpdate={true}
@@ -101,6 +121,26 @@ const elevationDataFrom = (geometry: MultiLineString): number[][] => {
   return elevationData;
 };
 
+const getMultilineStringLength = (multilineString: MultiLineString): number => {
+  const firstPosition = multilineString.coordinates[0][0];
+  let previousPosition = firstPosition;
+
+  const length = multilineString.coordinates[0].reduce(
+    (totalLength, position) => {
+      totalLength += getDistance(
+        positionToGeolibInputCoordinates(previousPosition),
+        positionToGeolibInputCoordinates(position)
+      );
+      previousPosition = position;
+
+      return totalLength;
+    },
+    0
+  );
+
+  return length;
+};
+
 const positionToGeolibInputCoordinates = (
   position: Position
 ): GeolibInputCoordinates => {
@@ -130,4 +170,8 @@ const reverseTrackGeometry = (geometry: MultiLineString): MultiLineString => {
   });
 
   return { type: "MultiLineString", coordinates };
+};
+
+const roundToOneDecimal = (number: number): number => {
+  return Math.round(number * 10) / 10;
 };

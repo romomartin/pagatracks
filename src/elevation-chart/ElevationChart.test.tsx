@@ -27,6 +27,18 @@ describe("Elevation chart", () => {
     );
   });
 
+  it("shows total distance of track", () => {
+    render(
+      <ElevationChart
+        selectedTrack={aTrack({ name: "selectedTrack" })}
+      ></ElevationChart>
+    );
+
+    const additionalData = screen.getByLabelText("additionalData");
+
+    expect(additionalData).toHaveTextContent("47.2km");
+  });
+
   it("sets correct styles for series tooltip", () => {
     render(
       <ElevationChart

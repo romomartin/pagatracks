@@ -219,10 +219,16 @@ const getTrackLength = (trackId: string, tracks: TracksById): number => {
   const track = tracks[trackId];
   const trackGeometry = track.geometry as MultiLineString;
 
-  const firstPosition = trackGeometry.coordinates[0][0];
+  const length = getMultilineStringLength(trackGeometry);
+
+  return metersToKm(length);
+};
+
+const getMultilineStringLength = (multilineString: MultiLineString): number => {
+  const firstPosition = multilineString.coordinates[0][0];
   let previousPosition = firstPosition;
 
-  const length = trackGeometry.coordinates[0].reduce(
+  const length = multilineString.coordinates[0].reduce(
     (totalLength, position) => {
       totalLength += getDistance(
         positionToGeolibInputCoordinates(previousPosition),
@@ -235,7 +241,7 @@ const getTrackLength = (trackId: string, tracks: TracksById): number => {
     0
   );
 
-  return metersToKm(length);
+  return length;
 };
 
 const positionToGeolibInputCoordinates = (

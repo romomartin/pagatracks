@@ -33,7 +33,7 @@ export const CreateRoutePanel = ({
       <h2>
         Your route{" "}
         <span className={style.text1}>
-          {roundToOneDecimal(route.routeStats.length)}km +1000m
+          {roundToOneDecimal(route.routeStats.length)}km +xxxxm
         </span>
       </h2>
       <div className={style.buttons}>
