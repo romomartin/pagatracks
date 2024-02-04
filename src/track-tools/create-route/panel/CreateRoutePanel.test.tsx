@@ -89,4 +89,25 @@ describe("create route panel", () => {
 
     expect(deleteRouteHint).toBeDefined();
   });
+
+  it("shows route stats", async () => {
+    const route: Route = {
+      ...nullRoute,
+      startPointId: "aPointId",
+      routeStats: { length: 12.3, elevGain: 1234.8 },
+    };
+    render(
+      <CreateRoutePanel
+        isVisible={true}
+        route={route}
+        deleteRoute={() => {}}
+        undoRoute={() => {}}
+      />
+    );
+
+    const renderedPanel = screen.getByLabelText("createRoutePanel");
+
+    expect(renderedPanel).toHaveTextContent("12.3km");
+    expect(renderedPanel).toHaveTextContent("+1235m");
+  });
 });

@@ -24,6 +24,7 @@ export type Route = {
 
 type RouteStats = {
   length: number;
+  elevGain: number;
 };
 
 export const nullRoute: Route = {
@@ -31,7 +32,7 @@ export const nullRoute: Route = {
   endPointId: "",
   trackIds: [],
   nextPossibleTrackIds: [],
-  routeStats: { length: 0 },
+  routeStats: { length: 0, elevGain: 0 },
 };
 
 export const CreateRoute = ({
@@ -126,7 +127,7 @@ export const CreateRoute = ({
       endPointId: "",
       trackIds: [],
       nextPossibleTrackIds: nextTrackIds || [],
-      routeStats: { length: 0 },
+      routeStats: { length: 0, elevGain: 0 },
     });
   };
 
