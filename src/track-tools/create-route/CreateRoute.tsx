@@ -86,6 +86,7 @@ export const CreateRoute = ({
     changeInteractiveLayers([TrackLayerIds.SELECTABLE_TRACKS]);
     changeSelectedFeatureId(undefined);
     updateCurrentRoute(nullRoute);
+    setIsCreatingRoute(false);
   };
 
   const deleteRoute = (): void => {
