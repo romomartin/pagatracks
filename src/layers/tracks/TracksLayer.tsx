@@ -78,7 +78,9 @@ export const TracksLayer = ({
         <Layer
           id={TrackLayerIds.ROUTE_TRACKS}
           {...routeTracksStyle}
-          filter={filterTracksById(currentRoute.trackIds)}
+          filter={filterTracksById(
+            currentRoute.tracks.map((track) => track.id)
+          )}
         />
       </Source>
     </>
@@ -89,7 +91,7 @@ const isNullRoute = (route: Route): boolean => {
   return (
     route.nextPossibleTrackIds.length === 0 &&
     route.startPointId === "" &&
-    route.trackIds.length === 0
+    route.tracks.length === 0
   );
 };
 

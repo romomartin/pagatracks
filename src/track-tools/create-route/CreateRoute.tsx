@@ -17,7 +17,7 @@ import { getDistance } from "geolib";
 export type Route = {
   startPointId: string;
   endPointId: string;
-  trackIds: string[];
+  tracks: Track[];
   nextPossibleTrackIds: string[];
   routeStats: RouteStats;
 };
@@ -30,7 +30,7 @@ type RouteStats = {
 export const nullRoute: Route = {
   startPointId: "",
   endPointId: "",
-  trackIds: [],
+  tracks: [],
   nextPossibleTrackIds: [],
   routeStats: { length: 0, elevGain: 0 },
 };
@@ -97,21 +97,20 @@ export const CreateRoute = ({
 
   const undoRoute = (): void => {
     changeSelectedFeatureId(undefined);
-    if (currentRoute.trackIds.length === 0) {
+    if (currentRoute.tracks.length === 0) {
       deleteRoute();
       return;
     }
 
-    currentRoute.trackIds.splice(-1, 1);
+    currentRoute.tracks.splice(-1, 1);
 
     currentRoute.nextPossibleTrackIds =
-      currentRoute.trackIds.length === 0
+      currentRoute.tracks.length === 0
         ? networkGraph.nodeEdges(currentRoute.startPointId) || []
         : getNextPossibleTracksIds(currentRoute, networkGraph);
     currentRoute.routeStats.length = getLength(currentRoute, tracks);
     currentRoute.routeStats.elevGain = getElevationGain(
       currentRoute,
-      tracks,
       connectionIndex
     );
     currentRoute.endPointId = getEndNodeId(currentRoute, networkGraph) || "";
@@ -133,7 +132,7 @@ export const CreateRoute = ({
       updateCurrentRoute({
         startPointId: startNodeId,
         endPointId: "",
-        trackIds: [],
+        tracks: [],
         nextPossibleTrackIds: nextTrackIds || [],
         routeStats: { length: 0, elevGain: 0 },
       });
@@ -149,7 +148,7 @@ export const CreateRoute = ({
   const onNextTrack = useCallback(
     (nextTrackId: string) => {
       changeSelectedFeatureId(undefined);
-      currentRoute.trackIds.push(nextTrackId);
+      currentRoute.tracks.push(tracks[nextTrackId]);
 
       currentRoute.endPointId = getEndNodeId(currentRoute, networkGraph) ?? "";
       currentRoute.nextPossibleTrackIds = getNextPossibleTracksIds(
@@ -159,7 +158,6 @@ export const CreateRoute = ({
       currentRoute.routeStats.length = getLength(currentRoute, tracks);
       currentRoute.routeStats.elevGain = getElevationGain(
         currentRoute,
-        tracks,
         connectionIndex
       );
       updateCurrentRoute(currentRoute);
@@ -231,7 +229,8 @@ const getNextPossibleTracksIds = (
 };
 
 const getEndNodeId = (route: Route, networkGraph: NetworkGraph): string => {
-  const endNodeId = route.trackIds.reduce((endNodeId, trackId) => {
+  const endNodeId = route.tracks.reduce((endNodeId, track) => {
+    const trackId = track.id;
     endNodeId =
       endNodeId === networkGraph.getEdge(trackId)?.v
         ? networkGraph.getEdge(trackId)?.w
@@ -243,14 +242,13 @@ const getEndNodeId = (route: Route, networkGraph: NetworkGraph): string => {
 };
 
 const getLength = (route: Route, tracks: TracksById): number => {
-  return route.trackIds.reduce((length, trackId) => {
-    length += getTrackLength(trackId, tracks);
+  return route.tracks.reduce((length, track) => {
+    length += getTrackLength(track);
     return length;
   }, 0);
 };
 
-const getTrackLength = (trackId: string, tracks: TracksById): number => {
-  const track = tracks[trackId];
+const getTrackLength = (track: Track): number => {
   const trackGeometry = track.geometry as MultiLineString;
 
   const length = getMultilineStringLength(trackGeometry);
@@ -260,12 +258,12 @@ const getTrackLength = (trackId: string, tracks: TracksById): number => {
 
 const getElevationGain = (
   route: Route,
-  tracks: TracksById,
   connectionIndex: ConnectionIndex
 ): number => {
   let elevationGain = 0;
 
-  route.trackIds.reduce((prevEndPointId, trackId) => {
+  route.tracks.reduce((prevEndPointId, track) => {
+    const trackId = track.id;
     const trackConnections = connectionIndex[trackId];
 
     let isReversed = false;
@@ -275,7 +273,7 @@ const getElevationGain = (
       nextEndPointId = trackConnections.startNodeId;
     }
 
-    elevationGain += getTrackElevationGain(tracks[trackId], isReversed);
+    elevationGain += getTrackElevationGain(track, isReversed);
 
     return nextEndPointId;
   }, route.startPointId);

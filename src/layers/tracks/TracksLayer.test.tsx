@@ -241,7 +241,7 @@ describe("Tracks layer", () => {
         currentRoute={{
           startPointId: "node0",
           endPointId: "",
-          trackIds: [],
+          tracks: [],
           nextPossibleTrackIds: [aTrackId],
           routeStats: { length: 0, elevGain: 0 },
         }}
@@ -285,7 +285,7 @@ describe("Tracks layer", () => {
         currentRoute={{
           startPointId: "node0",
           endPointId: "",
-          trackIds: [],
+          tracks: [],
           nextPossibleTrackIds: [aTrackId, otherTrackId],
           routeStats: { length: 0, elevGain: 0 },
         }}
@@ -319,7 +319,7 @@ describe("Tracks layer", () => {
         currentRoute={{
           startPointId: "node0",
           endPointId: "",
-          trackIds: [],
+          tracks: [],
           nextPossibleTrackIds: [aTrackId, otherTrackId],
           routeStats: { length: 0, elevGain: 0 },
         }}
