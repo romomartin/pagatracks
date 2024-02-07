@@ -101,11 +101,16 @@ function App() {
         selectedFeatureId={selectedFeatureId || ""}
         currentRoute={currentRoute}
       ></MapCanvas>
-      {selectedFeatureId && tracks[selectedFeatureId] && (
+      {(selectedFeatureId && tracks[selectedFeatureId]) ||
+      currentRoute.tracks.length > 0 ? (
         <ElevationChart
-          selectedTrack={tracks[selectedFeatureId]}
-        ></ElevationChart>
-      )}
+          selectedTrack={
+            selectedFeatureId ? tracks[selectedFeatureId] : undefined
+          }
+          currentRoute={currentRoute}
+          connectionIndex={connections.connectionIndex}
+        />
+      ) : null}
       <SideMenu trackTools={[createRoute]}></SideMenu>
     </>
   );

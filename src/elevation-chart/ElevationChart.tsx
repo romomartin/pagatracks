@@ -1,16 +1,20 @@
 import style from "./styles.module.css";
 import { FunctionComponent, useEffect, useState } from "react";
 import HighchartsReact from "highcharts-react-official";
-import Highcharts from "highcharts";
+import Highcharts, { SeriesOptionsType } from "highcharts";
 import { Track } from "../tracks/track";
 import { MultiLineString, Position } from "geojson";
 import { getDistance } from "geolib";
 import { GeolibInputCoordinates } from "geolib/es/types";
 import { texts } from "../texts";
 import { ReactComponent as ReverseLogo } from "./reverse-icon.svg";
+import { Route } from "../track-tools/create-route/CreateRoute";
+import { ConnectionIndex } from "../network/build-connections";
 
 type Props = {
   selectedTrack: Track | undefined;
+  currentRoute: Route;
+  connectionIndex: ConnectionIndex;
 };
 
 type AdditionalData = {
@@ -25,38 +29,26 @@ const nullAdditionalData = {
 
 export const ElevationChart: FunctionComponent<Props> = ({
   selectedTrack,
+  currentRoute,
+  connectionIndex,
 }: Props) => {
   const [chartOptions, setChartOptions] = useState<Highcharts.Options>({});
   const [additionalData, setAdditionalData] =
     useState<AdditionalData>(nullAdditionalData);
-  const [isReversed, setIsReversed] = useState<boolean>(false);
+  const [isChartReversed, setIsChartReversed] = useState<boolean>(false);
 
   useEffect(() => {
-    const copiedGeometry = copyGeometry(
-      selectedTrack?.geometry as MultiLineString
-    );
+    const { additionalData, chartOptions } =
+      currentRoute.tracks.length === 0
+        ? getDataForTrack(selectedTrack, isChartReversed)
+        : getDataForRoute(currentRoute, connectionIndex);
 
-    const chartGeometry = isReversed
-      ? reverseTrackGeometry(copiedGeometry)
-      : copiedGeometry;
-
-    setAdditionalData({
-      length: metersToKm(getMultilineStringLength(chartGeometry)),
-      elevationGain: selectedTrack
-        ? getTrackElevationGain(selectedTrack, isReversed)
-        : 0,
-    });
-
-    setChartOptions(
-      buildChartOptions(
-        elevationDataFrom(chartGeometry),
-        selectedTrack?.properties.name
-      )
-    );
-  }, [selectedTrack, isReversed]);
+    setAdditionalData(additionalData);
+    setChartOptions(chartOptions);
+  }, [selectedTrack, currentRoute, isChartReversed, connectionIndex]);
 
   const reverseChart = () => {
-    setIsReversed(!isReversed);
+    setIsChartReversed(!isChartReversed);
   };
 
   return (
@@ -64,13 +56,15 @@ export const ElevationChart: FunctionComponent<Props> = ({
       <div className={style.specs} aria-label="additionalData">
         {roundToOneDecimal(additionalData.length)}km +
         {Math.round(additionalData.elevationGain)}m
-        <button
-          id={style.reverseButton}
-          aria-label="reverseChartButton"
-          onClick={() => reverseChart()}
-        >
-          <ReverseLogo></ReverseLogo>
-        </button>
+        {currentRoute.tracks.length === 0 && (
+          <button
+            id={style.reverseButton}
+            aria-label="reverseChartButton"
+            onClick={() => reverseChart()}
+          >
+            <ReverseLogo></ReverseLogo>
+          </button>
+        )}
       </div>
       <HighchartsReact
         updateArgs={[true, true, true]}
@@ -82,23 +76,99 @@ export const ElevationChart: FunctionComponent<Props> = ({
   );
 };
 
+const getDataForRoute = (
+  route: Route,
+  connectionIndex: ConnectionIndex
+): { additionalData: AdditionalData; chartOptions: Highcharts.Options } => {
+  const additionalData = {
+    length: route.routeStats.length,
+    elevationGain: route.routeStats.elevGain,
+  };
+
+  let elevationData: number[][][] = [];
+
+  route.tracks.reduce(
+    (acc, track) => {
+      const trackConnections = connectionIndex[track.properties.name];
+      const geometryCopy = copyGeometry(track.geometry as MultiLineString);
+
+      let isReversed = false;
+
+      if (trackConnections.startNodeId !== acc.lastNodeId) {
+        isReversed = true;
+        acc.lastNodeId = trackConnections.startNodeId;
+      } else {
+        acc.lastNodeId = trackConnections.endNodeId;
+      }
+
+      const chartGeometry = isReversed
+        ? reverseTrackGeometry(geometryCopy)
+        : geometryCopy;
+
+      elevationData.push(
+        elevationDataFrom(chartGeometry, acc.distanceFromStart)
+      );
+      acc.distanceFromStart += getTrackLengthMeters(track);
+
+      return acc;
+    },
+    { lastNodeId: route.startPointId, distanceFromStart: 0 }
+  );
+
+  const chartOptions = buildChartOptions(elevationData, "Your route");
+
+  return {
+    additionalData,
+    chartOptions,
+  };
+};
+
+const getDataForTrack = (
+  track: Track | undefined,
+  isReversed: boolean
+): { additionalData: AdditionalData; chartOptions: Highcharts.Options } => {
+  if (!track) return { additionalData: nullAdditionalData, chartOptions: {} };
+
+  const geometryCopy = copyGeometry(track.geometry as MultiLineString);
+
+  const chartGeometry = isReversed
+    ? reverseTrackGeometry(geometryCopy)
+    : geometryCopy;
+
+  const additionalData = {
+    length: metersToKm(getMultilineStringLength(chartGeometry)),
+    elevationGain: track ? getTrackElevationGain(track, isReversed) : 0,
+  };
+
+  const chartOptions = buildChartOptions(
+    [elevationDataFrom(chartGeometry)],
+    track.properties.name
+  );
+
+  return {
+    additionalData,
+    chartOptions,
+  };
+};
+
 const buildChartOptions = (
-  elevationData: number[][],
+  elevationData: number[][][],
   title: string = ""
 ): Highcharts.Options => {
+  const series: SeriesOptionsType[] = elevationData.map((data) => {
+    return {
+      type: "line",
+      name: texts.elevation,
+      data: data,
+      tooltip: {
+        valueSuffix: "m",
+        headerFormat: "",
+      },
+    };
+  });
   return {
     title: { text: title },
-    series: [
-      {
-        type: "line",
-        name: texts.elevation,
-        data: elevationData,
-        tooltip: {
-          valueSuffix: "m",
-          headerFormat: "",
-        },
-      },
-    ],
+    series,
     chart: {
       height: "180px",
       backgroundColor: "transparent",
@@ -109,17 +179,20 @@ const buildChartOptions = (
   };
 };
 
-const elevationDataFrom = (geometry: MultiLineString): number[][] => {
+const elevationDataFrom = (
+  geometry: MultiLineString,
+  distanceOffset: number = 0
+): number[][] => {
   const firstPosition = geometry.coordinates[0][0];
   let previousPosition = firstPosition;
-  let distance = 0;
+
   const elevationData = geometry.coordinates[0].map((position) => {
-    distance += getDistance(
+    distanceOffset += getDistance(
       positionToGeolibInputCoordinates(previousPosition),
       positionToGeolibInputCoordinates(position)
     );
     previousPosition = position;
-    return [metersToKm(distance), position[2]];
+    return [metersToKm(distanceOffset), position[2]];
   });
   return elevationData;
 };
@@ -198,6 +271,14 @@ const reverseTrackGeometry = (geometry: MultiLineString): MultiLineString => {
   });
 
   return { type: "MultiLineString", coordinates };
+};
+
+const getTrackLengthMeters = (track: Track): number => {
+  const trackGeometry = track.geometry as MultiLineString;
+
+  const length = getMultilineStringLength(trackGeometry);
+
+  return length;
 };
 
 const roundToOneDecimal = (number: number): number => {

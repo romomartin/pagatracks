@@ -2,6 +2,7 @@ import { act, render, screen } from "@testing-library/react";
 import { ElevationChart } from "./ElevationChart";
 import { aTrack } from "../__test_helpers__/aTrack";
 import userEvent from "@testing-library/user-event";
+import { nullRoute } from "../track-tools/create-route/CreateRoute";
 
 jest.mock("highcharts-react-official", () => ({
   ...jest.requireActual("highcharts-react-official"),
@@ -11,67 +12,12 @@ jest.mock("highcharts-react-official", () => ({
 }));
 
 describe("Elevation chart", () => {
-  it("shows elevation profile of track", () => {
-    render(
-      <ElevationChart
-        selectedTrack={aTrack({ name: "selectedTrack" })}
-      ></ElevationChart>
-    );
-
-    const elevationChart = screen.getByText(/title: "selectedTrack"/i);
-
-    expect(elevationChart).toHaveTextContent('"type":"line"');
-    expect(elevationChart).toHaveTextContent('"name":"elevation"');
-    expect(elevationChart).toHaveTextContent(
-      '"data":[[0,0],[15.743,10],[31.486,8],[47.229,25]]'
-    );
-  });
-
-  it("shows total distance of track", () => {
-    render(
-      <ElevationChart
-        selectedTrack={aTrack({ name: "selectedTrack" })}
-      ></ElevationChart>
-    );
-
-    const additionalData = screen.getByLabelText("additionalData");
-
-    expect(additionalData).toHaveTextContent("47.2km");
-  });
-
-  it("shows elevation gain of track", () => {
-    render(
-      <ElevationChart
-        selectedTrack={aTrack({ name: "selectedTrack" })}
-      ></ElevationChart>
-    );
-
-    const additionalData = screen.getByLabelText("additionalData");
-
-    expect(additionalData).toHaveTextContent("+27m");
-  });
-
-  it("shows elevation gain of track when reversing series", () => {
-    render(
-      <ElevationChart
-        selectedTrack={aTrack({ name: "selectedTrack" })}
-      ></ElevationChart>
-    );
-    const additionalData = screen.getByLabelText("additionalData");
-    const reverseButton = screen.getByLabelText("reverseChartButton");
-
-    // eslint-disable-next-line testing-library/no-unnecessary-act
-    act(() => {
-      userEvent.click(reverseButton);
-    });
-
-    expect(additionalData).toHaveTextContent("+2m");
-  });
-
   it("sets correct styles for series tooltip", () => {
     render(
       <ElevationChart
         selectedTrack={aTrack({ name: "selectedTrack" })}
+        currentRoute={nullRoute}
+        connectionIndex={{}}
       ></ElevationChart>
     );
 
@@ -82,60 +28,236 @@ describe("Elevation chart", () => {
     );
   });
 
-  it("allows reversing elevation profile of track", () => {
-    render(
-      <ElevationChart
-        selectedTrack={aTrack({ name: "selectedTrack" })}
-      ></ElevationChart>
-    );
+  describe("with no current route", () => {
+    it("shows elevation profile of track", () => {
+      render(
+        <ElevationChart
+          selectedTrack={aTrack({ name: "selectedTrack" })}
+          currentRoute={nullRoute}
+          connectionIndex={{}}
+        ></ElevationChart>
+      );
 
-    const elevationChart = screen.getByText(/title: "selectedTrack"/i);
+      const elevationChart = screen.getByText(/title: "selectedTrack"/i);
 
-    expect(elevationChart).toHaveTextContent(
-      '"data":[[0,0],[15.743,10],[31.486,8],[47.229,25]]'
-    );
-
-    const reverseButton = screen.getByLabelText("reverseChartButton");
-    // eslint-disable-next-line testing-library/no-unnecessary-act
-    act(() => {
-      userEvent.click(reverseButton);
+      expect(elevationChart).toHaveTextContent('"type":"line"');
+      expect(elevationChart).toHaveTextContent('"name":"elevation"');
+      expect(elevationChart).toHaveTextContent(
+        '"data":[[0,0],[15.743,10],[31.486,8],[47.229,25]]'
+      );
     });
 
-    expect(elevationChart).toHaveTextContent(
-      '"data":[[0,25],[15.743,8],[31.486,10],[47.229,0]]'
-    );
+    it("shows total distance of track", () => {
+      render(
+        <ElevationChart
+          selectedTrack={aTrack({ name: "selectedTrack" })}
+          currentRoute={nullRoute}
+          connectionIndex={{}}
+        ></ElevationChart>
+      );
+
+      const additionalData = screen.getByLabelText("additionalData");
+
+      expect(additionalData).toHaveTextContent("47.2km");
+    });
+
+    it("shows elevation gain of track", () => {
+      render(
+        <ElevationChart
+          selectedTrack={aTrack({ name: "selectedTrack" })}
+          currentRoute={nullRoute}
+          connectionIndex={{}}
+        ></ElevationChart>
+      );
+
+      const additionalData = screen.getByLabelText("additionalData");
+
+      expect(additionalData).toHaveTextContent("+27m");
+    });
+
+    it("shows elevation gain of track when reversing series", () => {
+      render(
+        <ElevationChart
+          selectedTrack={aTrack({ name: "selectedTrack" })}
+          currentRoute={nullRoute}
+          connectionIndex={{}}
+        ></ElevationChart>
+      );
+      const additionalData = screen.getByLabelText("additionalData");
+      const reverseButton = screen.getByLabelText("reverseChartButton");
+
+      // eslint-disable-next-line testing-library/no-unnecessary-act
+      act(() => {
+        userEvent.click(reverseButton);
+      });
+
+      expect(additionalData).toHaveTextContent("+2m");
+    });
+
+    it("allows reversing elevation profile of track", () => {
+      render(
+        <ElevationChart
+          selectedTrack={aTrack({ name: "selectedTrack" })}
+          currentRoute={nullRoute}
+          connectionIndex={{}}
+        ></ElevationChart>
+      );
+
+      const elevationChart = screen.getByText(/title: "selectedTrack"/i);
+
+      expect(elevationChart).toHaveTextContent(
+        '"data":[[0,0],[15.743,10],[31.486,8],[47.229,25]]'
+      );
+
+      const reverseButton = screen.getByLabelText("reverseChartButton");
+      // eslint-disable-next-line testing-library/no-unnecessary-act
+      act(() => {
+        userEvent.click(reverseButton);
+      });
+
+      expect(elevationChart).toHaveTextContent(
+        '"data":[[0,25],[15.743,8],[31.486,10],[47.229,0]]'
+      );
+    });
+
+    it("undoes reversing elevation profile of track from reverse button", () => {
+      render(
+        <ElevationChart
+          selectedTrack={aTrack({ name: "selectedTrack" })}
+          currentRoute={nullRoute}
+          connectionIndex={{}}
+        ></ElevationChart>
+      );
+
+      const elevationChart = screen.getByText(/title: "selectedTrack"/i);
+
+      expect(elevationChart).toHaveTextContent(
+        '"data":[[0,0],[15.743,10],[31.486,8],[47.229,25]]'
+      );
+
+      const reverseButton = screen.getByLabelText("reverseChartButton");
+      // eslint-disable-next-line testing-library/no-unnecessary-act
+      act(() => {
+        userEvent.click(reverseButton);
+      });
+
+      expect(elevationChart).toHaveTextContent(
+        '"data":[[0,25],[15.743,8],[31.486,10],[47.229,0]]'
+      );
+
+      // eslint-disable-next-line testing-library/no-unnecessary-act
+      act(() => {
+        userEvent.click(reverseButton);
+      });
+
+      expect(elevationChart).toHaveTextContent(
+        '"data":[[0,0],[15.743,10],[31.486,8],[47.229,25]]'
+      );
+    });
   });
 
-  it("undoes reversing elevation profile of track from reverse button", () => {
-    render(
-      <ElevationChart
-        selectedTrack={aTrack({ name: "selectedTrack" })}
-      ></ElevationChart>
-    );
+  describe("with current route", () => {
+    it("shows elevation profile of route", () => {
+      render(
+        <ElevationChart
+          selectedTrack={undefined}
+          currentRoute={aRoute}
+          connectionIndex={{
+            firstTrack: { startNodeId: "node0", endNodeId: "node1" },
+            secondTrack: { startNodeId: "node1", endNodeId: "node2" },
+          }}
+        ></ElevationChart>
+      );
 
-    const elevationChart = screen.getByText(/title: "selectedTrack"/i);
+      const elevationChart = screen.getByText(/title: "Your route"/i);
 
-    expect(elevationChart).toHaveTextContent(
-      '"data":[[0,0],[15.743,10],[31.486,8],[47.229,25]]'
-    );
-
-    const reverseButton = screen.getByLabelText("reverseChartButton");
-    // eslint-disable-next-line testing-library/no-unnecessary-act
-    act(() => {
-      userEvent.click(reverseButton);
+      expect(elevationChart).toHaveTextContent('"type":"line"');
+      expect(elevationChart).toHaveTextContent('"name":"elevation"');
+      expect(elevationChart).toHaveTextContent(
+        /"data":\[\[0,0\],\[157.426,1\]\].*"data":\[\[157.426,1\],\[314.828,2\]\]/i
+      );
     });
 
-    expect(elevationChart).toHaveTextContent(
-      '"data":[[0,25],[15.743,8],[31.486,10],[47.229,0]]'
-    );
+    it("shows elevation profile of route in correct order", () => {
+      render(
+        <ElevationChart
+          selectedTrack={undefined}
+          currentRoute={aReversedRoute}
+          connectionIndex={{
+            firstTrack: { startNodeId: "node0", endNodeId: "node1" },
+            secondTrack: { startNodeId: "node1", endNodeId: "node2" },
+          }}
+        ></ElevationChart>
+      );
 
-    // eslint-disable-next-line testing-library/no-unnecessary-act
-    act(() => {
-      userEvent.click(reverseButton);
+      const elevationChart = screen.getByText(/title: "Your route"/i);
+
+      expect(elevationChart).toHaveTextContent('"type":"line"');
+      expect(elevationChart).toHaveTextContent('"name":"elevation"');
+      expect(elevationChart).toHaveTextContent(
+        /"data":\[\[0,2\],\[157.402,1\]\].*"data":\[\[157.402,1\],\[314.828,0\]\]/i
+      );
     });
 
-    expect(elevationChart).toHaveTextContent(
-      '"data":[[0,0],[15.743,10],[31.486,8],[47.229,25]]'
-    );
+    it("does not show reversing button", () => {
+      render(
+        <ElevationChart
+          selectedTrack={undefined}
+          currentRoute={aRoute}
+          connectionIndex={{
+            firstTrack: { startNodeId: "node0", endNodeId: "node1" },
+            secondTrack: { startNodeId: "node1", endNodeId: "node2" },
+          }}
+        ></ElevationChart>
+      );
+
+      const reverseButton = screen.queryByLabelText("reverseChartButton");
+
+      expect(reverseButton).not.toBeInTheDocument();
+    });
   });
 });
+
+const firstTrack = aTrack({
+  id: "firstTrack",
+  name: "firstTrack",
+  coordinates: [
+    [
+      [0, 0, 0],
+      [1, 1, 1],
+    ],
+  ],
+});
+
+const secondTrack = aTrack({
+  id: "secondTrack",
+  name: "secondTrack",
+  coordinates: [
+    [
+      [1, 1, 1],
+      [2, 2, 2],
+    ],
+  ],
+});
+
+const aRoute = {
+  startPointId: "node0",
+  endPointId: "node2",
+  tracks: [firstTrack, secondTrack],
+  nextPossibleTrackIds: [],
+  routeStats: {
+    length: 125,
+    elevGain: 2,
+  },
+};
+
+const aReversedRoute = {
+  startPointId: "node2",
+  endPointId: "node0",
+  tracks: [secondTrack, firstTrack],
+  nextPossibleTrackIds: [],
+  routeStats: {
+    length: 125,
+    elevGain: 2,
+  },
+};

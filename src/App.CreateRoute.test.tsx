@@ -420,13 +420,13 @@ describe("create new route", () => {
     const track1Id = "track1";
     const selectableTracksId = "selectable-tracks";
     const someConnectedTracks = aFeatureCollectionWith([
-      aTrackFeature({ id: "track1" }, [
+      aTrackFeature({ id: "track1", name: "track1" }, [
         [
           [1, 1],
           [2, 2],
         ],
       ]),
-      aTrackFeature({ id: "track2" }, [
+      aTrackFeature({ id: "track2", name: "track2" }, [
         [
           [2, 2],
           [3, 3],
@@ -454,13 +454,13 @@ describe("create new route", () => {
     const track1Id = "track1";
     const selectableTracksId = "selectable-tracks";
     const someConnectedTracks = aFeatureCollectionWith([
-      aTrackFeature({ id: "track1" }, [
+      aTrackFeature({ id: "track1", name: "track1" }, [
         [
           [1, 1],
           [2, 2],
         ],
       ]),
-      aTrackFeature({ id: "track2" }, [
+      aTrackFeature({ id: "track2", name: "track2" }, [
         [
           [2, 2],
           [3, 3],
@@ -490,13 +490,13 @@ describe("create new route", () => {
     const track1Id = "track1";
     const selectableTracksId = "selectable-tracks";
     const someConnectedTracks = aFeatureCollectionWith([
-      aTrackFeature({ id: "track1" }, [
+      aTrackFeature({ id: "track1", name: "track1" }, [
         [
           [1, 1],
           [2, 2],
         ],
       ]),
-      aTrackFeature({ id: "track2" }, [
+      aTrackFeature({ id: "track2", name: "track2" }, [
         [
           [2, 2],
           [3, 3],
@@ -516,13 +516,46 @@ describe("create new route", () => {
     expect(routeTracksLayer).toHaveTextContent(/filter: in,id,track1/i);
   });
 
+  it("shows elevation chart of route when route has some tracks", async () => {
+    const track1StartNodeId = "node0";
+    const nodesLayerId = "nodes";
+    const track1Id = "track1";
+    const selectableTracksId = "selectable-tracks";
+    const someConnectedTracks = aFeatureCollectionWith([
+      aTrackFeature({ id: "track1", name: "track1" }, [
+        [
+          [1, 1],
+          [2, 2],
+        ],
+      ]),
+      aTrackFeature({ id: "track2", name: "track2" }, [
+        [
+          [2, 2],
+          [3, 3],
+        ],
+      ]),
+    ]);
+    setFetchGlobalMock(someConnectedTracks);
+    render(<App />);
+    await forDataToBeFetched(screen, someConnectedTracks);
+
+    const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
+    fireEvent.click(createNewRouteButton);
+    selectFeatureOnMap(track1StartNodeId, nodesLayerId);
+    selectFeatureOnMap(track1Id, selectableTracksId);
+
+    const elevationChart = screen.getByLabelText("elevation-chart");
+
+    expect(elevationChart).toHaveTextContent(/Your route/i);
+  });
+
   it("displays route end node on map", async () => {
     const track1StartNodeId = "node0";
     const nodesLayerId = "nodes";
     const track1Id = "track1";
     const selectableTracksId = "selectable-tracks";
     const someTracks = aFeatureCollectionWith([
-      aTrackFeature({ id: "track1" }, [
+      aTrackFeature({ id: "track1", name: "track1" }, [
         [
           [1, 1],
           [2, 2],
@@ -588,13 +621,13 @@ describe("create new route", () => {
     const track1Id = "track1";
     const selectableTracksId = "selectable-tracks";
     const someConnectedTracks = aFeatureCollectionWith([
-      aTrackFeature({ id: "track1" }, [
+      aTrackFeature({ id: "track1", name: "track1" }, [
         [
           [1, 1],
           [2, 2],
         ],
       ]),
-      aTrackFeature({ id: "track2" }, [
+      aTrackFeature({ id: "track2", name: "track2" }, [
         [
           [2, 2],
           [3, 3],
@@ -622,13 +655,13 @@ describe("create new route", () => {
     const track1Id = "track1";
     const selectableTracksId = "selectable-tracks";
     const someConnectedTracks = aFeatureCollectionWith([
-      aTrackFeature({ id: "track1" }, [
+      aTrackFeature({ id: "track1", name: "track1" }, [
         [
           [1, 1],
           [2, 2],
         ],
       ]),
-      aTrackFeature({ id: "track2" }, [
+      aTrackFeature({ id: "track2", name: "track2" }, [
         [
           [2, 2],
           [3, 3],
@@ -658,13 +691,13 @@ describe("create new route", () => {
     const track1Id = "track1";
     const selectableTracksId = "selectable-tracks";
     const someConnectedTracks = aFeatureCollectionWith([
-      aTrackFeature({ id: "track1" }, [
+      aTrackFeature({ id: "track1", name: "track1" }, [
         [
           [1, 1],
           [2, 2],
         ],
       ]),
-      aTrackFeature({ id: "track2" }, [
+      aTrackFeature({ id: "track2", name: "track2" }, [
         [
           [2, 2],
           [3, 3],
@@ -693,13 +726,13 @@ describe("create new route", () => {
     const track2Id = "track2";
     const selectableTracksId = "selectable-tracks";
     const someConnectedTracks = aFeatureCollectionWith([
-      aTrackFeature({ id: "track1" }, [
+      aTrackFeature({ id: "track1", name: "track1" }, [
         [
           [1, 1],
           [2, 2],
         ],
       ]),
-      aTrackFeature({ id: "track2" }, [
+      aTrackFeature({ id: "track2", name: "track2" }, [
         [
           [2, 2],
           [3, 3],
@@ -730,13 +763,13 @@ describe("create new route", () => {
     const track2Id = "track2";
     const selectableTracksId = "selectable-tracks";
     const someConnectedTracks = aFeatureCollectionWith([
-      aTrackFeature({ id: "track1" }, [
+      aTrackFeature({ id: "track1", name: "track1" }, [
         [
           [1, 1],
           [2, 2],
         ],
       ]),
-      aTrackFeature({ id: "track2" }, [
+      aTrackFeature({ id: "track2", name: "track2" }, [
         [
           [2, 2],
           [3, 3],
@@ -772,13 +805,13 @@ describe("create new route", () => {
     const track2Id = "track2";
     const selectableTracksId = "selectable-tracks";
     const someConnectedTracks = aFeatureCollectionWith([
-      aTrackFeature({ id: "track1" }, [
+      aTrackFeature({ id: "track1", name: "track1" }, [
         [
           [1, 1, 0],
           [2, 2, 3.8],
         ],
       ]),
-      aTrackFeature({ id: "track2" }, [
+      aTrackFeature({ id: "track2", name: "track2" }, [
         [
           [2, 2, 3.8],
           [3, 3, 2.5],
@@ -808,13 +841,13 @@ describe("create new route", () => {
     const track1Id = "track1";
     const selectableTracksId = "selectable-tracks";
     const someConnectedTracks = aFeatureCollectionWith([
-      aTrackFeature({ id: "track1" }, [
+      aTrackFeature({ id: "track1", name: "track1" }, [
         [
           [1, 1, 0],
           [2, 2, 3.8],
         ],
       ]),
-      aTrackFeature({ id: "track2" }, [
+      aTrackFeature({ id: "track2", name: "track2" }, [
         [
           [2, 2, 3.8],
           [3, 3, 2.5],
@@ -846,13 +879,13 @@ describe("create new route", () => {
     const track2Id = "track2";
     const selectableTracksId = "selectable-tracks";
     const someConnectedTracks = aFeatureCollectionWith([
-      aTrackFeature({ id: "track1" }, [
+      aTrackFeature({ id: "track1", name: "track1" }, [
         [
           [1, 1],
           [2, 2],
         ],
       ]),
-      aTrackFeature({ id: "track2" }, [
+      aTrackFeature({ id: "track2", name: "track2" }, [
         [
           [2, 2],
           [3, 3],
@@ -884,13 +917,13 @@ describe("create new route", () => {
     const track2Id = "track2";
     const selectableTracksId = "selectable-tracks";
     const someConnectedTracks = aFeatureCollectionWith([
-      aTrackFeature({ id: "track1" }, [
+      aTrackFeature({ id: "track1", name: "track1" }, [
         [
           [1, 1],
           [2, 2],
         ],
       ]),
-      aTrackFeature({ id: "track2" }, [
+      aTrackFeature({ id: "track2", name: "track2" }, [
         [
           [2, 2],
           [3, 3],
@@ -933,13 +966,13 @@ describe("create new route", () => {
     const track2Id = "track2";
     const selectableTracksId = "selectable-tracks";
     const someConnectedTracks = aFeatureCollectionWith([
-      aTrackFeature({ id: "track1" }, [
+      aTrackFeature({ id: "track1", name: "track1" }, [
         [
           [1, 1],
           [2, 2],
         ],
       ]),
-      aTrackFeature({ id: "track2" }, [
+      aTrackFeature({ id: "track2", name: "track2" }, [
         [
           [2, 2],
           [3, 3],

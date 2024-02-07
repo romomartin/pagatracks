@@ -122,6 +122,17 @@ describe("app", () => {
     expect(elevationChart).toHaveTextContent(/selectedTrackName/i);
   });
 
+  it("does not show elevation chart when no track is selected", async () => {
+    setFetchGlobalMock();
+
+    render(<App />);
+    await forDataToBeFetched(screen);
+
+    const elevationChart = screen.queryByLabelText("elevation-chart");
+
+    expect(elevationChart).not.toBeInTheDocument();
+  });
+
   it("shows side panel", async () => {
     render(<App />);
     await forDataToBeFetched(screen);
