@@ -7,4 +7,5 @@ export const texts = {
   selectNextTrack: "Select next track",
   selectStartingPoint: "Select starting point",
   undoRouteHint: "Undo",
+  yourRoute: "Your route",
 };

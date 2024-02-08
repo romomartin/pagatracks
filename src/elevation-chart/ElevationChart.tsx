@@ -115,7 +115,7 @@ const getDataForRoute = (
     { lastNodeId: route.startPointId, distanceFromStart: 0 }
   );
 
-  const chartOptions = buildChartOptions(elevationData, "Your route");
+  const chartOptions = buildChartOptions(elevationData, texts.yourRoute);
 
   return {
     additionalData,

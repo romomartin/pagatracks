@@ -31,7 +31,7 @@ export const CreateRoutePanel = ({
       aria-label="createRoutePanel"
     >
       <h2>
-        Your route{" "}
+        {`${texts.yourRoute} `}
         <span className={style.text1}>
           {roundToOneDecimal(route.routeStats.length)}km +
           {Math.round(route.routeStats.elevGain)}m
