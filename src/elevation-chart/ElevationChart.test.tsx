@@ -3,6 +3,7 @@ import { ElevationChart } from "./ElevationChart";
 import { aTrack } from "../__test_helpers__/aTrack";
 import userEvent from "@testing-library/user-event";
 import { nullRoute } from "../track-tools/create-route/CreateRoute";
+import { PathTypes } from "../tracks/track";
 
 jest.mock("highcharts-react-official", () => ({
   ...jest.requireActual("highcharts-react-official"),
@@ -45,6 +46,23 @@ describe("Elevation chart", () => {
       expect(elevationChart).toHaveTextContent(
         '"data":[[0,0],[15.743,10],[31.486,8],[47.229,25]]'
       );
+    });
+
+    it("shows elevation profile color matching track's path type", () => {
+      render(
+        <ElevationChart
+          selectedTrack={aTrack({
+            name: "selectedTrack",
+            path_type: PathTypes.SINGLETRACK,
+          })}
+          currentRoute={nullRoute}
+          connectionIndex={{}}
+        ></ElevationChart>
+      );
+
+      const elevationChart = screen.getByText(/title: "selectedTrack"/i);
+
+      expect(elevationChart).toHaveTextContent('"color":"#175920"');
     });
 
     it("shows total distance of track", () => {
@@ -178,6 +196,25 @@ describe("Elevation chart", () => {
       );
     });
 
+    it("matches path type color for each route's track", () => {
+      render(
+        <ElevationChart
+          selectedTrack={undefined}
+          currentRoute={aRoute}
+          connectionIndex={{
+            firstTrack: { startNodeId: "node0", endNodeId: "node1" },
+            secondTrack: { startNodeId: "node1", endNodeId: "node2" },
+          }}
+        ></ElevationChart>
+      );
+
+      const elevationChart = screen.getByText(/title: "Your route"/i);
+
+      expect(elevationChart).toHaveTextContent(
+        /"color":"#6930C3".*"color":"#C70039"/i
+      );
+    });
+
     it("shows elevation profile of route in correct order", () => {
       render(
         <ElevationChart
@@ -227,6 +264,7 @@ const firstTrack = aTrack({
       [1, 1, 1],
     ],
   ],
+  path_type: PathTypes.PAVED,
 });
 
 const secondTrack = aTrack({
@@ -238,6 +276,7 @@ const secondTrack = aTrack({
       [2, 2, 2],
     ],
   ],
+  path_type: PathTypes.UNPAVED,
 });
 
 const aRoute = {

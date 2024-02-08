@@ -5,16 +5,18 @@ export const aTrack = ({
   id,
   name,
   coordinates,
+  path_type,
 }: {
   id?: string;
   name?: string;
   coordinates?: Position[][];
+  path_type?: PathTypes;
 }): Track => {
   return {
     id: id || "track143",
     properties: {
       name: name || "trackName",
-      path_type: PathTypes.UNPAVED,
+      path_type: path_type || PathTypes.UNPAVED,
     },
     geometry: {
       type: "MultiLineString",

@@ -1,9 +1,9 @@
 import { LineLayer } from "mapbox-gl";
 import { PathTypes } from "../../tracks/track";
 
-const UNPAVED_COLOR = "#C70039";
-const PAVED_COLOR = "#6930C3";
-const SINGLETRACK_COLOR = "#175920";
+export const UNPAVED_COLOR = "#C70039";
+export const PAVED_COLOR = "#6930C3";
+export const SINGLETRACK_COLOR = "#175920";
 
 const NULL_OPACITY = 0.00000000001;
 

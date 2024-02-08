@@ -2,7 +2,7 @@ import style from "./styles.module.css";
 import { FunctionComponent, useEffect, useState } from "react";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts, { SeriesOptionsType } from "highcharts";
-import { Track } from "../tracks/track";
+import { PathTypes, Track } from "../tracks/track";
 import { MultiLineString, Position } from "geojson";
 import { getDistance } from "geolib";
 import { GeolibInputCoordinates } from "geolib/es/types";
@@ -10,6 +10,11 @@ import { texts } from "../texts";
 import { ReactComponent as ReverseLogo } from "./reverse-icon.svg";
 import { Route } from "../track-tools/create-route/CreateRoute";
 import { ConnectionIndex } from "../network/build-connections";
+import {
+  PAVED_COLOR,
+  SINGLETRACK_COLOR,
+  UNPAVED_COLOR,
+} from "../layers/tracks/tracks-layer-styles";
 
 type Props = {
   selectedTrack: Track | undefined;
@@ -20,6 +25,13 @@ type Props = {
 type AdditionalData = {
   length: number;
   elevationGain: number;
+};
+
+type ElevationData = number[][];
+
+type TrackSeries = {
+  elevationData: ElevationData;
+  pathType: PathTypes;
 };
 
 const nullAdditionalData = {
@@ -85,7 +97,7 @@ const getDataForRoute = (
     elevationGain: route.routeStats.elevGain,
   };
 
-  let elevationData: number[][][] = [];
+  let trackSeries: TrackSeries[] = [];
 
   route.tracks.reduce(
     (acc, track) => {
@@ -105,9 +117,10 @@ const getDataForRoute = (
         ? reverseTrackGeometry(geometryCopy)
         : geometryCopy;
 
-      elevationData.push(
-        elevationDataFrom(chartGeometry, acc.distanceFromStart)
-      );
+      trackSeries.push({
+        elevationData: elevationDataFrom(chartGeometry, acc.distanceFromStart),
+        pathType: track.properties.path_type,
+      });
       acc.distanceFromStart += getTrackLengthMeters(track);
 
       return acc;
@@ -115,7 +128,7 @@ const getDataForRoute = (
     { lastNodeId: route.startPointId, distanceFromStart: 0 }
   );
 
-  const chartOptions = buildChartOptions(elevationData, texts.yourRoute);
+  const chartOptions = buildChartOptions(trackSeries, texts.yourRoute);
 
   return {
     additionalData,
@@ -140,10 +153,12 @@ const getDataForTrack = (
     elevationGain: track ? getTrackElevationGain(track, isReversed) : 0,
   };
 
-  const chartOptions = buildChartOptions(
-    [elevationDataFrom(chartGeometry)],
-    track.properties.name
-  );
+  const trackSeries = {
+    elevationData: elevationDataFrom(chartGeometry),
+    pathType: track.properties.path_type,
+  };
+
+  const chartOptions = buildChartOptions([trackSeries], track.properties.name);
 
   return {
     additionalData,
@@ -152,14 +167,16 @@ const getDataForTrack = (
 };
 
 const buildChartOptions = (
-  elevationData: number[][][],
+  trackSeries: TrackSeries[],
   title: string = ""
 ): Highcharts.Options => {
-  const series: SeriesOptionsType[] = elevationData.map((data) => {
+  const series: SeriesOptionsType[] = trackSeries.map((trackSeries) => {
     return {
       type: "line",
       name: texts.elevation,
-      data: data,
+      data: trackSeries.elevationData,
+      color: getPathColor(trackSeries.pathType),
+      marker: { symbol: "circle" },
       tooltip: {
         valueSuffix: "m",
         headerFormat: "",
@@ -177,6 +194,23 @@ const buildChartOptions = (
       enabled: false,
     },
   };
+};
+
+const getPathColor = (pathType: PathTypes): string => {
+  switch (pathType) {
+    case (pathType = PathTypes.PAVED): {
+      return PAVED_COLOR;
+    }
+    case (pathType = PathTypes.UNPAVED): {
+      return UNPAVED_COLOR;
+    }
+    case (pathType = PathTypes.SINGLETRACK): {
+      return SINGLETRACK_COLOR;
+    }
+    default: {
+      return "purple";
+    }
+  }
 };
 
 const elevationDataFrom = (
