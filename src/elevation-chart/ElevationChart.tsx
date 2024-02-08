@@ -181,6 +181,11 @@ const buildChartOptions = (
         valueSuffix: "m",
         headerFormat: "",
       },
+      states: {
+        inactive: {
+          opacity: 1,
+        },
+      },
     };
   });
   return {
