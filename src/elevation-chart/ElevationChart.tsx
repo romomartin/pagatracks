@@ -172,10 +172,11 @@ const buildChartOptions = (
 ): Highcharts.Options => {
   const series: SeriesOptionsType[] = trackSeries.map((trackSeries) => {
     return {
-      type: "line",
+      type: "area",
       name: texts.elevation,
       data: trackSeries.elevationData,
       color: getPathColor(trackSeries.pathType),
+      fillOpacity: 0.5,
       marker: { symbol: "circle" },
       tooltip: {
         valueSuffix: "m",
@@ -183,7 +184,7 @@ const buildChartOptions = (
       },
       states: {
         inactive: {
-          opacity: 1,
+          opacity: 0.8,
         },
       },
     };

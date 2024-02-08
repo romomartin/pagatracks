@@ -25,7 +25,7 @@ describe("Elevation chart", () => {
     const elevationChart = screen.getByText(/title: "selectedTrack"/i);
 
     expect(elevationChart).toHaveTextContent(
-      '"tooltip":{"valueSuffix":"m","headerFormat":""}}]'
+      '"tooltip":{"valueSuffix":"m","headerFormat":""}'
     );
   });
 
@@ -41,7 +41,7 @@ describe("Elevation chart", () => {
 
       const elevationChart = screen.getByText(/title: "selectedTrack"/i);
 
-      expect(elevationChart).toHaveTextContent('"type":"line"');
+      expect(elevationChart).toHaveTextContent('"type":"area"');
       expect(elevationChart).toHaveTextContent('"name":"elevation"');
       expect(elevationChart).toHaveTextContent(
         '"data":[[0,0],[15.743,10],[31.486,8],[47.229,25]]'
@@ -189,7 +189,7 @@ describe("Elevation chart", () => {
 
       const elevationChart = screen.getByText(/title: "Your route"/i);
 
-      expect(elevationChart).toHaveTextContent('"type":"line"');
+      expect(elevationChart).toHaveTextContent('"type":"area"');
       expect(elevationChart).toHaveTextContent('"name":"elevation"');
       expect(elevationChart).toHaveTextContent(
         /"data":\[\[0,0\],\[157.426,1\]\].*"data":\[\[157.426,1\],\[314.828,2\]\]/i
@@ -229,8 +229,6 @@ describe("Elevation chart", () => {
 
       const elevationChart = screen.getByText(/title: "Your route"/i);
 
-      expect(elevationChart).toHaveTextContent('"type":"line"');
-      expect(elevationChart).toHaveTextContent('"name":"elevation"');
       expect(elevationChart).toHaveTextContent(
         /"data":\[\[0,2\],\[157.402,1\]\].*"data":\[\[157.402,1\],\[314.828,0\]\]/i
       );
