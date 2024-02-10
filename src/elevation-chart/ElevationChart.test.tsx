@@ -284,7 +284,7 @@ const aRoute = {
     { track: firstTrack, isReversed: false },
     { track: secondTrack, isReversed: false },
   ],
-  nextPossibleTrackIds: [],
+  nextPossibleSegments: [],
   routeStats: {
     length: 125,
     elevGain: 2,
@@ -298,7 +298,7 @@ const aReversedRoute = {
     { track: secondTrack, isReversed: true },
     { track: firstTrack, isReversed: true },
   ],
-  nextPossibleTrackIds: [],
+  nextPossibleSegments: [],
   routeStats: {
     length: 125,
     elevGain: 2,

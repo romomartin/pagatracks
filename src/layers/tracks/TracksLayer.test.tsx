@@ -8,6 +8,7 @@ import {
   tracksStyle,
 } from "./tracks-layer-styles";
 import { aTrackFeature } from "../../__test_helpers__/geoJSON";
+import { aTrack } from "../../__test_helpers__/aTrack";
 import { nullRoute } from "../../track-tools/create-route/CreateRoute";
 
 describe("Tracks layer", () => {
@@ -227,10 +228,11 @@ describe("Tracks layer", () => {
   });
 
   it("animated tracks layer visibility blinks", async () => {
-    const aTrackId = "track_1";
+    const theTrackId = "track_1";
+    const theTrack = aTrack({ id: theTrackId });
     const tracks = {
       type: "FeatureCollection",
-      features: [aTrackFeature({ id: aTrackId })],
+      features: [aTrackFeature({ id: theTrackId })],
     } as FeatureCollection;
 
     render(
@@ -242,7 +244,7 @@ describe("Tracks layer", () => {
           startPointId: "node0",
           endPointId: "",
           segments: [],
-          nextPossibleTrackIds: [aTrackId],
+          nextPossibleSegments: [{ track: theTrack, isReversed: false }],
           routeStats: { length: 0, elevGain: 0 },
         }}
       />
@@ -267,12 +269,14 @@ describe("Tracks layer", () => {
   });
 
   it("allows to show an animated blinking style on a given set of tracks", async () => {
-    const aTrackId = "track_1";
+    const theTrackId = "track_1";
+    const theTrack = aTrack({ id: theTrackId });
     const otherTrackId = "track_2";
+    const otherTrack = aTrack({ id: otherTrackId });
     const tracks = {
       type: "FeatureCollection",
       features: [
-        aTrackFeature({ id: aTrackId }),
+        aTrackFeature({ id: theTrackId }),
         aTrackFeature({ id: otherTrackId }),
       ],
     } as FeatureCollection;
@@ -286,7 +290,10 @@ describe("Tracks layer", () => {
           startPointId: "node0",
           endPointId: "",
           segments: [],
-          nextPossibleTrackIds: [aTrackId, otherTrackId],
+          nextPossibleSegments: [
+            { track: theTrack, isReversed: false },
+            { track: otherTrack, isReversed: false },
+          ],
           routeStats: { length: 0, elevGain: 0 },
         }}
       />
@@ -301,12 +308,14 @@ describe("Tracks layer", () => {
   });
 
   it("allows to filter selectable tracks", async () => {
-    const aTrackId = "track_1";
+    const theTrackId = "track_1";
+    const theTrack = aTrack({ id: theTrackId });
     const otherTrackId = "track_2";
+    const otherTrack = aTrack({ id: otherTrackId });
     const tracks = {
       type: "FeatureCollection",
       features: [
-        aTrackFeature({ id: aTrackId }),
+        aTrackFeature({ id: theTrackId }),
         aTrackFeature({ id: otherTrackId }),
       ],
     } as FeatureCollection;
@@ -320,7 +329,10 @@ describe("Tracks layer", () => {
           startPointId: "node0",
           endPointId: "",
           segments: [],
-          nextPossibleTrackIds: [aTrackId, otherTrackId],
+          nextPossibleSegments: [
+            { track: theTrack, isReversed: false },
+            { track: otherTrack, isReversed: false },
+          ],
           routeStats: { length: 0, elevGain: 0 },
         }}
       />

@@ -17,9 +17,14 @@ import { getDistance } from "geolib";
 export type Route = {
   startPointId: string;
   endPointId: string;
-  segments: { track: Track; isReversed: boolean }[];
-  nextPossibleTrackIds: string[];
+  segments: RouteSegment[];
+  nextPossibleSegments: RouteSegment[];
   routeStats: RouteStats;
+};
+
+type RouteSegment = {
+  track: Track;
+  isReversed: boolean;
 };
 
 type RouteStats = {
@@ -31,7 +36,7 @@ export const nullRoute: Route = {
   startPointId: "",
   endPointId: "",
   segments: [],
-  nextPossibleTrackIds: [],
+  nextPossibleSegments: [],
   routeStats: { length: 0, elevGain: 0 },
 };
 
@@ -102,7 +107,12 @@ export const CreateRoute = ({
       return;
     }
 
-    removeLastTrackFromRoute(currentRoute, connectionIndex, networkGraph);
+    removeLastTrackFromRoute(
+      currentRoute,
+      tracks,
+      connectionIndex,
+      networkGraph
+    );
     updateCurrentRoute(currentRoute);
   };
 
@@ -116,13 +126,19 @@ export const CreateRoute = ({
       });
       changeInteractiveLayers([TrackLayerIds.SELECTABLE_TRACKS]);
 
-      const nextTrackIds = networkGraph.nodeEdges(startNodeId);
+      const nextSegmentsIds = networkGraph.nodeEdges(startNodeId);
+      const nextSegments: RouteSegment[] = nextSegmentsIds
+        ? nextSegmentsIds.map((edgeId) => ({
+            track: tracks[edgeId],
+            isReversed: isTrackReversed(edgeId, startNodeId, connectionIndex),
+          }))
+        : [];
 
       updateCurrentRoute({
         startPointId: startNodeId,
         endPointId: "",
         segments: [],
-        nextPossibleTrackIds: nextTrackIds || [],
+        nextPossibleSegments: nextSegments,
         routeStats: { length: 0, elevGain: 0 },
       });
     },
@@ -131,6 +147,8 @@ export const CreateRoute = ({
       changeLayersVisibility,
       networkGraph,
       updateCurrentRoute,
+      connectionIndex,
+      tracks,
     ]
   );
 
@@ -140,7 +158,13 @@ export const CreateRoute = ({
 
       const track = tracks[nextTrackId];
 
-      addTrackToRoute(track, currentRoute, connectionIndex, networkGraph);
+      addTrackToRoute(
+        track,
+        currentRoute,
+        tracks,
+        connectionIndex,
+        networkGraph
+      );
       updateCurrentRoute(currentRoute);
     },
     [
@@ -198,16 +222,19 @@ export const CreateRoute = ({
 
 const removeLastTrackFromRoute = (
   route: Route,
+  tracks: TracksById,
   connectionIndex: ConnectionIndex,
   networkGraph: NetworkGraph
 ): Route => {
   route.segments.splice(-1, 1);
   route.endPointId = getEndNodeId(route, connectionIndex);
 
-  route.nextPossibleTrackIds =
-    route.segments.length === 0
-      ? networkGraph.nodeEdges(route.startPointId) || []
-      : getNextPossibleTracksIds(route, networkGraph);
+  route.nextPossibleSegments = getNextPossibleSegments(
+    route,
+    tracks,
+    connectionIndex,
+    networkGraph
+  );
   route.routeStats.length = getLength(route);
   route.routeStats.elevGain = getElevationGain(route);
 
@@ -217,6 +244,7 @@ const removeLastTrackFromRoute = (
 const addTrackToRoute = (
   track: Track,
   route: Route,
+  tracks: TracksById,
   connectionIndex: ConnectionIndex,
   networkGraph: NetworkGraph
 ): Route => {
@@ -230,24 +258,40 @@ const addTrackToRoute = (
   });
 
   route.endPointId = getEndNodeId(route, connectionIndex);
-  route.nextPossibleTrackIds = getNextPossibleTracksIds(route, networkGraph);
+  route.nextPossibleSegments = getNextPossibleSegments(
+    route,
+    tracks,
+    connectionIndex,
+    networkGraph
+  );
   route.routeStats.length = getLength(route);
   route.routeStats.elevGain = getElevationGain(route);
 
   return route;
 };
 
-const getNextPossibleTracksIds = (
+const getNextPossibleSegments = (
   route: Route,
+  tracks: TracksById,
+  connectionIndex: ConnectionIndex,
   networkGraph: NetworkGraph
-): string[] => {
-  const endNodeId = route.endPointId;
+): RouteSegment[] => {
+  const endNodeId =
+    route.endPointId && route.endPointId !== ""
+      ? route.endPointId
+      : route.startPointId;
 
   if (!endNodeId) return [];
 
-  const nextTrackIds = networkGraph.nodeEdges(endNodeId);
+  const nextSegmentsIds = networkGraph.nodeEdges(endNodeId);
+  const nextSegments = nextSegmentsIds?.map((id) => {
+    return {
+      track: tracks[id],
+      isReversed: isTrackReversed(id, endNodeId, connectionIndex),
+    };
+  });
 
-  return nextTrackIds || [];
+  return nextSegments || [];
 };
 
 const getEndNodeId = (

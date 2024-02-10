@@ -51,7 +51,13 @@ export const TracksLayer = ({
           id={TrackLayerIds.SELECTABLE_TRACKS}
           {...selectableTracksStyle}
           {...(!isNullRoute(currentRoute)
-            ? { filter: filterTracksById(currentRoute.nextPossibleTrackIds) }
+            ? {
+                filter: filterTracksById(
+                  currentRoute.nextPossibleSegments.map(
+                    (segment) => segment.track.id
+                  )
+                ),
+              }
             : {})}
         />
         <Layer
@@ -72,7 +78,9 @@ export const TracksLayer = ({
           id={TrackLayerIds.ANIMATED_TRACKS}
           {...highlightedTrackStyle}
           layout={{ visibility: animatedVisibility }}
-          filter={filterTracksById(currentRoute.nextPossibleTrackIds)}
+          filter={filterTracksById(
+            currentRoute.nextPossibleSegments.map((segment) => segment.track.id)
+          )}
         />
         <Layer id={TrackLayerIds.TRACKS} {...tracksStyle} />
         <Layer
@@ -89,7 +97,7 @@ export const TracksLayer = ({
 
 const isNullRoute = (route: Route): boolean => {
   return (
-    route.nextPossibleTrackIds.length === 0 &&
+    route.nextPossibleSegments.length === 0 &&
     route.startPointId === "" &&
     route.segments.length === 0
   );
