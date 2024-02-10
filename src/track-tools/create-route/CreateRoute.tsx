@@ -102,16 +102,7 @@ export const CreateRoute = ({
       return;
     }
 
-    currentRoute.tracks.splice(-1, 1);
-    currentRoute.endPointId = getEndNodeId(currentRoute, connectionIndex);
-
-    currentRoute.nextPossibleTrackIds =
-      currentRoute.tracks.length === 0
-        ? networkGraph.nodeEdges(currentRoute.startPointId) || []
-        : getNextPossibleTracksIds(currentRoute, networkGraph);
-    currentRoute.routeStats.length = getLength(currentRoute);
-    currentRoute.routeStats.elevGain = getElevationGain(currentRoute);
-
+    removeLastTrackFromRoute(currentRoute, connectionIndex, networkGraph);
     updateCurrentRoute(currentRoute);
   };
 
@@ -146,28 +137,10 @@ export const CreateRoute = ({
   const onNextTrack = useCallback(
     (nextTrackId: string) => {
       changeSelectedFeatureId(undefined);
-      const routeEndPoint =
-        currentRoute.tracks.length > 0
-          ? currentRoute.endPointId
-          : currentRoute.startPointId;
-      const isReversed = isTrackReversed(
-        nextTrackId,
-        routeEndPoint,
-        connectionIndex
-      );
 
-      currentRoute.tracks.push({
-        track: tracks[nextTrackId],
-        isReversed,
-      });
+      const track = tracks[nextTrackId];
 
-      currentRoute.endPointId = getEndNodeId(currentRoute, connectionIndex);
-      currentRoute.nextPossibleTrackIds = getNextPossibleTracksIds(
-        currentRoute,
-        networkGraph
-      );
-      currentRoute.routeStats.length = getLength(currentRoute);
-      currentRoute.routeStats.elevGain = getElevationGain(currentRoute);
+      addTrackToRoute(track, currentRoute, connectionIndex, networkGraph);
       updateCurrentRoute(currentRoute);
     },
     [
@@ -221,6 +194,47 @@ export const CreateRoute = ({
   });
 
   return { button, panel };
+};
+
+const removeLastTrackFromRoute = (
+  route: Route,
+  connectionIndex: ConnectionIndex,
+  networkGraph: NetworkGraph
+): Route => {
+  route.tracks.splice(-1, 1);
+  route.endPointId = getEndNodeId(route, connectionIndex);
+
+  route.nextPossibleTrackIds =
+    route.tracks.length === 0
+      ? networkGraph.nodeEdges(route.startPointId) || []
+      : getNextPossibleTracksIds(route, networkGraph);
+  route.routeStats.length = getLength(route);
+  route.routeStats.elevGain = getElevationGain(route);
+
+  return route;
+};
+
+const addTrackToRoute = (
+  track: Track,
+  route: Route,
+  connectionIndex: ConnectionIndex,
+  networkGraph: NetworkGraph
+): Route => {
+  const routeEndPoint =
+    route.tracks.length > 0 ? route.endPointId : route.startPointId;
+  const isReversed = isTrackReversed(track.id, routeEndPoint, connectionIndex);
+
+  route.tracks.push({
+    track,
+    isReversed,
+  });
+
+  route.endPointId = getEndNodeId(route, connectionIndex);
+  route.nextPossibleTrackIds = getNextPossibleTracksIds(route, networkGraph);
+  route.routeStats.length = getLength(route);
+  route.routeStats.elevGain = getElevationGain(route);
+
+  return route;
 };
 
 const getNextPossibleTracksIds = (
