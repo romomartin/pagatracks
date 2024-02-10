@@ -1,9 +1,10 @@
 import { FeatureCollection } from "geojson";
 import { Layer, Source } from "react-map-gl";
 import {
+  endNodeStyle,
   highlightedNodeStyle,
   nodesStyle,
-  selectedNodeStyle,
+  startNodeStyle,
 } from "./nodes-layer-styles";
 import { LayerVisibility, LayersVisibility } from "..";
 
@@ -34,7 +35,7 @@ export const NodesLayer = ({
       <Source id={NodeLayerIds.NODES} type="geojson" data={nodes}>
         <Layer
           id={NodeLayerIds.ROUTE_START_NODE}
-          {...selectedNodeStyle}
+          {...startNodeStyle(routeStartNode === routeEndNode)}
           layout={{
             visibility:
               layersVisibility[NodeLayerIds.ROUTE_START_NODE] ||
@@ -44,7 +45,7 @@ export const NodesLayer = ({
         />
         <Layer
           id={NodeLayerIds.ROUTE_END_NODE}
-          {...selectedNodeStyle}
+          {...endNodeStyle(routeStartNode === routeEndNode)}
           layout={{
             visibility:
               layersVisibility[NodeLayerIds.ROUTE_END_NODE] ||
