@@ -15,6 +15,7 @@ import {
   SINGLETRACK_COLOR,
   UNPAVED_COLOR,
 } from "../layers/tracks/tracks-layer-styles";
+require("highcharts/modules/accessibility")(Highcharts);
 
 type Props = {
   selectedTrack: Track | undefined;
