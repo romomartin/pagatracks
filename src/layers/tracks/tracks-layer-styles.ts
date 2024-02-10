@@ -21,7 +21,7 @@ export const tracksStyle: Omit<LineLayer, "id"> = {
       SINGLETRACK_COLOR,
       /* other */ "purple",
     ],
-    "line-width": 3,
+    "line-width": 2,
   },
 };
 
@@ -56,12 +56,62 @@ export const highlightedTrackStyle: Omit<LineLayer, "id"> = {
   },
 };
 
+export const nextPossibleTracksNormalStyle: Omit<LineLayer, "id"> = {
+  type: "line",
+  paint: {
+    "line-width": 13,
+    "line-gradient": [
+      "interpolate",
+      ["linear"],
+      ["line-progress"],
+      0,
+      "white", // Start color
+      0.5,
+      "rgba(0, 0, 255, 0)", // End color
+    ],
+  },
+  layout: {
+    "line-cap": "round",
+  },
+};
+
+export const nextPossibleTracksReversedStyle: Omit<LineLayer, "id"> = {
+  type: "line",
+  paint: {
+    "line-width": 13,
+    "line-gradient": [
+      "interpolate",
+      ["linear"],
+      ["line-progress"],
+      0.5,
+      "rgba(0, 0, 255, 0)", // Start color
+      1,
+      "white", // End color
+    ],
+  },
+  layout: {
+    "line-cap": "round",
+  },
+};
+
 export const routeTracksStyle: Omit<LineLayer, "id"> = {
   type: "line",
   paint: {
-    "line-color": "#FCE22A",
+    "line-color": "white",
+    "line-opacity": 0.9,
     "line-width": 4,
-    "line-dasharray": [1, 3, 1],
+    "line-dasharray": [0.1, 3, 0.1],
+  },
+  layout: {
+    "line-cap": "round",
+  },
+};
+export const routeTracksStyle2: Omit<LineLayer, "id"> = {
+  type: "line",
+  paint: {
+    "line-color": "white",
+    "line-opacity": 1,
+    "line-width": 5,
   },
   layout: {
     "line-cap": "round",

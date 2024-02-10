@@ -243,7 +243,7 @@ describe("create new route", () => {
     expect(map).not.toHaveTextContent(/interactiveLayerIds:nodes/i);
   });
 
-  it("animates next track options from selected start point", async () => {
+  it("shows next track options from selected start point", async () => {
     const track1StartNodeId = "node0";
     const nodesLayerId = "nodes";
     const someConnectedTracks = aFeatureCollectionWith([
@@ -267,14 +267,14 @@ describe("create new route", () => {
     const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
     fireEvent.click(createNewRouteButton);
     selectFeatureOnMap(track1StartNodeId, nodesLayerId);
-    const animatedTracksLayer = await screen.findByText(
-      /layer-id: animated-tracks/i
+    const nextPossibleTracksNormalLayer = await screen.findByText(
+      /layer-id: next-possible-tracks-normal/i
     );
 
-    expect(animatedTracksLayer).toHaveTextContent(/filter: in,id,1/i);
+    expect(nextPossibleTracksNormalLayer).toHaveTextContent(/filter: in,id,1/i);
   });
 
-  it("hides animated next track options when closing create route tool", async () => {
+  it("hides next track options when closing create route tool", async () => {
     const track1StartNodeId = "node0";
     const nodesLayerId = "nodes";
     const someConnectedTracks = aFeatureCollectionWith([
@@ -299,14 +299,16 @@ describe("create new route", () => {
     fireEvent.click(createNewRouteButton);
     selectFeatureOnMap(track1StartNodeId, nodesLayerId);
     fireEvent.click(createNewRouteButton);
-    const animatedTracksLayer = await screen.findByText(
-      /layer-id: animated-tracks/i
+    const nextPossibleTracksNormalLayer = await screen.findByText(
+      /layer-id: next-possible-tracks-normal/i
     );
 
-    expect(animatedTracksLayer).not.toHaveTextContent(/filter: in,id,1/i);
+    expect(nextPossibleTracksNormalLayer).not.toHaveTextContent(
+      /filter: in,id,1/i
+    );
   });
 
-  it("animates next track options from selected start point when two tracks share start and end node", async () => {
+  it("shows next track options from selected start point when two tracks share start and end node", async () => {
     const track1StartNodeId = "node0";
     const nodesLayerId = "nodes";
     const someConnectedTracks = aFeatureCollectionWith([
@@ -330,11 +332,13 @@ describe("create new route", () => {
     const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
     fireEvent.click(createNewRouteButton);
     selectFeatureOnMap(track1StartNodeId, nodesLayerId);
-    const animatedTracksLayer = await screen.findByText(
-      /layer-id: animated-tracks/i
+    const nextPossibleTracksNormalLayer = await screen.findByText(
+      /layer-id: next-possible-tracks-normal/i
     );
 
-    expect(animatedTracksLayer).toHaveTextContent(/filter: in,id,1/i);
+    expect(nextPossibleTracksNormalLayer).toHaveTextContent(
+      /filter: in,id,1,2/i
+    );
   });
 
   it("allows selecting next track when starting point has been selected", async () => {
@@ -510,10 +514,17 @@ describe("create new route", () => {
     const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
     fireEvent.click(createNewRouteButton);
     selectFeatureOnMap(track1StartNodeId, nodesLayerId);
-    selectFeatureOnMap(track1Id, selectableTracksId);
-    const routeTracksLayer = await screen.findByText(/layer-id: route-tracks/i);
 
-    expect(routeTracksLayer).toHaveTextContent(/filter: in,id,track1/i);
+    selectFeatureOnMap(track1Id, selectableTracksId);
+    const routeTracksDashesLayer = await screen.findByText(
+      /layer-id: route-tracks-dashes/i
+    );
+    const routeTracksOutlineLayer = await screen.findByText(
+      /layer-id: route-tracks-outline/i
+    );
+
+    expect(routeTracksDashesLayer).toHaveTextContent(/filter: in,id,track1/i);
+    expect(routeTracksOutlineLayer).toHaveTextContent(/filter: in,id,track1/i);
   });
 
   it("shows elevation chart of route when route has some tracks", async () => {
@@ -644,9 +655,20 @@ describe("create new route", () => {
     selectFeatureOnMap(track1Id, selectableTracksId);
     const deleteRouteButton = screen.getByLabelText("deleteRoute");
     fireEvent.click(deleteRouteButton);
-    const routeTracksLayer = await screen.findByText(/layer-id: route-tracks/i);
+    selectFeatureOnMap(track1Id, selectableTracksId);
+    const routeTracksDashesLayer = await screen.findByText(
+      /layer-id: route-tracks-dashes/i
+    );
+    const routeTracksOutlineLayer = await screen.findByText(
+      /layer-id: route-tracks-outline/i
+    );
 
-    expect(routeTracksLayer).not.toHaveTextContent(/filter: in,id,track1/i);
+    expect(routeTracksDashesLayer).not.toHaveTextContent(
+      /filter: in,id,track1/i
+    );
+    expect(routeTracksOutlineLayer).not.toHaveTextContent(
+      /filter: in,id,track1/i
+    );
   });
 
   it("deletes selected track on delete route button", async () => {
@@ -900,14 +922,26 @@ describe("create new route", () => {
     selectFeatureOnMap(routeStartNodeId, nodesLayerId);
     selectFeatureOnMap(track1Id, selectableTracksId);
     selectFeatureOnMap(track2Id, selectableTracksId);
-    const routeTracksLayer = await screen.findByText(/layer-id: route-tracks/i);
+    selectFeatureOnMap(track1Id, selectableTracksId);
+    const routeTracksDashesLayer = await screen.findByText(
+      /layer-id: route-tracks-dashes/i
+    );
+    const routeTracksOutlineLayer = await screen.findByText(
+      /layer-id: route-tracks-outline/i
+    );
 
-    expect(routeTracksLayer).toHaveTextContent(/filter: in,id,track1,track2/i);
+    expect(routeTracksDashesLayer).toHaveTextContent(
+      /filter: in,id,track1,track2/i
+    );
+    expect(routeTracksOutlineLayer).toHaveTextContent(
+      /filter: in,id,track1,track2/i
+    );
 
     const undoRouteButton = screen.getByLabelText("undoRoute");
     fireEvent.click(undoRouteButton);
 
-    expect(routeTracksLayer).toHaveTextContent(/filter: in,id,track1/i);
+    expect(routeTracksDashesLayer).toHaveTextContent(/filter: in,id,track1/i);
+    expect(routeTracksOutlineLayer).toHaveTextContent(/filter: in,id,track1/i);
   });
 
   it("updates next track options from route on undo last selected track", async () => {
@@ -941,12 +975,17 @@ describe("create new route", () => {
     const selectableTracksLayer = await screen.findByText(
       /layer-id: selectable-tracks/i
     );
-    const animatedTracksLayer = await screen.findByText(
-      /layer-id: animated-tracks/i
+    const nextPossibleTracksNormalLayer = await screen.findByText(
+      /layer-id: next-possible-tracks-normal/i
+    );
+    const nextPossibleTracksReversedLayer = await screen.findByText(
+      /layer-id: next-possible-tracks-reversed/i
     );
 
     expect(selectableTracksLayer).toHaveTextContent(/filter: in,id,track2/i);
-    expect(animatedTracksLayer).toHaveTextContent(/filter: in,id,track2/i);
+    expect(nextPossibleTracksReversedLayer).toHaveTextContent(
+      /filter: in,id,track2/i
+    );
 
     const undoRouteButton = screen.getByLabelText("undoRoute");
     fireEvent.click(undoRouteButton);
@@ -954,8 +993,11 @@ describe("create new route", () => {
     expect(selectableTracksLayer).toHaveTextContent(
       /filter: in,id,track1,track2/i
     );
-    expect(animatedTracksLayer).toHaveTextContent(
-      /filter: in,id,track1,track2/i
+    expect(nextPossibleTracksReversedLayer).toHaveTextContent(
+      /filter: in,id,track1/i
+    );
+    expect(nextPossibleTracksNormalLayer).toHaveTextContent(
+      /filter: in,id,track2/i
     );
   });
 
