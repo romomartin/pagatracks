@@ -1,4 +1,5 @@
-import { render, screen } from "@testing-library/react";
+/* eslint-disable testing-library/no-unnecessary-act */
+import { act, render, screen } from "@testing-library/react";
 import { Route, nullRoute } from "../CreateRoute";
 import { CreateRoutePanel } from "./CreateRoutePanel";
 import userEvent from "@testing-library/user-event";
@@ -48,7 +49,9 @@ describe("create route panel", () => {
     );
     const deleteButton = screen.getByLabelText("deleteRoute");
 
-    userEvent.hover(deleteButton);
+    act(() => {
+      userEvent.hover(deleteButton);
+    });
     const deleteRouteHint = await screen.findByText("Delete route");
 
     expect(deleteRouteHint).toBeDefined();
@@ -66,7 +69,9 @@ describe("create route panel", () => {
     );
     const deleteButton = screen.getByLabelText("undoRoute");
 
-    userEvent.hover(deleteButton);
+    act(() => {
+      userEvent.hover(deleteButton);
+    });
     const deleteRouteHint = await screen.findByText("Undo");
 
     expect(deleteRouteHint).toBeDefined();
@@ -84,7 +89,9 @@ describe("create route panel", () => {
     );
     const deleteButton = screen.getByLabelText("downloadRoute");
 
-    userEvent.hover(deleteButton);
+    act(() => {
+      userEvent.hover(deleteButton);
+    });
     const deleteRouteHint = await screen.findByText("Download route");
 
     expect(deleteRouteHint).toBeDefined();
