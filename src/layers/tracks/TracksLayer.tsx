@@ -79,7 +79,7 @@ export const TracksLayer = ({
           id={TrackLayerIds.ROUTE_TRACKS}
           {...routeTracksStyle}
           filter={filterTracksById(
-            currentRoute.tracks.map((track) => track.id)
+            currentRoute.tracks.map((track) => track.track.id)
           )}
         />
       </Source>

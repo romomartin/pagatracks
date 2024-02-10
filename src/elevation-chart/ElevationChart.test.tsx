@@ -280,7 +280,10 @@ const secondTrack = aTrack({
 const aRoute = {
   startPointId: "node0",
   endPointId: "node2",
-  tracks: [firstTrack, secondTrack],
+  tracks: [
+    { track: firstTrack, isReversed: false },
+    { track: secondTrack, isReversed: false },
+  ],
   nextPossibleTrackIds: [],
   routeStats: {
     length: 125,
@@ -291,7 +294,10 @@ const aRoute = {
 const aReversedRoute = {
   startPointId: "node2",
   endPointId: "node0",
-  tracks: [secondTrack, firstTrack],
+  tracks: [
+    { track: secondTrack, isReversed: true },
+    { track: firstTrack, isReversed: true },
+  ],
   nextPossibleTrackIds: [],
   routeStats: {
     length: 125,

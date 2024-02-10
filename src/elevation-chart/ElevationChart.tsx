@@ -101,8 +101,10 @@ const getDataForRoute = (
 
   route.tracks.reduce(
     (acc, track) => {
-      const trackConnections = connectionIndex[track.properties.name];
-      const geometryCopy = copyGeometry(track.geometry as MultiLineString);
+      const trackConnections = connectionIndex[track.track.properties.name];
+      const geometryCopy = copyGeometry(
+        track.track.geometry as MultiLineString
+      );
 
       let isReversed = false;
 
@@ -119,9 +121,9 @@ const getDataForRoute = (
 
       trackSeries.push({
         elevationData: elevationDataFrom(chartGeometry, acc.distanceFromStart),
-        pathType: track.properties.path_type,
+        pathType: track.track.properties.path_type,
       });
-      acc.distanceFromStart += getTrackLengthMeters(track);
+      acc.distanceFromStart += getTrackLengthMeters(track.track);
 
       return acc;
     },
