@@ -48,6 +48,13 @@ export const TracksLayer = ({
     <>
       <Source id="tracks" type="geojson" data={tracks}>
         <Layer
+          id={TrackLayerIds.SELECTABLE_TRACKS}
+          {...selectableTracksStyle}
+          {...(!isNullRoute(currentRoute)
+            ? { filter: filterTracksById(currentRoute.nextPossibleTrackIds) }
+            : {})}
+        />
+        <Layer
           id={TrackLayerIds.SELECTED_TRACK}
           {...highlightedTrackStyle}
           filter={["in", "id", selectedFeatureId]}
@@ -67,19 +74,12 @@ export const TracksLayer = ({
           layout={{ visibility: animatedVisibility }}
           filter={filterTracksById(currentRoute.nextPossibleTrackIds)}
         />
-        <Layer
-          id={TrackLayerIds.SELECTABLE_TRACKS}
-          {...selectableTracksStyle}
-          {...(!isNullRoute(currentRoute)
-            ? { filter: filterTracksById(currentRoute.nextPossibleTrackIds) }
-            : {})}
-        />
         <Layer id={TrackLayerIds.TRACKS} {...tracksStyle} />
         <Layer
           id={TrackLayerIds.ROUTE_TRACKS}
           {...routeTracksStyle}
           filter={filterTracksById(
-            currentRoute.tracks.map((track) => track.track.id)
+            currentRoute.segments.map((track) => track.track.id)
           )}
         />
       </Source>
@@ -91,7 +91,7 @@ const isNullRoute = (route: Route): boolean => {
   return (
     route.nextPossibleTrackIds.length === 0 &&
     route.startPointId === "" &&
-    route.tracks.length === 0
+    route.segments.length === 0
   );
 };
 

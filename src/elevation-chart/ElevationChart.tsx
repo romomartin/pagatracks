@@ -51,7 +51,7 @@ export const ElevationChart: FunctionComponent<Props> = ({
 
   useEffect(() => {
     const { additionalData, chartOptions } =
-      currentRoute.tracks.length === 0
+      currentRoute.segments.length === 0
         ? getDataForTrack(selectedTrack, isChartReversed)
         : getDataForRoute(currentRoute, connectionIndex);
 
@@ -68,7 +68,7 @@ export const ElevationChart: FunctionComponent<Props> = ({
       <div className={style.specs} aria-label="additionalData">
         {roundToOneDecimal(additionalData.length)}km +
         {Math.round(additionalData.elevationGain)}m
-        {currentRoute.tracks.length === 0 && (
+        {currentRoute.segments.length === 0 && (
           <button
             id={style.reverseButton}
             aria-label="reverseChartButton"
@@ -99,7 +99,7 @@ const getDataForRoute = (
 
   let trackSeries: TrackSeries[] = [];
 
-  route.tracks.reduce(
+  route.segments.reduce(
     (acc, track) => {
       const trackConnections = connectionIndex[track.track.properties.name];
       const geometryCopy = copyGeometry(

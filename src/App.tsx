@@ -102,7 +102,7 @@ function App() {
         currentRoute={currentRoute}
       ></MapCanvas>
       {(selectedFeatureId && tracks[selectedFeatureId]) ||
-      currentRoute.tracks.length > 0 ? (
+      currentRoute.segments.length > 0 ? (
         <ElevationChart
           selectedTrack={
             selectedFeatureId ? tracks[selectedFeatureId] : undefined

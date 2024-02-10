@@ -17,7 +17,7 @@ import { getDistance } from "geolib";
 export type Route = {
   startPointId: string;
   endPointId: string;
-  tracks: { track: Track; isReversed: boolean }[];
+  segments: { track: Track; isReversed: boolean }[];
   nextPossibleTrackIds: string[];
   routeStats: RouteStats;
 };
@@ -30,7 +30,7 @@ type RouteStats = {
 export const nullRoute: Route = {
   startPointId: "",
   endPointId: "",
-  tracks: [],
+  segments: [],
   nextPossibleTrackIds: [],
   routeStats: { length: 0, elevGain: 0 },
 };
@@ -97,7 +97,7 @@ export const CreateRoute = ({
 
   const undoRoute = (): void => {
     changeSelectedFeatureId(undefined);
-    if (currentRoute.tracks.length === 0) {
+    if (currentRoute.segments.length === 0) {
       deleteRoute();
       return;
     }
@@ -121,7 +121,7 @@ export const CreateRoute = ({
       updateCurrentRoute({
         startPointId: startNodeId,
         endPointId: "",
-        tracks: [],
+        segments: [],
         nextPossibleTrackIds: nextTrackIds || [],
         routeStats: { length: 0, elevGain: 0 },
       });
@@ -201,11 +201,11 @@ const removeLastTrackFromRoute = (
   connectionIndex: ConnectionIndex,
   networkGraph: NetworkGraph
 ): Route => {
-  route.tracks.splice(-1, 1);
+  route.segments.splice(-1, 1);
   route.endPointId = getEndNodeId(route, connectionIndex);
 
   route.nextPossibleTrackIds =
-    route.tracks.length === 0
+    route.segments.length === 0
       ? networkGraph.nodeEdges(route.startPointId) || []
       : getNextPossibleTracksIds(route, networkGraph);
   route.routeStats.length = getLength(route);
@@ -221,10 +221,10 @@ const addTrackToRoute = (
   networkGraph: NetworkGraph
 ): Route => {
   const routeEndPoint =
-    route.tracks.length > 0 ? route.endPointId : route.startPointId;
+    route.segments.length > 0 ? route.endPointId : route.startPointId;
   const isReversed = isTrackReversed(track.id, routeEndPoint, connectionIndex);
 
-  route.tracks.push({
+  route.segments.push({
     track,
     isReversed,
   });
@@ -254,7 +254,7 @@ const getEndNodeId = (
   route: Route,
   connectionIndex: ConnectionIndex
 ): string => {
-  const endTrack = route.tracks[route.tracks.length - 1];
+  const endTrack = route.segments[route.segments.length - 1];
   if (!endTrack) return "";
 
   const endTrackConnections = connectionIndex[endTrack.track.id];
@@ -267,7 +267,7 @@ const getEndNodeId = (
 };
 
 const getLength = (route: Route): number => {
-  return route.tracks.reduce((length, track) => {
+  return route.segments.reduce((length, track) => {
     length += getTrackLength(track.track);
     return length;
   }, 0);
@@ -282,7 +282,7 @@ const getTrackLength = (track: Track): number => {
 };
 
 const getElevationGain = (route: Route): number => {
-  return route.tracks.reduce((elevationGain, track) => {
+  return route.segments.reduce((elevationGain, track) => {
     elevationGain += getTrackElevationGain(track.track, track.isReversed);
 
     return elevationGain;
