@@ -5,6 +5,7 @@ import { ReactComponent as TrashCanLogo } from "../icons/trash-can-icon.svg";
 import { ReactComponent as UndoLogo } from "../icons/undo-icon.svg";
 import { ReactComponent as DownloadLogo } from "../icons/download-icon.svg";
 import { useEffect, useState } from "react";
+import { downloadRoute } from "../utilities/download-route";
 
 type CreateRoutePanelProps = {
   isVisible: boolean;
@@ -24,6 +25,15 @@ export const CreateRoutePanel = ({
     setHint(getBasicHint(route));
   }, [route]);
 
+  const handleDownloadRoute = (route: Route) => {
+    if (route.segments.length <= 0) {
+      setHint(texts.firstAddTrack);
+      return;
+    }
+
+    downloadRoute(route);
+  };
+
   return (
     <div
       key="createRoute"
@@ -40,6 +50,7 @@ export const CreateRoutePanel = ({
       <div className={style.buttons}>
         <button
           aria-label="downloadRoute"
+          onClick={() => handleDownloadRoute(route)}
           onMouseEnter={() => setHint(texts.downloadRouteHint)}
           onMouseLeave={() => setHint(getBasicHint(route))}
         >

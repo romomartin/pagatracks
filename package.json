@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@dagrejs/graphlib": "^2.1.13",
+    "@dwayneparton/geojson-to-gpx": "^0.1.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -27,7 +28,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!@dwayneparton/geojson-to-gpx)/\"",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

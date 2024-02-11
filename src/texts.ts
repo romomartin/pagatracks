@@ -4,6 +4,7 @@ export const texts = {
   designRoute: "Design route",
   downloadRouteHint: "Download route",
   elevation: "elevation",
+  firstAddTrack: "First add a track",
   selectNextTrack: "Select next track",
   selectStartingPoint: "Select starting point",
   undoRouteHint: "Undo",

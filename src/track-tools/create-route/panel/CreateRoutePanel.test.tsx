@@ -97,6 +97,26 @@ describe("create route panel", () => {
     expect(deleteRouteHint).toBeDefined();
   });
 
+  it("shows hint when trying to download route without any track", async () => {
+    const route: Route = { ...nullRoute, startPointId: "aPointId" };
+    render(
+      <CreateRoutePanel
+        isVisible={true}
+        route={route}
+        deleteRoute={() => {}}
+        undoRoute={() => {}}
+      />
+    );
+    const deleteButton = screen.getByLabelText("downloadRoute");
+
+    act(() => {
+      userEvent.click(deleteButton);
+    });
+    const deleteRouteHint = await screen.findByText("First add a track");
+
+    expect(deleteRouteHint).toBeDefined();
+  });
+
   it("shows route stats", async () => {
     const route: Route = {
       ...nullRoute,
