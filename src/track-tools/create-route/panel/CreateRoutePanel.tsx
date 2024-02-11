@@ -1,9 +1,9 @@
 import { texts } from "../../../texts";
 import { Route } from "../CreateRoute";
 import style from "./styles.module.css";
-import { ReactComponent as TrashCanLogo } from "../trash-can-icon.svg";
-import { ReactComponent as UndoLogo } from "../undo-icon.svg";
-import { ReactComponent as DownloadLogo } from "../download-icon.svg";
+import { ReactComponent as TrashCanLogo } from "../icons/trash-can-icon.svg";
+import { ReactComponent as UndoLogo } from "../icons/undo-icon.svg";
+import { ReactComponent as DownloadLogo } from "../icons/download-icon.svg";
 import { useEffect, useState } from "react";
 
 type CreateRoutePanelProps = {
