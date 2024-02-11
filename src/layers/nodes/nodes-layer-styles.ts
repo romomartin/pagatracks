@@ -29,9 +29,11 @@ export const startNodeStyle = (
   return {
     type: "circle",
     paint: {
-      "circle-radius": 7,
+      "circle-radius": 6,
       "circle-color": START_COLOR,
       "circle-translate": offset,
+      "circle-stroke-width": 2,
+      "circle-stroke-color": "white",
     },
   };
 };
@@ -42,9 +44,11 @@ export const endNodeStyle = (needsOffset: boolean): Omit<CircleLayer, "id"> => {
   return {
     type: "circle",
     paint: {
-      "circle-radius": 7,
+      "circle-radius": 6,
       "circle-color": END_COLOR,
       "circle-translate": offset,
+      "circle-stroke-width": 2,
+      "circle-stroke-color": "white",
     },
   };
 };
