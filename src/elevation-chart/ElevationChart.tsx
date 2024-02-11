@@ -228,7 +228,7 @@ const buildChartOptions = (
       name: texts.elevation,
       data: trackSeries.elevationData,
       color: getPathColor(trackSeries.pathType),
-      fillOpacity: 0.5,
+      fillOpacity: 0.2,
       marker: { symbol: "circle" },
       tooltip: {
         valueSuffix: "m",
@@ -236,7 +236,7 @@ const buildChartOptions = (
       },
       states: {
         inactive: {
-          opacity: 0.8,
+          opacity: 0.2,
         },
       },
       point: {
