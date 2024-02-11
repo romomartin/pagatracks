@@ -33,6 +33,7 @@ type ElevationData = ElevationChartPoint[];
 type ElevationChartPoint = {
   x: number;
   y: number;
+  coordinates: number[];
 };
 
 type TrackSeries = {
@@ -240,7 +241,11 @@ const elevationDataFrom = (
       positionToGeolibInputCoordinates(position)
     );
     previousPosition = position;
-    return { x: metersToKm(distanceOffset), y: position[2] };
+    return {
+      x: metersToKm(distanceOffset),
+      y: position[2],
+      coordinates: [position[0], position[1]],
+    };
   });
   return elevationData;
 };

@@ -44,7 +44,10 @@ describe("Elevation chart", () => {
       expect(elevationChart).toHaveTextContent('"type":"area"');
       expect(elevationChart).toHaveTextContent('"name":"elevation"');
       expect(elevationChart).toHaveTextContent(
-        '"data":[{"x":0,"y":0},{"x":15.743,"y":10},{"x":31.486,"y":8},{"x":47.229,"y":25}]'
+        '"data":[{"x":0,"y":0,"coordinates":[0,0]},' +
+          '{"x":15.743,"y":10,"coordinates":[0.1,0.1]},' +
+          '{"x":31.486,"y":8,"coordinates":[0.2,0.2]},' +
+          '{"x":47.229,"y":25,"coordinates":[0.3,0.3]}]'
       );
     });
 
@@ -124,7 +127,10 @@ describe("Elevation chart", () => {
       const elevationChart = screen.getByText(/title: "selectedTrack"/i);
 
       expect(elevationChart).toHaveTextContent(
-        '"data":[{"x":0,"y":0},{"x":15.743,"y":10},{"x":31.486,"y":8},{"x":47.229,"y":25}]'
+        '"data":[{"x":0,"y":0,"coordinates":[0,0]},' +
+          '{"x":15.743,"y":10,"coordinates":[0.1,0.1]},' +
+          '{"x":31.486,"y":8,"coordinates":[0.2,0.2]},' +
+          '{"x":47.229,"y":25,"coordinates":[0.3,0.3]}]'
       );
 
       const reverseButton = screen.getByLabelText("reverseChartButton");
@@ -134,7 +140,10 @@ describe("Elevation chart", () => {
       });
 
       expect(elevationChart).toHaveTextContent(
-        '"data":[{"x":0,"y":25},{"x":15.743,"y":8},{"x":31.486,"y":10},{"x":47.229,"y":0}]'
+        '"data":[{"x":0,"y":25,"coordinates":[0.3,0.3]},' +
+          '{"x":15.743,"y":8,"coordinates":[0.2,0.2]},' +
+          '{"x":31.486,"y":10,"coordinates":[0.1,0.1]},' +
+          '{"x":47.229,"y":0,"coordinates":[0,0]}]'
       );
     });
 
@@ -146,30 +155,23 @@ describe("Elevation chart", () => {
           connectionIndex={{}}
         ></ElevationChart>
       );
-
       const elevationChart = screen.getByText(/title: "selectedTrack"/i);
-
-      expect(elevationChart).toHaveTextContent(
-        '"data":[{"x":0,"y":0},{"x":15.743,"y":10},{"x":31.486,"y":8},{"x":47.229,"y":25}]'
-      );
 
       const reverseButton = screen.getByLabelText("reverseChartButton");
       // eslint-disable-next-line testing-library/no-unnecessary-act
       act(() => {
         userEvent.click(reverseButton);
       });
-
-      expect(elevationChart).toHaveTextContent(
-        '"data":[{"x":0,"y":25},{"x":15.743,"y":8},{"x":31.486,"y":10},{"x":47.229,"y":0}]'
-      );
-
       // eslint-disable-next-line testing-library/no-unnecessary-act
       act(() => {
         userEvent.click(reverseButton);
       });
 
       expect(elevationChart).toHaveTextContent(
-        '"data":[{"x":0,"y":0},{"x":15.743,"y":10},{"x":31.486,"y":8},{"x":47.229,"y":25}]'
+        '"data":[{"x":0,"y":0,"coordinates":[0,0]},' +
+          '{"x":15.743,"y":10,"coordinates":[0.1,0.1]},' +
+          '{"x":31.486,"y":8,"coordinates":[0.2,0.2]},' +
+          '{"x":47.229,"y":25,"coordinates":[0.3,0.3]}]'
       );
     });
   });
@@ -192,7 +194,7 @@ describe("Elevation chart", () => {
       expect(elevationChart).toHaveTextContent('"type":"area"');
       expect(elevationChart).toHaveTextContent('"name":"elevation"');
       expect(elevationChart).toHaveTextContent(
-        '"data":[{"x":0,"y":0},{"x":157.426,"y":1}]'
+        '"data":[{"x":0,"y":0,"coordinates":[0,0]},{"x":157.426,"y":1,"coordinates":[1,1]}]'
       );
     });
 
@@ -230,7 +232,7 @@ describe("Elevation chart", () => {
       const elevationChart = screen.getByText(/title: "Your route"/i);
 
       expect(elevationChart).toHaveTextContent(
-        '"data":[{"x":0,"y":2},{"x":157.402,"y":1}]'
+        '"data":[{"x":0,"y":2,"coordinates":[2,2]},{"x":157.402,"y":1,"coordinates":[1,1]}]'
       );
     });
 
