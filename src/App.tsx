@@ -1,5 +1,5 @@
 import { MapCanvas } from "./map/MapCanvas";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ElevationChart } from "./elevation-chart/ElevationChart";
 import {
   TracksById,
@@ -57,6 +57,16 @@ function App() {
     setSelectedFeatureId(selectedFeatureId);
   };
 
+  const [chartHoveredPoint, setChartHoveredPoint] = useState<
+    { x: number; y: number } | undefined
+  >(undefined);
+  const changeChartHoveredPoint = useCallback(
+    (point: { x: number; y: number } | undefined) => {
+      setChartHoveredPoint(point);
+    },
+    []
+  );
+
   const [layersVisibility, setLayersVisibility] = useState<LayersVisibility>(
     {}
   );
@@ -100,6 +110,7 @@ function App() {
         onSelectedFeature={changeSelectedFeatureId}
         selectedFeatureId={selectedFeatureId || ""}
         currentRoute={currentRoute}
+        chartHoveredPoint={chartHoveredPoint}
       ></MapCanvas>
       {(selectedFeatureId && tracks[selectedFeatureId]) ||
       currentRoute.segments.length > 0 ? (
@@ -109,6 +120,7 @@ function App() {
           }
           currentRoute={currentRoute}
           connectionIndex={connections.connectionIndex}
+          changeChartHoveredPoint={changeChartHoveredPoint}
         />
       ) : null}
       <SideMenu trackTools={[createRoute]}></SideMenu>

@@ -19,6 +19,7 @@ describe("Elevation chart", () => {
         selectedTrack={aTrack({ name: "selectedTrack" })}
         currentRoute={nullRoute}
         connectionIndex={{}}
+        changeChartHoveredPoint={() => {}}
       ></ElevationChart>
     );
 
@@ -36,6 +37,7 @@ describe("Elevation chart", () => {
           selectedTrack={aTrack({ name: "selectedTrack" })}
           currentRoute={nullRoute}
           connectionIndex={{}}
+          changeChartHoveredPoint={() => {}}
         ></ElevationChart>
       );
 
@@ -60,6 +62,7 @@ describe("Elevation chart", () => {
           })}
           currentRoute={nullRoute}
           connectionIndex={{}}
+          changeChartHoveredPoint={() => {}}
         ></ElevationChart>
       );
 
@@ -74,6 +77,7 @@ describe("Elevation chart", () => {
           selectedTrack={aTrack({ name: "selectedTrack" })}
           currentRoute={nullRoute}
           connectionIndex={{}}
+          changeChartHoveredPoint={() => {}}
         ></ElevationChart>
       );
 
@@ -88,6 +92,7 @@ describe("Elevation chart", () => {
           selectedTrack={aTrack({ name: "selectedTrack" })}
           currentRoute={nullRoute}
           connectionIndex={{}}
+          changeChartHoveredPoint={() => {}}
         ></ElevationChart>
       );
 
@@ -102,6 +107,7 @@ describe("Elevation chart", () => {
           selectedTrack={aTrack({ name: "selectedTrack" })}
           currentRoute={nullRoute}
           connectionIndex={{}}
+          changeChartHoveredPoint={() => {}}
         ></ElevationChart>
       );
       const additionalData = screen.getByLabelText("additionalData");
@@ -121,6 +127,7 @@ describe("Elevation chart", () => {
           selectedTrack={aTrack({ name: "selectedTrack" })}
           currentRoute={nullRoute}
           connectionIndex={{}}
+          changeChartHoveredPoint={() => {}}
         ></ElevationChart>
       );
 
@@ -153,6 +160,7 @@ describe("Elevation chart", () => {
           selectedTrack={aTrack({ name: "selectedTrack" })}
           currentRoute={nullRoute}
           connectionIndex={{}}
+          changeChartHoveredPoint={() => {}}
         ></ElevationChart>
       );
       const elevationChart = screen.getByText(/title: "selectedTrack"/i);
@@ -186,6 +194,7 @@ describe("Elevation chart", () => {
             firstTrack: { startNodeId: "node0", endNodeId: "node1" },
             secondTrack: { startNodeId: "node1", endNodeId: "node2" },
           }}
+          changeChartHoveredPoint={() => {}}
         ></ElevationChart>
       );
 
@@ -207,6 +216,7 @@ describe("Elevation chart", () => {
             firstTrack: { startNodeId: "node0", endNodeId: "node1" },
             secondTrack: { startNodeId: "node1", endNodeId: "node2" },
           }}
+          changeChartHoveredPoint={() => {}}
         ></ElevationChart>
       );
 
@@ -226,6 +236,7 @@ describe("Elevation chart", () => {
             firstTrack: { startNodeId: "node0", endNodeId: "node1" },
             secondTrack: { startNodeId: "node1", endNodeId: "node2" },
           }}
+          changeChartHoveredPoint={() => {}}
         ></ElevationChart>
       );
 
@@ -245,6 +256,7 @@ describe("Elevation chart", () => {
             firstTrack: { startNodeId: "node0", endNodeId: "node1" },
             secondTrack: { startNodeId: "node1", endNodeId: "node2" },
           }}
+          changeChartHoveredPoint={() => {}}
         ></ElevationChart>
       );
 

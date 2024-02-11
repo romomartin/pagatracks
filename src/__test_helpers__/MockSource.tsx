@@ -1,4 +1,9 @@
-import { FeatureCollection, GeoJsonProperties, Geometry } from "geojson";
+import {
+  Feature,
+  FeatureCollection,
+  GeoJsonProperties,
+  Geometry,
+} from "geojson";
 
 export const MockSource = ({
   id,
@@ -8,7 +13,9 @@ export const MockSource = ({
 }: {
   id: string;
   type: string;
-  data: FeatureCollection<Geometry, GeoJsonProperties>;
+  data:
+    | FeatureCollection<Geometry, GeoJsonProperties>
+    | Feature<Geometry, GeoJsonProperties>;
   children: JSX.Element[];
 }): JSX.Element => {
   return (
@@ -17,7 +24,11 @@ export const MockSource = ({
         {`Source-id: ${id}`}
         {`type: ${type}`}
         {`data-type: ${data.type}`}
-        {`data-features: ${JSON.stringify(data.features)}`}
+        {`data-features: ${
+          data.type === "FeatureCollection"
+            ? JSON.stringify(data.features)
+            : JSON.stringify(data)
+        }`}
         {children}
       </div>
     </>

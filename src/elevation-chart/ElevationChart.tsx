@@ -21,6 +21,9 @@ type Props = {
   selectedTrack: Track | undefined;
   currentRoute: Route;
   connectionIndex: ConnectionIndex;
+  changeChartHoveredPoint: (
+    chartHoveredPoint: { x: number; y: number } | undefined
+  ) => void;
 };
 
 type AdditionalData = {
@@ -50,6 +53,7 @@ export const ElevationChart: FunctionComponent<Props> = ({
   selectedTrack,
   currentRoute,
   connectionIndex,
+  changeChartHoveredPoint,
 }: Props) => {
   const [chartOptions, setChartOptions] = useState<Highcharts.Options>({});
   const [additionalData, setAdditionalData] =
@@ -59,12 +63,26 @@ export const ElevationChart: FunctionComponent<Props> = ({
   useEffect(() => {
     const { additionalData, chartOptions } =
       currentRoute.segments.length === 0
-        ? getDataForTrack(selectedTrack, isChartReversed)
-        : getDataForRoute(currentRoute, connectionIndex);
+        ? getDataForTrack(
+            selectedTrack,
+            isChartReversed,
+            changeChartHoveredPoint
+          )
+        : getDataForRoute(
+            currentRoute,
+            connectionIndex,
+            changeChartHoveredPoint
+          );
 
     setAdditionalData(additionalData);
     setChartOptions(chartOptions);
-  }, [selectedTrack, currentRoute, isChartReversed, connectionIndex]);
+  }, [
+    selectedTrack,
+    currentRoute,
+    isChartReversed,
+    connectionIndex,
+    changeChartHoveredPoint,
+  ]);
 
   const reverseChart = () => {
     setIsChartReversed(!isChartReversed);
@@ -97,7 +115,10 @@ export const ElevationChart: FunctionComponent<Props> = ({
 
 const getDataForRoute = (
   route: Route,
-  connectionIndex: ConnectionIndex
+  connectionIndex: ConnectionIndex,
+  changeChartHoveredPoint: (
+    chartHoveredPoint: { x: number; y: number } | undefined
+  ) => void
 ): { additionalData: AdditionalData; chartOptions: Highcharts.Options } => {
   const additionalData = {
     length: route.routeStats.length,
@@ -137,7 +158,11 @@ const getDataForRoute = (
     { lastNodeId: route.startPointId, distanceFromStart: 0 }
   );
 
-  const chartOptions = buildChartOptions(trackSeries, texts.yourRoute);
+  const chartOptions = buildChartOptions(
+    trackSeries,
+    texts.yourRoute,
+    changeChartHoveredPoint
+  );
 
   return {
     additionalData,
@@ -147,7 +172,10 @@ const getDataForRoute = (
 
 const getDataForTrack = (
   track: Track | undefined,
-  isReversed: boolean
+  isReversed: boolean,
+  changeChartHoveredPoint: (
+    chartHoveredPoint: { x: number; y: number } | undefined
+  ) => void
 ): { additionalData: AdditionalData; chartOptions: Highcharts.Options } => {
   if (!track) return { additionalData: nullAdditionalData, chartOptions: {} };
 
@@ -167,7 +195,11 @@ const getDataForTrack = (
     pathType: track.properties.path_type,
   };
 
-  const chartOptions = buildChartOptions([trackSeries], track.properties.name);
+  const chartOptions = buildChartOptions(
+    [trackSeries],
+    track.properties.name,
+    changeChartHoveredPoint
+  );
 
   return {
     additionalData,
@@ -177,7 +209,10 @@ const getDataForTrack = (
 
 const buildChartOptions = (
   trackSeries: TrackSeries[],
-  title: string = ""
+  title: string = "",
+  changeChartHoveredPoint: (
+    chartHoveredPoint: { x: number; y: number } | undefined
+  ) => void
 ): Highcharts.Options => {
   const series: SeriesOptionsType[] = trackSeries.map((trackSeries) => {
     return {
@@ -194,6 +229,19 @@ const buildChartOptions = (
       states: {
         inactive: {
           opacity: 0.8,
+        },
+      },
+      point: {
+        events: {
+          mouseOver: (e: any) => {
+            changeChartHoveredPoint({
+              x: e.target.coordinates[0],
+              y: e.target.coordinates[1],
+            });
+          },
+          mouseOut: () => {
+            changeChartHoveredPoint(undefined);
+          },
         },
       },
     };

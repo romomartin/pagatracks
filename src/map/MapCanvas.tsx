@@ -5,6 +5,7 @@ import { NodesLayer } from "../layers/nodes/NodesLayer";
 import { LayerIds, LayersVisibility } from "../layers";
 import { Route } from "../track-tools/create-route/CreateRoute";
 import { useState } from "react";
+import { PointLayer } from "../layers/point/PointLayer";
 
 type MapProps = {
   tracks: FeatureCollection;
@@ -14,6 +15,7 @@ type MapProps = {
   onSelectedFeature: (selectedFeatureId: string) => void;
   selectedFeatureId: string;
   currentRoute: Route;
+  chartHoveredPoint: { x: number; y: number } | undefined;
 };
 
 export const MapCanvas = ({
@@ -24,6 +26,7 @@ export const MapCanvas = ({
   onSelectedFeature,
   selectedFeatureId,
   currentRoute,
+  chartHoveredPoint,
 }: MapProps) => {
   const [hoveredFeatureId, setHoveredFeatureId] = useState<string>("");
 
@@ -70,6 +73,7 @@ export const MapCanvas = ({
         hoveredFeatureId={hoveredFeatureId}
         currentRoute={currentRoute}
       ></TracksLayer>
+      <PointLayer point={chartHoveredPoint}></PointLayer>
       <NodesLayer
         nodes={nodes}
         layersVisibility={layersVisibility}
