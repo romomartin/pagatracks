@@ -46,10 +46,10 @@ describe("Elevation chart", () => {
       expect(elevationChart).toHaveTextContent('"type":"area"');
       expect(elevationChart).toHaveTextContent('"name":"elevation"');
       expect(elevationChart).toHaveTextContent(
-        '"data":[{"x":0,"y":0,"coordinates":[0,0]},' +
-          '{"x":15.743,"y":10,"coordinates":[0.1,0.1]},' +
-          '{"x":31.486,"y":8,"coordinates":[0.2,0.2]},' +
-          '{"x":47.229,"y":25,"coordinates":[0.3,0.3]}]'
+        '"data":[{"x":0,"y":0,"coordinates":[0,0],"pathType":"unpaved"},' +
+          '{"x":15.743,"y":10,"coordinates":[0.1,0.1],"pathType":"unpaved"},' +
+          '{"x":31.486,"y":8,"coordinates":[0.2,0.2],"pathType":"unpaved"},' +
+          '{"x":47.229,"y":25,"coordinates":[0.3,0.3],"pathType":"unpaved"}]'
       );
     });
 
@@ -134,10 +134,10 @@ describe("Elevation chart", () => {
       const elevationChart = screen.getByText(/title: "selectedTrack"/i);
 
       expect(elevationChart).toHaveTextContent(
-        '"data":[{"x":0,"y":0,"coordinates":[0,0]},' +
-          '{"x":15.743,"y":10,"coordinates":[0.1,0.1]},' +
-          '{"x":31.486,"y":8,"coordinates":[0.2,0.2]},' +
-          '{"x":47.229,"y":25,"coordinates":[0.3,0.3]}]'
+        '"data":[{"x":0,"y":0,"coordinates":[0,0],"pathType":"unpaved"},' +
+          '{"x":15.743,"y":10,"coordinates":[0.1,0.1],"pathType":"unpaved"},' +
+          '{"x":31.486,"y":8,"coordinates":[0.2,0.2],"pathType":"unpaved"},' +
+          '{"x":47.229,"y":25,"coordinates":[0.3,0.3],"pathType":"unpaved"}]'
       );
 
       const reverseButton = screen.getByLabelText("reverseChartButton");
@@ -147,10 +147,10 @@ describe("Elevation chart", () => {
       });
 
       expect(elevationChart).toHaveTextContent(
-        '"data":[{"x":0,"y":25,"coordinates":[0.3,0.3]},' +
-          '{"x":15.743,"y":8,"coordinates":[0.2,0.2]},' +
-          '{"x":31.486,"y":10,"coordinates":[0.1,0.1]},' +
-          '{"x":47.229,"y":0,"coordinates":[0,0]}]'
+        '"data":[{"x":0,"y":25,"coordinates":[0.3,0.3],"pathType":"unpaved"},' +
+          '{"x":15.743,"y":8,"coordinates":[0.2,0.2],"pathType":"unpaved"},' +
+          '{"x":31.486,"y":10,"coordinates":[0.1,0.1],"pathType":"unpaved"},' +
+          '{"x":47.229,"y":0,"coordinates":[0,0],"pathType":"unpaved"}]'
       );
     });
 
@@ -176,10 +176,10 @@ describe("Elevation chart", () => {
       });
 
       expect(elevationChart).toHaveTextContent(
-        '"data":[{"x":0,"y":0,"coordinates":[0,0]},' +
-          '{"x":15.743,"y":10,"coordinates":[0.1,0.1]},' +
-          '{"x":31.486,"y":8,"coordinates":[0.2,0.2]},' +
-          '{"x":47.229,"y":25,"coordinates":[0.3,0.3]}]'
+        '"data":[{"x":0,"y":0,"coordinates":[0,0],"pathType":"unpaved"},' +
+          '{"x":15.743,"y":10,"coordinates":[0.1,0.1],"pathType":"unpaved"},' +
+          '{"x":31.486,"y":8,"coordinates":[0.2,0.2],"pathType":"unpaved"},' +
+          '{"x":47.229,"y":25,"coordinates":[0.3,0.3],"pathType":"unpaved"}]'
       );
     });
   });
@@ -203,7 +203,12 @@ describe("Elevation chart", () => {
       expect(elevationChart).toHaveTextContent('"type":"area"');
       expect(elevationChart).toHaveTextContent('"name":"elevation"');
       expect(elevationChart).toHaveTextContent(
-        '"data":[{"x":0,"y":0,"coordinates":[0,0]},{"x":157.426,"y":1,"coordinates":[1,1]}]'
+        '"data":[{"x":0,"y":0,"coordinates":[0,0],"pathType":"paved"},' +
+          '{"x":157.426,"y":1,"coordinates":[1,1],"pathType":"paved"}]'
+      );
+      expect(elevationChart).toHaveTextContent(
+        '"data":[{"x":157.426,"y":1,"coordinates":[1,1],"pathType":"unpaved"},' +
+          '{"x":314.828,"y":2,"coordinates":[2,2],"pathType":"unpaved"}]'
       );
     });
 
@@ -243,7 +248,12 @@ describe("Elevation chart", () => {
       const elevationChart = screen.getByText(/title: "Your route"/i);
 
       expect(elevationChart).toHaveTextContent(
-        '"data":[{"x":0,"y":2,"coordinates":[2,2]},{"x":157.402,"y":1,"coordinates":[1,1]}]'
+        '"data":[{"x":0,"y":2,"coordinates":[2,2],"pathType":"unpaved"},' +
+          '{"x":157.402,"y":1,"coordinates":[1,1],"pathType":"unpaved"}]'
+      );
+      expect(elevationChart).toHaveTextContent(
+        '"data":[{"x":157.402,"y":1,"coordinates":[1,1],"pathType":"paved"},' +
+          '{"x":314.828,"y":0,"coordinates":[0,0],"pathType":"paved"}]'
       );
     });
 

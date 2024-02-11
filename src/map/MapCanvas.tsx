@@ -6,6 +6,7 @@ import { LayerIds, LayersVisibility } from "../layers";
 import { Route } from "../track-tools/create-route/CreateRoute";
 import { useState } from "react";
 import { PointLayer } from "../layers/point/PointLayer";
+import { PathTypes } from "../tracks/track";
 
 type MapProps = {
   tracks: FeatureCollection;
@@ -15,7 +16,7 @@ type MapProps = {
   onSelectedFeature: (selectedFeatureId: string) => void;
   selectedFeatureId: string;
   currentRoute: Route;
-  chartHoveredPoint: { x: number; y: number } | undefined;
+  chartHoveredPoint: { x: number; y: number; pathType: PathTypes } | undefined;
 };
 
 export const MapCanvas = ({

@@ -22,7 +22,7 @@ type Props = {
   currentRoute: Route;
   connectionIndex: ConnectionIndex;
   changeChartHoveredPoint: (
-    chartHoveredPoint: { x: number; y: number } | undefined
+    chartHoveredPoint: { x: number; y: number; pathType: PathTypes } | undefined
   ) => void;
 };
 
@@ -117,7 +117,7 @@ const getDataForRoute = (
   route: Route,
   connectionIndex: ConnectionIndex,
   changeChartHoveredPoint: (
-    chartHoveredPoint: { x: number; y: number } | undefined
+    chartHoveredPoint: { x: number; y: number; pathType: PathTypes } | undefined
   ) => void
 ): { additionalData: AdditionalData; chartOptions: Highcharts.Options } => {
   const additionalData = {
@@ -147,9 +147,15 @@ const getDataForRoute = (
         ? reverseTrackGeometry(geometryCopy)
         : geometryCopy;
 
+      const pathType = track.track.properties.path_type;
+
       trackSeries.push({
-        elevationData: elevationDataFrom(chartGeometry, acc.distanceFromStart),
-        pathType: track.track.properties.path_type,
+        elevationData: elevationDataFrom(
+          chartGeometry,
+          pathType,
+          acc.distanceFromStart
+        ),
+        pathType,
       });
       acc.distanceFromStart += getTrackLengthMeters(track.track);
 
@@ -174,7 +180,7 @@ const getDataForTrack = (
   track: Track | undefined,
   isReversed: boolean,
   changeChartHoveredPoint: (
-    chartHoveredPoint: { x: number; y: number } | undefined
+    chartHoveredPoint: { x: number; y: number; pathType: PathTypes } | undefined
   ) => void
 ): { additionalData: AdditionalData; chartOptions: Highcharts.Options } => {
   if (!track) return { additionalData: nullAdditionalData, chartOptions: {} };
@@ -190,9 +196,11 @@ const getDataForTrack = (
     elevationGain: track ? getTrackElevationGain(track, isReversed) : 0,
   };
 
+  const pathType = track.properties.path_type;
+
   const trackSeries = {
-    elevationData: elevationDataFrom(chartGeometry),
-    pathType: track.properties.path_type,
+    elevationData: elevationDataFrom(chartGeometry, pathType),
+    pathType,
   };
 
   const chartOptions = buildChartOptions(
@@ -211,7 +219,7 @@ const buildChartOptions = (
   trackSeries: TrackSeries[],
   title: string = "",
   changeChartHoveredPoint: (
-    chartHoveredPoint: { x: number; y: number } | undefined
+    chartHoveredPoint: { x: number; y: number; pathType: PathTypes } | undefined
   ) => void
 ): Highcharts.Options => {
   const series: SeriesOptionsType[] = trackSeries.map((trackSeries) => {
@@ -237,6 +245,7 @@ const buildChartOptions = (
             changeChartHoveredPoint({
               x: e.target.coordinates[0],
               y: e.target.coordinates[1],
+              pathType: e.target.pathType,
             });
           },
           mouseOut: () => {
@@ -278,6 +287,7 @@ const getPathColor = (pathType: PathTypes): string => {
 
 const elevationDataFrom = (
   geometry: MultiLineString,
+  pathType: PathTypes,
   distanceOffset: number = 0
 ): ElevationData => {
   const firstPosition = geometry.coordinates[0][0];
@@ -293,6 +303,7 @@ const elevationDataFrom = (
       x: metersToKm(distanceOffset),
       y: position[2],
       coordinates: [position[0], position[1]],
+      pathType,
     };
   });
   return elevationData;

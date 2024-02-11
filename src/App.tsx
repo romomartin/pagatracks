@@ -2,6 +2,7 @@ import { MapCanvas } from "./map/MapCanvas";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ElevationChart } from "./elevation-chart/ElevationChart";
 import {
+  PathTypes,
   TracksById,
   getTracks,
   trackFromGeoJSON,
@@ -58,10 +59,10 @@ function App() {
   };
 
   const [chartHoveredPoint, setChartHoveredPoint] = useState<
-    { x: number; y: number } | undefined
+    { x: number; y: number; pathType: PathTypes } | undefined
   >(undefined);
   const changeChartHoveredPoint = useCallback(
-    (point: { x: number; y: number } | undefined) => {
+    (point: { x: number; y: number; pathType: PathTypes } | undefined) => {
       setChartHoveredPoint(point);
     },
     []
