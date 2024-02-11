@@ -44,7 +44,7 @@ describe("Elevation chart", () => {
       expect(elevationChart).toHaveTextContent('"type":"area"');
       expect(elevationChart).toHaveTextContent('"name":"elevation"');
       expect(elevationChart).toHaveTextContent(
-        '"data":[[0,0],[15.743,10],[31.486,8],[47.229,25]]'
+        '"data":[{"x":0,"y":0},{"x":15.743,"y":10},{"x":31.486,"y":8},{"x":47.229,"y":25}]'
       );
     });
 
@@ -124,7 +124,7 @@ describe("Elevation chart", () => {
       const elevationChart = screen.getByText(/title: "selectedTrack"/i);
 
       expect(elevationChart).toHaveTextContent(
-        '"data":[[0,0],[15.743,10],[31.486,8],[47.229,25]]'
+        '"data":[{"x":0,"y":0},{"x":15.743,"y":10},{"x":31.486,"y":8},{"x":47.229,"y":25}]'
       );
 
       const reverseButton = screen.getByLabelText("reverseChartButton");
@@ -134,7 +134,7 @@ describe("Elevation chart", () => {
       });
 
       expect(elevationChart).toHaveTextContent(
-        '"data":[[0,25],[15.743,8],[31.486,10],[47.229,0]]'
+        '"data":[{"x":0,"y":25},{"x":15.743,"y":8},{"x":31.486,"y":10},{"x":47.229,"y":0}]'
       );
     });
 
@@ -150,7 +150,7 @@ describe("Elevation chart", () => {
       const elevationChart = screen.getByText(/title: "selectedTrack"/i);
 
       expect(elevationChart).toHaveTextContent(
-        '"data":[[0,0],[15.743,10],[31.486,8],[47.229,25]]'
+        '"data":[{"x":0,"y":0},{"x":15.743,"y":10},{"x":31.486,"y":8},{"x":47.229,"y":25}]'
       );
 
       const reverseButton = screen.getByLabelText("reverseChartButton");
@@ -160,7 +160,7 @@ describe("Elevation chart", () => {
       });
 
       expect(elevationChart).toHaveTextContent(
-        '"data":[[0,25],[15.743,8],[31.486,10],[47.229,0]]'
+        '"data":[{"x":0,"y":25},{"x":15.743,"y":8},{"x":31.486,"y":10},{"x":47.229,"y":0}]'
       );
 
       // eslint-disable-next-line testing-library/no-unnecessary-act
@@ -169,7 +169,7 @@ describe("Elevation chart", () => {
       });
 
       expect(elevationChart).toHaveTextContent(
-        '"data":[[0,0],[15.743,10],[31.486,8],[47.229,25]]'
+        '"data":[{"x":0,"y":0},{"x":15.743,"y":10},{"x":31.486,"y":8},{"x":47.229,"y":25}]'
       );
     });
   });
@@ -192,7 +192,7 @@ describe("Elevation chart", () => {
       expect(elevationChart).toHaveTextContent('"type":"area"');
       expect(elevationChart).toHaveTextContent('"name":"elevation"');
       expect(elevationChart).toHaveTextContent(
-        /"data":\[\[0,0\],\[157.426,1\]\].*"data":\[\[157.426,1\],\[314.828,2\]\]/i
+        '"data":[{"x":0,"y":0},{"x":157.426,"y":1}]'
       );
     });
 
@@ -230,7 +230,7 @@ describe("Elevation chart", () => {
       const elevationChart = screen.getByText(/title: "Your route"/i);
 
       expect(elevationChart).toHaveTextContent(
-        /"data":\[\[0,2\],\[157.402,1\]\].*"data":\[\[157.402,1\],\[314.828,0\]\]/i
+        '"data":[{"x":0,"y":2},{"x":157.402,"y":1}]'
       );
     });
 

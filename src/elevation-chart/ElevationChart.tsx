@@ -28,7 +28,12 @@ type AdditionalData = {
   elevationGain: number;
 };
 
-type ElevationData = number[][];
+type ElevationData = ElevationChartPoint[];
+
+type ElevationChartPoint = {
+  x: number;
+  y: number;
+};
 
 type TrackSeries = {
   elevationData: ElevationData;
@@ -225,7 +230,7 @@ const getPathColor = (pathType: PathTypes): string => {
 const elevationDataFrom = (
   geometry: MultiLineString,
   distanceOffset: number = 0
-): number[][] => {
+): ElevationData => {
   const firstPosition = geometry.coordinates[0][0];
   let previousPosition = firstPosition;
 
@@ -235,7 +240,7 @@ const elevationDataFrom = (
       positionToGeolibInputCoordinates(position)
     );
     previousPosition = position;
-    return [metersToKm(distanceOffset), position[2]];
+    return { x: metersToKm(distanceOffset), y: position[2] };
   });
   return elevationData;
 };
