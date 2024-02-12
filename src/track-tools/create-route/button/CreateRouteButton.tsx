@@ -1,8 +1,8 @@
 import { useState } from "react";
 import style from "./styles.module.css";
+import createRouteIcon from "../icons/create-route-icon.svg";
 
 type CreateRouteButtonProps = {
-  icon: JSX.Element;
   name: string;
   togglePanelVisibility: () => void;
   createNewRoute: () => void;
@@ -10,7 +10,6 @@ type CreateRouteButtonProps = {
 };
 
 export const CreateRouteButton = ({
-  icon,
   name,
   togglePanelVisibility,
   createNewRoute,
@@ -31,7 +30,7 @@ export const CreateRouteButton = ({
       aria-label="createRouteToolButton"
       onClick={onClick}
     >
-      {icon}
+      <img src={createRouteIcon} alt="Create route icon" />
       <span className={style.name}>{name}</span>
     </button>
   );

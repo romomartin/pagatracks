@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { texts } from "../../texts";
-import { CreateRouteIcon } from "./CreateRouteIcon";
 import { CreateRouteButton } from "./button/CreateRouteButton";
 import { CreateRoutePanel } from "./panel/CreateRoutePanel";
 import { TrackTool } from "..";
@@ -203,7 +202,6 @@ export const CreateRoute = ({
   ]);
 
   const button = CreateRouteButton({
-    icon: CreateRouteIcon(),
     name: texts.designRoute,
     togglePanelVisibility,
     createNewRoute,
