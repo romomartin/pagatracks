@@ -1,5 +1,6 @@
 import { useState } from "react";
 import style from "./styles.module.css";
+import { icons } from "../tool-icons";
 
 type ToolButtonProps = {
   toolKey: string;
@@ -31,7 +32,7 @@ export const ToolButton = ({
       aria-label={`${toolKey}Button`}
       onClick={onClick}
     >
-      <img src={`../tool-icons/${toolKey}`} alt={`${name} icon`} />
+      <img src={icons[toolKey as keyof typeof icons]} alt={`${name} icon`} />
       <span className={style.name}>{name}</span>
     </button>
   );

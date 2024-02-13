@@ -20,6 +20,7 @@ import { LayerIds, LayersVisibility } from "./layers";
 import { TrackLayerIds } from "./layers/tracks/TracksLayer";
 import { CreateRoute } from "./track-tools";
 import { Route, nullRoute } from "./track-tools/create-route/CreateRoute";
+import { MapLegend } from "./track-tools/map-legend/MapLegend";
 
 function App() {
   const [tracks, setTracks] = useState<TracksById>({});
@@ -124,7 +125,7 @@ function App() {
           changeChartHoveredPoint={changeChartHoveredPoint}
         />
       ) : null}
-      <SideMenu trackTools={[createRoute]}></SideMenu>
+      <SideMenu trackTools={[MapLegend(), createRoute]}></SideMenu>
     </>
   );
 }

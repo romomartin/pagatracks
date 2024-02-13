@@ -5,8 +5,11 @@ export const texts = {
   downloadRouteHint: "Download route",
   elevation: "elevation",
   firstAddTrack: "First add a track",
+  paved: "Paved",
   selectNextTrack: "Select next track",
   selectStartingPoint: "Select starting point",
+  singleTrack: "Singletrack",
   undoRouteHint: "Undo",
+  unpaved: "Unpaved",
   yourRoute: "Your route",
 };

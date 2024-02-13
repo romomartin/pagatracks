@@ -1,0 +1,13 @@
+.container{
+  padding: 10px 0
+}
+.legend-item{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 1.5em;
+  gap: 10px
+}
+.legend-item img{
+  height: 1.5em;
+}

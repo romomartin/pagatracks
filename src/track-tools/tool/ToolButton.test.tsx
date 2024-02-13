@@ -36,7 +36,6 @@ describe("ToolButton", () => {
     const buttonImage = screen.getByAltText("My awesome tool icon");
 
     expect(buttonImage).toBeDefined();
-    expect(buttonImage).toHaveAttribute("src", "../tool-icons/myAwesomeTool");
   });
 
   it("executes function when toggling on", () => {
