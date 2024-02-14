@@ -17,7 +17,9 @@ export type TracksById = { [trackId: string]: Track };
 
 export const getTracks = async (): Promise<FeatureCollection> => {
   try {
-    const result = await fetch("/data/tracks.json");
+    const result = await fetch(
+      "https://raw.githubusercontent.com/romomartin/pagatracks/gh-pages/data/tracks.json"
+    );
     const data = await result.json();
     return data;
   } catch (e) {
