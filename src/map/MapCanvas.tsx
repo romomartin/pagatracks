@@ -1,4 +1,4 @@
-import { Map, MapLayerMouseEvent } from "react-map-gl";
+import { Map, MapLayerMouseEvent, NavigationControl } from "react-map-gl";
 import { TracksLayer } from "../layers/tracks/TracksLayer";
 import { FeatureCollection } from "geojson";
 import { NodesLayer } from "../layers/nodes/NodesLayer";
@@ -68,6 +68,10 @@ export const MapCanvas = ({
       onClick={handleMapClick}
       onMouseMove={handleMapMouseOver}
     >
+      <NavigationControl
+        visualizePitch={true}
+        position="bottom-right"
+      ></NavigationControl>
       <TracksLayer
         tracks={tracks}
         selectedFeatureId={selectedFeatureId}

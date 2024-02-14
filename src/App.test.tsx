@@ -31,6 +31,7 @@ describe("app", () => {
     const interactiveLayers = screen.getByText(
       /interactiveLayerIds:*selectable-tracks/i
     );
+    const navigationControl = screen.getByText(/visualizePitch: true/i);
 
     expect(style).toBeInTheDocument();
     expect(cursor).toBeInTheDocument();
@@ -38,6 +39,7 @@ describe("app", () => {
     expect(initialLongitude).toBeInTheDocument();
     expect(initialZoom).toBeInTheDocument();
     expect(interactiveLayers).toBeInTheDocument();
+    expect(navigationControl).toBeInTheDocument();
   });
 
   it("renders the map with fetched tracks", async () => {
