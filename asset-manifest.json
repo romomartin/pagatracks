@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/pagatracks/static/css/main.2b201168.css",
+    "main.js": "/pagatracks/static/js/main.57fe962a.js",
+    "static/js/912.039d65e7.chunk.js": "/pagatracks/static/js/912.039d65e7.chunk.js",
+    "static/media/create-route-icon.svg": "/pagatracks/static/media/create-route-icon.a0c0f85616ff0a936b1ec948f5559b70.svg",
+    "index.html": "/pagatracks/index.html",
+    "static/media/download-icon.svg": "/pagatracks/static/media/download-icon.0212b4b18f9befc1455a9029e748ece3.svg",
+    "static/media/undo-icon.svg": "/pagatracks/static/media/undo-icon.18d1a70d0fccbd95df19e9e175eca0cd.svg",
+    "static/media/trash-can-icon.svg": "/pagatracks/static/media/trash-can-icon.946246003779acd3d1dc750762995866.svg",
+    "static/media/reverse-icon.svg": "/pagatracks/static/media/reverse-icon.aeda2a9bed589cc5202c6ee7438c0f7d.svg",
+    "static/media/mapLegend-icon.svg": "/pagatracks/static/media/mapLegend-icon.f28a9f8a9a35c6372da716a177819c33.svg",
+    "main.2b201168.css.map": "/pagatracks/static/css/main.2b201168.css.map",
+    "main.57fe962a.js.map": "/pagatracks/static/js/main.57fe962a.js.map",
+    "912.039d65e7.chunk.js.map": "/pagatracks/static/js/912.039d65e7.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2b201168.css",
+    "static/js/main.57fe962a.js"
+  ]
+}
