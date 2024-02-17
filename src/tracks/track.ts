@@ -17,7 +17,7 @@ export type TracksById = { [trackId: string]: Track };
 
 export const getTracks = async (): Promise<FeatureCollection> => {
   try {
-    const result = await fetch("/data/tracks.json");
+    const result = await fetch(`${process.env.PUBLIC_URL}/data/tracks.json`);
     const data = await result.json();
     return data;
   } catch (e) {
