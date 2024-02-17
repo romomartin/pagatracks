@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/pagatracks/static/css/main.2b201168.css",
-    "main.js": "/pagatracks/static/js/main.a7b362e9.js",
+    "main.js": "/pagatracks/static/js/main.5121e30c.js",
     "static/js/912.549bfbc6.chunk.js": "/pagatracks/static/js/912.549bfbc6.chunk.js",
     "static/media/create-route-icon.svg": "/pagatracks/static/media/create-route-icon.a0c0f85616ff0a936b1ec948f5559b70.svg",
     "index.html": "/pagatracks/index.html",
@@ -11,11 +11,11 @@
     "static/media/reverse-icon.svg": "/pagatracks/static/media/reverse-icon.aeda2a9bed589cc5202c6ee7438c0f7d.svg",
     "static/media/mapLegend-icon.svg": "/pagatracks/static/media/mapLegend-icon.f28a9f8a9a35c6372da716a177819c33.svg",
     "main.2b201168.css.map": "/pagatracks/static/css/main.2b201168.css.map",
-    "main.a7b362e9.js.map": "/pagatracks/static/js/main.a7b362e9.js.map",
+    "main.5121e30c.js.map": "/pagatracks/static/js/main.5121e30c.js.map",
     "912.549bfbc6.chunk.js.map": "/pagatracks/static/js/912.549bfbc6.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.2b201168.css",
-    "static/js/main.a7b362e9.js"
+    "static/js/main.5121e30c.js"
   ]
 }
