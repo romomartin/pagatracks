@@ -14,8 +14,6 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test
-        env:
-          REACT_APP_MAPBOX_TOKEN: ${{ secrets.REACT_APP_MAPBOX_TOKEN }}
 
       - name: Deploy with gh-pages
         run: |
@@ -23,3 +21,4 @@ jobs:
           npx gh-pages -d build -u "github-actions-bot <support+actions@github.com>"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REACT_APP_MAPBOX_TOKEN: ${{ secrets.REACT_APP_MAPBOX_TOKEN }}
