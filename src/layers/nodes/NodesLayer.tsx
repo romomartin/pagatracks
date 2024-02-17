@@ -2,7 +2,7 @@ import { FeatureCollection } from "geojson";
 import { Layer, Source } from "react-map-gl";
 import {
   endNodeStyle,
-  highlightedNodeStyle,
+  nodesGradientStyle,
   nodesStyle,
   startNodeStyle,
 } from "./nodes-layer-styles";
@@ -10,6 +10,7 @@ import { LayerVisibility, LayersVisibility } from "..";
 
 export enum NodeLayerIds {
   NODES = "nodes",
+  NODES_GRADIENT = "nodes-gradient",
   HOVERED_NODE = "hovered-node",
   ROUTE_START_NODE = "route-start-node",
   ROUTE_END_NODE = "route-end-node",
@@ -56,6 +57,14 @@ export const NodesLayer = ({
           filter={["in", "id", routeEndNode]}
         />
         <Layer
+          id={NodeLayerIds.NODES_GRADIENT}
+          {...nodesGradientStyle}
+          layout={{
+            visibility:
+              layersVisibility[NodeLayerIds.NODES] || LayerVisibility.NONE,
+          }}
+        />
+        <Layer
           id={NodeLayerIds.NODES}
           {...nodesStyle}
           layout={{
@@ -65,7 +74,7 @@ export const NodesLayer = ({
         />
         <Layer
           id={NodeLayerIds.HOVERED_NODE}
-          {...highlightedNodeStyle}
+          {...startNodeStyle(false)}
           layout={{
             visibility:
               layersVisibility[NodeLayerIds.HOVERED_NODE] ||

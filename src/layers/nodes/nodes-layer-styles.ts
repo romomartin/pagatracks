@@ -6,18 +6,18 @@ const END_COLOR = "#E02401";
 export const nodesStyle: Omit<CircleLayer, "id"> = {
   type: "circle",
   paint: {
-    "circle-radius": 6.5,
-    "circle-color": START_COLOR,
+    "circle-radius": 5.5,
+    "circle-color": "white",
   },
 };
 
-export const highlightedNodeStyle: Omit<CircleLayer, "id"> = {
+export const nodesGradientStyle: Omit<CircleLayer, "id"> = {
   type: "circle",
   paint: {
     "circle-radius": 15,
-    "circle-color": START_COLOR,
+    "circle-color": "black",
     "circle-opacity": 0.6,
-    "circle-blur": 0.3,
+    "circle-blur": 1.3,
   },
 };
 
