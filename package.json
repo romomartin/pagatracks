@@ -32,6 +32,7 @@
     "deploy": "gh-pages -d build",
     "build": "react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!@dwayneparton/geojson-to-gpx)/\"",
+    "lint": "eslint --cache -f table --ext .js,.ts,.tsx src --fix",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

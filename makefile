@@ -10,5 +10,8 @@ clean:
 test: 
 	docker-compose run --rm pagatracks npm run test 
 
+lint: 
+	docker-compose run --rm pagatracks npm run lint 
+
 test-watch: 
 	docker-compose run --rm pagatracks npm run test -- --watch 
