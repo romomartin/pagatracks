@@ -35,7 +35,9 @@ export const NodesLayer = ({
       <Source id={NodeLayerIds.NODES} type="geojson" data={nodes}>
         <Layer
           id={NodeLayerIds.ROUTE_START_NODE}
-          {...startNodeStyle(routeStartNode === routeEndNode)}
+          {...startNodeStyle(
+            routeStartNode === routeEndNode && routeStartNode !== ""
+          )}
           layout={{
             visibility:
               layersVisibility[NodeLayerIds.ROUTE_START_NODE] ||
