@@ -9,7 +9,7 @@ import {
 import { LayerVisibility, LayersVisibility } from "..";
 
 export enum NodeLayerIds {
-  NODES = "nodes",
+  NODES = "nodes-base",
   NODES_GRADIENT = "nodes-gradient",
   HOVERED_NODE = "hovered-node",
   ROUTE_START_NODE = "route-start-node",

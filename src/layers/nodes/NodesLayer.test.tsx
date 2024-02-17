@@ -44,7 +44,7 @@ describe("Nodes layer", () => {
         routeEndNode=""
       />
     );
-    const nodesLayer = await screen.findByText(/layer-id: nodes/i);
+    const nodesLayer = await screen.findByText(/layer-id: nodes-base/i);
 
     expect(nodesLayer).toHaveTextContent(/visibility: none/i);
   });

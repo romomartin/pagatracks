@@ -103,7 +103,7 @@ describe("app", () => {
     await forDataToBeFetched(screen, fetchedData);
     const source = await screen.findByText(/source-id: nodes/i);
 
-    expect(source).toHaveTextContent(/layer-id: nodes/i);
+    expect(source).toHaveTextContent(/layer-id: nodes-base/i);
     expect(source).toHaveTextContent(/data-features:.*[1, 2, 10].*[3, 4, 12]/i);
   });
 

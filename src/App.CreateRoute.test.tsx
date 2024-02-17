@@ -21,9 +21,13 @@ describe("create new route", () => {
 
     const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
     fireEvent.click(createNewRouteButton);
-    const nodesLayer = await screen.findByText(/layer-id: nodes/i);
+    const nodesLayer = await screen.findByText(/layer-id: nodes-base/i);
+    const nodesGradientLayer = await screen.findByText(
+      /layer-id: nodes-gradient/i
+    );
 
     expect(nodesLayer).toHaveTextContent(/visibility: visible/i);
+    expect(nodesGradientLayer).toHaveTextContent(/visibility: visible/i);
   });
 
   it("hides connection nodes when closing create new route", async () => {
@@ -32,11 +36,16 @@ describe("create new route", () => {
 
     const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
     fireEvent.click(createNewRouteButton);
-    let nodesLayer = await screen.findByText(/layer-id: nodes/i);
+    let nodesBaseLayer = await screen.findByText(/layer-id: nodes-base/i);
+    let nodesGradientLayer = await screen.findByText(
+      /layer-id: nodes-gradient/i
+    );
     fireEvent.click(createNewRouteButton);
-    nodesLayer = await screen.findByText(/layer-id: nodes/i);
+    nodesBaseLayer = await screen.findByText(/layer-id: nodes-base/i);
+    nodesGradientLayer = await screen.findByText(/layer-id: nodes-gradient/i);
 
-    expect(nodesLayer).toHaveTextContent(/visibility: none/i);
+    expect(nodesBaseLayer).toHaveTextContent(/visibility: none/i);
+    expect(nodesGradientLayer).toHaveTextContent(/visibility: none/i);
   });
 
   it("shows hint when starting create new route", async () => {
@@ -203,7 +212,7 @@ describe("create new route", () => {
     const createNewRouteButton = screen.getByLabelText("createRouteToolButton");
     fireEvent.click(createNewRouteButton);
     selectFeatureOnMap(selectedNodeId, nodesLayerId);
-    const nodesLayer = await screen.findByText(/layer-id: nodes/i);
+    const nodesLayer = await screen.findByText(/layer-id: nodes-base/i);
 
     expect(nodesLayer).toHaveTextContent(/visibility: none/i);
   });
