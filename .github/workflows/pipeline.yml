@@ -39,7 +39,7 @@ jobs:
       - name: build app
         run: npm run build
         env:
-          PUBLIC_URL: /pagatracks
+          PUBLIC_URL: /
           REACT_APP_MAPBOX_TOKEN: ${{ secrets.REACT_APP_MAPBOX_TOKEN }}
       - name: upload artifact
         uses: actions/upload-pages-artifact@v1
