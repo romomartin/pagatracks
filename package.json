@@ -22,14 +22,7 @@
     "deploy": "gh-pages -d build",
     "build": "react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!@dwayneparton/geojson-to-gpx)/\"",
-    "lint": "eslint --cache -f table --ext .js,.ts,.tsx src --fix",
     "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [
@@ -54,8 +47,6 @@
     "@types/node": "^16.18.48",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
-    "eslint": "^8.56.0",
-    "eslint-formatter-table": "^7.32.1",
     "gh-pages": "^6.1.1",
     "typescript": "^4.9.5"
   }
