@@ -1,4 +1,4 @@
-import { LineLayer } from "mapbox-gl";
+import { LineLayerSpecification } from "mapbox-gl";
 import { PathTypes } from "../../tracks/track";
 
 export const UNPAVED_COLOR = "#C70039";
@@ -7,7 +7,7 @@ export const SINGLETRACK_COLOR = "#175920";
 
 const NULL_OPACITY = 0.00000000001;
 
-export const tracksStyle: Omit<LineLayer, "id"> = {
+export const tracksStyle: Omit<LineLayerSpecification, "id" | "source"> = {
   type: "line",
   paint: {
     "line-color": [
@@ -25,7 +25,7 @@ export const tracksStyle: Omit<LineLayer, "id"> = {
   },
 };
 
-export const selectableTracksStyle: Omit<LineLayer, "id"> = {
+export const selectableTracksStyle: Omit<LineLayerSpecification, "id" | "source"> = {
   type: "line",
   paint: {
     "line-color": "#959595",
@@ -34,7 +34,7 @@ export const selectableTracksStyle: Omit<LineLayer, "id"> = {
   },
 };
 
-export const highlightedTrackStyle: Omit<LineLayer, "id"> = {
+export const highlightedTrackStyle: Omit<LineLayerSpecification, "id" | "source"> = {
   type: "line",
   paint: {
     "line-color": [
@@ -56,7 +56,7 @@ export const highlightedTrackStyle: Omit<LineLayer, "id"> = {
   },
 };
 
-export const nextPossibleTracksNormalStyle: Omit<LineLayer, "id"> = {
+export const nextPossibleTracksNormalStyle: Omit<LineLayerSpecification, "id" | "source"> = {
   type: "line",
   paint: {
     "line-width": 13,
@@ -75,7 +75,7 @@ export const nextPossibleTracksNormalStyle: Omit<LineLayer, "id"> = {
   },
 };
 
-export const nextPossibleTracksReversedStyle: Omit<LineLayer, "id"> = {
+export const nextPossibleTracksReversedStyle: Omit<LineLayerSpecification, "id" | "source"> = {
   type: "line",
   paint: {
     "line-width": 13,
@@ -94,7 +94,7 @@ export const nextPossibleTracksReversedStyle: Omit<LineLayer, "id"> = {
   },
 };
 
-export const routeTracksStyle: Omit<LineLayer, "id"> = {
+export const routeTracksStyle: Omit<LineLayerSpecification, "id" | "source"> = {
   type: "line",
   paint: {
     "line-color": "white",
@@ -106,7 +106,7 @@ export const routeTracksStyle: Omit<LineLayer, "id"> = {
     "line-cap": "round",
   },
 };
-export const routeTracksStyle2: Omit<LineLayer, "id"> = {
+export const routeTracksStyle2: Omit<LineLayerSpecification, "id" | "source"> = {
   type: "line",
   paint: {
     "line-color": "white",

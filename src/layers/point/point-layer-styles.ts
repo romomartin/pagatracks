@@ -1,4 +1,4 @@
-import { CircleLayer } from "mapbox-gl";
+import { CircleLayerSpecification } from "mapbox-gl";
 import { PathTypes } from "../../tracks/track";
 import {
   PAVED_COLOR,
@@ -6,7 +6,7 @@ import {
   UNPAVED_COLOR,
 } from "../tracks/tracks-layer-styles";
 
-export const pointStyle: Omit<CircleLayer, "id"> = {
+export const pointStyle: Omit<CircleLayerSpecification, "id"|"source"> = {
   type: "circle",
   paint: {
     "circle-radius": 4.5,

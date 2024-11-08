@@ -1,9 +1,9 @@
-import { CircleLayer } from "mapbox-gl";
+import { CircleLayerSpecification, PropertyValueSpecification } from "mapbox-gl";
 
 const START_COLOR = "#379237";
 const END_COLOR = "#E02401";
 
-export const nodesStyle: Omit<CircleLayer, "id"> = {
+export const nodesStyle: Omit<CircleLayerSpecification, "id"|"source"> = {
   type: "circle",
   paint: {
     "circle-radius": 5.5,
@@ -11,7 +11,7 @@ export const nodesStyle: Omit<CircleLayer, "id"> = {
   },
 };
 
-export const nodesGradientStyle: Omit<CircleLayer, "id"> = {
+export const nodesGradientStyle: Omit<CircleLayerSpecification, "id"|"source"> = {
   type: "circle",
   paint: {
     "circle-radius": 15,
@@ -23,8 +23,8 @@ export const nodesGradientStyle: Omit<CircleLayer, "id"> = {
 
 export const startNodeStyle = (
   needsOffset: boolean
-): Omit<CircleLayer, "id"> => {
-  const offset = needsOffset ? [5, 0] : [0, 0];
+): Omit<CircleLayerSpecification, "id"|"source"> => {
+  const offset:PropertyValueSpecification<[number, number]> = needsOffset ? [5, 0] : [0, 0];
 
   return {
     type: "circle",
@@ -38,8 +38,8 @@ export const startNodeStyle = (
   };
 };
 
-export const endNodeStyle = (needsOffset: boolean): Omit<CircleLayer, "id"> => {
-  const offset = needsOffset ? [0, 5] : [0, 0];
+export const endNodeStyle = (needsOffset: boolean): Omit<CircleLayerSpecification, "id"|"source"> => {
+  const offset:PropertyValueSpecification<[number, number]> = needsOffset ? [0, 5] : [0, 0];
 
   return {
     type: "circle",

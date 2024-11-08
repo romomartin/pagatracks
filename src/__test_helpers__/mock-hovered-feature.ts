@@ -1,7 +1,7 @@
 import { LineString } from "geojson";
-import { Layer, MapboxGeoJSONFeature } from "mapbox-gl";
+import { GeoJSONFeature, Layer } from "mapbox-gl";
 
-export const mockHoveredFeature = (): MapboxGeoJSONFeature => {
+export const mockHoveredFeature = (): GeoJSONFeature => {
   return {
     id: undefined,
     type: "Feature",
@@ -12,7 +12,6 @@ export const mockHoveredFeature = (): MapboxGeoJSONFeature => {
         [2, 2],
       ],
     } as LineString,
-    layer: {} as Layer,
     properties: { name: "" },
     source: "",
     sourceLayer: "",

@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import App from "./App";
 import * as mockSelectedFeature from "./__test_helpers__/mock-selected-feature";
 import * as mockHoveredFeature from "./__test_helpers__/mock-hovered-feature";
-import { Layer, MapboxGeoJSONFeature } from "mapbox-gl";
+import { Layer, GeoJSONFeature, LayerSpecification } from "mapbox-gl";
 import { LineString } from "geojson";
 import {
   forDataToBeFetched,
@@ -179,7 +179,7 @@ const aMapboxGeoJSONFeature = ({
   id: string;
   name?: string;
   layerId: string;
-}): MapboxGeoJSONFeature => {
+}): GeoJSONFeature => {
   return {
     id: undefined,
     type: "Feature",
@@ -190,7 +190,7 @@ const aMapboxGeoJSONFeature = ({
         [2, 2],
       ],
     } as LineString,
-    layer: { id: layerId } as Layer,
+    layer: { id: layerId } as LayerSpecification,
     properties: { id, name },
     source: "",
     sourceLayer: "",

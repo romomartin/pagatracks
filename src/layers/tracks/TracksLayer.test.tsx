@@ -27,6 +27,7 @@ describe("Tracks layer", () => {
       />
     );
     const source = await screen.findByText(/source-id: tracks/i);
+    console.log(source)
 
     expect(source).toHaveTextContent(/type: geojson/i);
     expect(source).toHaveTextContent(/data-type: FeatureCollection/i);

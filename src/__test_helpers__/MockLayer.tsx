@@ -1,4 +1,4 @@
-import mapboxgl from "mapbox-gl";
+import { LineLayerSpecification } from "mapbox-gl";
 
 export const MockLayer = ({
   id,
@@ -9,9 +9,9 @@ export const MockLayer = ({
 }: {
   id: string;
   type: string;
-  paint: mapboxgl.LinePaint;
+  paint: LineLayerSpecification['paint'];
   filter: string;
-  layout: mapboxgl.Layout;
+  layout: LineLayerSpecification['layout'];
 }): JSX.Element => {
   return (
     <>
